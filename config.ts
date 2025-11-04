@@ -1,0 +1,2 @@
+export const supabaseUrl="https://vhigwhnrvzqtblknamtn.supabase.co"
+export const supabaseAnonKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoaWd3aG5ydnpxdGJsa25hbXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxNjQ0MzEsImV4cCI6MjA3MDc0MDQzMX0.oHJBcSLrNZLKA4mKOYmuVicQJScH_TD-sXaeTTwz-Xw"

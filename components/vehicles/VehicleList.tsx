@@ -1,0 +1,69 @@
+import useVehicles from "@/hooks/useVehicles";
+import { useLotStore } from "@/stores/zustand/lot";
+import { useRouter } from "expo-router";
+import { FlatList, View } from "react-native";
+import Button from "../ui/button";
+import RequestTooLong from "../ui/requestTooLong";
+import LoaderSkeleton from "../ui/Skeleton";
+import VehicleSelectItem from "./VehicleSelectItem";
+
+const VehicleList = () => {
+    const router = useRouter();
+    const {
+        vehicles,
+        errorFetching,
+        isLoading,
+        refetch,
+        isRefetching
+    } = useVehicles();
+
+    const {
+        lot: {
+            vehicleId
+        }
+    } = useLotStore()
+
+    const handleContinue = ()=> {
+        if (!vehicleId) return;
+        router.push("/reservation/bookDetails");
+    }
+
+    if (isLoading) return <LoaderSkeleton />
+
+    return (
+        <View
+            style={{
+                flex: 1,
+                paddingBottom: 10
+            }}
+        >
+            {
+                errorFetching ?
+                    <RequestTooLong
+                        message={errorFetching.message}
+                        refresh={refetch}
+                    /> :
+
+                    <FlatList
+                        data={vehicles}
+                        keyExtractor={item => item.id?.toString()}
+                        renderItem={({ item }) =>
+                            <VehicleSelectItem
+                                vehicle={item}
+                            />
+                        }
+                        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                        showsVerticalScrollIndicator={false}
+                        refreshing={isRefetching}
+                        onRefresh={refetch}
+                    />
+            }
+            <Button
+                title="Continue"
+                onPress={handleContinue}
+            />
+        </View>
+    )
+}
+
+export default VehicleList;

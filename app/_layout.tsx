@@ -1,24 +1,60 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { initI18n } from '@/i18n';
+import { AuthContextProvider } from '@/stores/context/AuthContext';
+import { TabsHistoryContextProvider } from '@/stores/context/tabsHistoryContext';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useLayoutEffect } from 'react';
+import { useColorScheme } from 'react-native';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+const queryClient = new QueryClient();
 
-export default function RootLayout() {
+const RootLayout = () => {
   const colorScheme = useColorScheme();
+
+  const [loaded] = useFonts({
+    SpaceMono_Regular: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  })
+
+  useLayoutEffect(() => {
+    const initLang = async () => {
+      await initI18n();
+    }
+    initLang();
+  }, [])
+
+  if (!loaded) return null;
+
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
+      <TabsHistoryContextProvider>
+        <AuthContextProvider>
+          <QueryClientProvider client={queryClient}>
+            <Stack
+              screenOptions={{
+                headerShown: false
+              }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen
+                name="addVehicle"
+                options={{
+                  presentation: "modal"
+                }}
+              />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </QueryClientProvider>
+        </AuthContextProvider>
+      </TabsHistoryContextProvider>
       <StatusBar style="auto" />
     </ThemeProvider>
-  );
+  )
 }
+
+export default RootLayout;

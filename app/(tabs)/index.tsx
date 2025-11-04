@@ -1,98 +1,193 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import LotItem from "@/components/lots/lotItem";
+import Header from "@/components/ui/header";
+import RequestTooLong from "@/components/ui/requestTooLong";
+import LoaderSkeleton from "@/components/ui/Skeleton";
+import { Colors } from "@/constants/Colors";
+import useLots from "@/hooks/useLots";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+    FlatList,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    useColorScheme,
+    View
+} from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const FindParkingScreen = () => {
+    const router = useRouter();
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
+    const { t } = useTranslation();
+    const colorSchema = useColorScheme() || "light";
+    const [layout, setLayout] = useState<"list" | "tile">("list");
+
+    const {
+        lots,
+        isPending,
+        error,
+        refetch,
+        isRefetching
+    } = useLots();
+
+    const handleShowDetails = (id: string) => {
+        router.push(`/lotDetails/${id}`)
+    }
+
+    return (
+        <View style={styles.container}>
+            <Header
+                title="Search"
+                rightIcon={
+                    <View style={styles.layoutToggle}>
+                        <Pressable
+                            onPress={() => setLayout("list")}
+                        >
+                            <Ionicons
+                                name="reorder-four"
+                                size={28}
+                                color={layout === "list" ?
+                                    Colors[colorSchema].tint :
+                                    Colors[colorSchema].icon
+                                }
+                            />
+                        </Pressable>
+
+                        <Pressable
+                            onPress={() => setLayout("tile")}
+                        >
+                            <Ionicons
+                                name="grid-outline"
+                                size={24}
+                                color={layout === "tile" ?
+                                    Colors[colorSchema].tint :
+                                    Colors[colorSchema].icon
+                                }
+                            />
+                        </Pressable>
+                    </View>
+                }
             />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+            <View
+                style={[
+                    styles.inputSearch,
+                    {
+                        borderColor: Colors[colorSchema].icon,
+                        backgroundColor: Colors[colorSchema].background
+                    }
+                ]}
+            >
+                <Ionicons
+                    name="search"
+                    size={20}
+                    color={Colors[colorSchema].icon}
+                />
+                <TextInput
+                    style={[
+                        styles.inputSearchText,
+                        {
+                            color: Colors[colorSchema].icon,
+                        }
+                    ]}
+                    placeholderTextColor={Colors[colorSchema].icon}
+                    placeholder="Search"
+                />
+            </View>
+            <View style={styles.filterContent}>
+                <Text
+                    style={{
+                        fontSize: 20,
+                        fontWeight: "500",
+                        color: Colors[colorSchema].text
+                    }}
+                >
+                    Search Result
+                </Text>
+                <Text
+                    style={{
+                        fontSize: 20,
+                        color: Colors[colorSchema].tint
+                    }}
+                >
+                    Filters
+                </Text>
+            </View>
+            {
+                error ?
+                    <RequestTooLong
+                        refresh={refetch}
+                        message={error.message}
+                    />
+                    :
+                    isPending ?
+                        <LoaderSkeleton /> :
+                        <FlatList
+                            data={lots}
+                            key={layout}
+                            numColumns={layout === "list" ? 1 : 2}
+                            keyExtractor={item => item.id.toString()}
+                            renderItem={({ item }) =>
+                                <View
+                                    style={{
+                                        flex: 1 / (layout === "list" ? 1 : 2)
+                                    }}
+                                >
+                                    <LotItem
+                                        lot={item}
+                                        layout={layout}
+                                        onPress={() => handleShowDetails(item.id)}
+                                    />
+                                </View>
+                            }
+                            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                            columnWrapperStyle={layout === "tile" ? { gap: 10 } : undefined}
+                            showsVerticalScrollIndicator={false}
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
+                        />
+            }
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+    container: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 60,
+        gap: 10
+    },
+    layoutToggle: {
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center",
+        gap: 5
+    },
+    headerText: {
+        fontSize: 20,
+        fontWeight: "semibold"
+    },
+    inputSearch: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 8,
+        gap: 5,
+        borderRadius: 8
+    },
+    inputSearchText: {
+        width: "100%",
+        fontSize: 16,
+        fontWeight: "semibold",
+        outlineWidth: 0
+    },
+    filterContent: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center"
+    }
+})
+
+export default FindParkingScreen;
