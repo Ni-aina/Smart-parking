@@ -1,4 +1,4 @@
-import { createVehicle, getVehicles } from "@/actions/vehicle.action";
+import { createVehicle, getVehiclesByDriverId } from "@/actions/vehicle.action";
 import { VehicleInterface } from "@/types/vehicle";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
@@ -19,7 +19,7 @@ const useVehicles = () => {
         isRefetching
     } = useQuery({
         queryKey: ["vehicles"],
-        queryFn: ()=> getVehicles(profileId)
+        queryFn: ()=> getVehiclesByDriverId(profileId)
     })
 
     const {

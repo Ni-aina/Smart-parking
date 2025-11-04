@@ -115,16 +115,18 @@ export async function deleteVehicle(id: string): Promise<boolean> {
     }
 }
 
-export async function getVehicles(driverId: string): Promise<VehicleInterface[]> {
+export async function getVehiclesByDriverId(driverId: string): Promise<VehicleInterface[]> {
     if (!isUUID(driverId)) throw new Error("You have to be authenticated");
 
     try {
         const request = (async () => {
             const { data: vehicles, error } = await supabase.from("vehicles")
                 .select("*")
+                .eq("driver_id", driverId)
                 .order("created_at", {
                     ascending: false
                 })
+
             if (!vehicles || error) throw new Error(`Fetching vehicles raise an error, ${error?.message}`);
 
             const normalized = vehicles.map(item => normalizeData(item));
