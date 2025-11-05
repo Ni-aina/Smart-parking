@@ -1,8 +1,10 @@
 import { Colors } from "@/constants/Colors";
 import { VehicleInterface } from "@/types/vehicle";
 import Feather from '@expo/vector-icons/Feather';
+import { useRouter } from "expo-router";
 import {
     Image,
+    Pressable,
     StyleSheet,
     Text,
     useColorScheme,
@@ -17,9 +19,18 @@ const VehicleItem = ({
     vehicle
 }: VehicleItemInterface) => {
     const colorSchema = useColorScheme() || "light";
+    const router = useRouter();
+
+    const handleNavigateToUpdate = () => {
+        router.push({
+            pathname: "/editVehicle",
+            params: {
+                vehicle: JSON.stringify(vehicle)
+            }
+        })
+    }
 
     const {
-        id,
         model,
         plateNumber
     } = vehicle;
@@ -79,21 +90,40 @@ const VehicleItem = ({
                     columnGap: 15
                 }}
             >
-                <Feather
-                    name="eye"
-                    size={24}
-                    color="yellowgreen"
-                />
-                <Feather
-                    name="edit"
-                    size={24}
-                    color="orange"
-                />
-                <Feather
-                    name="trash"
-                    size={24}
-                    color="red"
-                />
+                <Pressable
+                    style={({ pressed }) => pressed && {
+                        opacity: 0.6
+                    }}
+                >
+                    <Feather
+                        name="eye"
+                        size={24}
+                        color="yellowgreen"
+                    />
+                </Pressable>
+                <Pressable
+                    style={({ pressed }) => pressed && {
+                        opacity: 0.6
+                    }}
+                    onPress={handleNavigateToUpdate}
+                >
+                    <Feather
+                        name="edit"
+                        size={24}
+                        color="orange"
+                    />
+                </Pressable>
+                <Pressable
+                    style={({ pressed }) => pressed && {
+                        opacity: 0.6
+                    }}
+                >
+                    <Feather
+                        name="trash"
+                        size={24}
+                        color="red"
+                    />
+                </Pressable>
             </View>
         </View>
     )

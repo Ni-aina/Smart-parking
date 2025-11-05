@@ -2,7 +2,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Icons from "@/components/ui/icons";
 import VehicleForm from "@/components/vehicles/VehicleForm";
 import { Colors } from "@/constants/Colors";
-import { useRouter } from "expo-router";
+import { VehicleInterface } from "@/types/vehicle";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import {
     StyleSheet,
     Text,
@@ -10,9 +11,12 @@ import {
     View
 } from "react-native";
 
-const AddVehicle = () => {
+const EditVehicle = () => {
     const colorSchema = useColorScheme() || "light";
     const router = useRouter();
+
+    const { vehicle } = useLocalSearchParams();
+    const parsedVehicle: VehicleInterface = JSON.parse(vehicle as string);
 
     return (
         <ProtectedRoute>
@@ -27,7 +31,7 @@ const AddVehicle = () => {
                             color: Colors[colorSchema].text
                         }}
                     >
-                        Add Vehicle
+                        Update Vehicle
                     </Text>
                     <Icons
                         name="close"
@@ -36,7 +40,9 @@ const AddVehicle = () => {
                         onPress={() => router.canGoBack() && router.back()}
                     />
                 </View>
-                <VehicleForm />
+                <VehicleForm
+                    vehicle={parsedVehicle}
+                />
             </View>
         </ProtectedRoute>
     )
@@ -56,4 +62,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddVehicle;
+export default EditVehicle;

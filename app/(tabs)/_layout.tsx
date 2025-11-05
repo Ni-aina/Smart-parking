@@ -76,12 +76,12 @@ const TabLayout = () => {
 
 const styles = StyleSheet.create({
   tabs: {
-    flex: 1,
-    paddingBottom: 40
+    flex: 1
   },
   tabList: {
     paddingHorizontal: 20,
-    paddingVertical: 10
+    paddingTop: 10,
+    paddingBottom: 50
   },
   tabTrigger: {
     alignItems: "center"

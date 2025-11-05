@@ -16,14 +16,23 @@ import {
 import Button from "../ui/button";
 import Loading from "../ui/loading";
 
-const VehicleForm = () => {
+interface VehicleFormInterface {
+    vehicle?: VehicleInterface
+}
+
+const VehicleForm = ({
+    vehicle
+}: VehicleFormInterface) => {
     const colorScheme = useColorScheme() || "light";
     const { currentProfile } = useCurrentProfile();
 
     const {
-        mutate,
-        error,
-        isPending
+        handleCreate,
+        creationError,
+        isCreating,
+        handleUpdate,
+        updateError,
+        isUpdating,
     } = useVehicles();
 
     const {
@@ -31,10 +40,26 @@ const VehicleForm = () => {
         handleSubmit,
         watch,
         control
-    } = useForm<VehicleInterface>();
+    } = useForm<VehicleInterface>({
+        defaultValues: {
+            id: vehicle?.id || "",
+            driverId: vehicle?.driverId || "",
+            plateNumber: vehicle?.plateNumber || "",
+            make: vehicle?.make || "",
+            model: vehicle?.model || "",
+            year: vehicle?.year && Number(vehicle.year).toString() || "",
+            width: vehicle?.width && Number(vehicle.width).toString() || "",
+            length: vehicle?.length && Number(vehicle.length).toString() || "",
+            height: vehicle?.height && Number(vehicle.height).toString() || ""
+        }
+    })
 
     const onSubmit = () => {
-        mutate({
+        if (watch("id")) {
+            handleUpdate(watch());
+            return;
+        }
+        handleCreate({
             ...watch(),
             driverId: currentProfile?.id || ""
         })
@@ -300,8 +325,12 @@ const VehicleForm = () => {
                             }
                         </View>
                         {
-                            error &&
-                            <Text style={styles.inputError}>{error.message}</Text>
+                            creationError &&
+                            <Text style={styles.inputError}>{creationError.message}</Text>
+                        }
+                         {
+                            updateError &&
+                            <Text style={styles.inputError}>{updateError.message}</Text>
                         }
                     </View>
                 </ScrollView>
@@ -312,12 +341,12 @@ const VehicleForm = () => {
                 }}
             >
                 <Button
-                    title="Add vehicle"
+                    title={watch("id") ? "Update vehicle" : "Add vehicle"}
                     onPress={handleSubmit(onSubmit)}
                 />
             </View>
             {
-                isPending &&
+                (isCreating || isUpdating) &&
                 <Loading />
             }
         </>

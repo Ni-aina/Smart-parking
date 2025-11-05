@@ -15,7 +15,7 @@ export async function createVehicle(vehicle: VehicleInterface): Promise<VehicleI
                 year,
                 width,
                 length,
-                height,
+                height
             } = vehicle;
 
             if (!driver_id) throw new Error("You must be authenticated");
@@ -61,7 +61,7 @@ export async function updateVehicle(vehicle: VehicleInterface): Promise<VehicleI
                 year,
                 width,
                 length,
-                height,
+                height
             } = vehicle;
 
             if (!id) return null;
