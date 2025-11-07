@@ -1,7 +1,7 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { Stack } from "expo-router";
 
-const Reservation = () => {
+const ReservationLayout = () => {
     return (
         <ProtectedRoute>
             <Stack screenOptions={{ headerShown: false }}/>
@@ -9,4 +9,4 @@ const Reservation = () => {
     )
 }
  
-export default Reservation;
+export default ReservationLayout;

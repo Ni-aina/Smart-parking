@@ -15,7 +15,7 @@ const SignInScreen = () => {
         <View style={styles.container}>
             <View style={styles.headerContent}>
                 <Icons name="arrow-back" size={28}
-                    onPress={() => router.back()}
+                    onPress={() => router.canGoBack() && router.back()}
                     color={Colors[colorScheme].text}
                 />
                 <Text style={[styles.title, { color: Colors[colorScheme].text }]}>

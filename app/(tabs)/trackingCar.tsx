@@ -26,7 +26,7 @@ const TrackingCarSceen = () => {
   } = useVehicles();
 
   const handleAddVehicle = () => {
-    router.push("/addVehicle");
+    router.push("/vehicleControls/addVehicle");
   }
 
   if (isLoading) return (

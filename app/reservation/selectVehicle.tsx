@@ -25,7 +25,7 @@ const SelectVehicle = () => {
                         name="add"
                         size={30}
                         color={Colors[colorSchema].text}
-                        onPress={() => router.push("/addVehicle")}
+                        onPress={() => router.push("/vehicleControls/addVehicle")}
                     />
                 }
             />

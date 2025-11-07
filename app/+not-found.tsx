@@ -9,7 +9,7 @@ const NotFoundScreen = () => {
 
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen />
       <View style={styles.container}>
         <Text style={styles.text}>
           {t("page_not_found")}
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
-    gap: 20
+    gap: 40
   },
   text: {
     fontSize: 24,

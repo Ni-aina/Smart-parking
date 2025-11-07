@@ -41,12 +41,6 @@ const RootLayout = () => {
               }}
             >
               <Stack.Screen name="index" />
-              <Stack.Screen
-                name="addVehicle"
-                options={{
-                  presentation: "modal"
-                }}
-              />
               <Stack.Screen name="+not-found" />
             </Stack>
           </QueryClientProvider>

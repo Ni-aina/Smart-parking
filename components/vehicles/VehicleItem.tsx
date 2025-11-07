@@ -23,7 +23,7 @@ const VehicleItem = ({
 
     const handleNavigateToUpdate = () => {
         router.push({
-            pathname: "/editVehicle",
+            pathname: "/vehicleControls/editVehicle",
             params: {
                 vehicle: JSON.stringify(vehicle)
             }
