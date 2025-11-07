@@ -2,12 +2,14 @@ import { createProfile } from "@/actions/profile.action";
 import { createUser } from "@/actions/user.action";
 import { Colors } from "@/constants/Colors";
 import { RegisterType } from "@/types/signUp";
-import { useEffect, useState } from "react";
+import * as Linking from "expo-linking";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
     KeyboardAvoidingView,
     Platform,
+    Pressable,
     ScrollView,
     StyleSheet,
     Text,
@@ -15,7 +17,6 @@ import {
     useColorScheme,
     View
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
 import { isValidPhoneNumber } from "react-phone-number-input";
 import PhoneInput from "react-phone-number-input/react-native-input";
 import Button from "./ui/button";
@@ -25,22 +26,15 @@ import Loading from "./ui/loading";
 const SignUpForm = () => {
     const colorScheme = useColorScheme() || "light";
     const { t } = useTranslation();
-    const [open, setOpen] = useState(false);
     const [isPending, setIsPending] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [roleSelected, setRoleSelected] = useState<"driver" | "owner">("driver");
-    const [items, setItems] = useState([
-        { label: t("driver"), value: "driver" },
-        { label: t("owner"), value: "owner" }
-    ])
 
     const {
         control,
         handleSubmit,
         formState: { errors },
         watch,
-        setValue,
         reset
     } = useForm<RegisterType>();
 
@@ -51,7 +45,6 @@ const SignUpForm = () => {
             setIsPending(true);
 
             const {
-                role,
                 fullName,
                 emailAddress,
                 password,
@@ -63,7 +56,7 @@ const SignUpForm = () => {
 
             const profile = await createProfile({
                 id: user.id,
-                roles: [role],
+                roles: ["driver"],
                 fullName,
                 emailAddress,
                 phoneNumber,
@@ -80,10 +73,6 @@ const SignUpForm = () => {
         }
     }
 
-    useEffect(() => {
-        setValue("role", roleSelected);
-    }, [roleSelected])
-
     return (
         <>
             <KeyboardAvoidingView
@@ -96,16 +85,6 @@ const SignUpForm = () => {
                         <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
                             {t("select_your_account_type")} *
                         </Text>
-                        <DropDownPicker
-                            open={open}
-                            value={roleSelected}
-                            items={items}
-                            setOpen={setOpen}
-                            setValue={setRoleSelected}
-                            setItems={setItems}
-                            listMode="SCROLLVIEW"
-                            style={styles.inputSelect}
-                        />
 
                         <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
                             {t("full_name")} *
@@ -285,19 +264,46 @@ const SignUpForm = () => {
                             }
                         </View>
                     </View>
+                    {
+                        isSaved &&
+                        <Text 
+                            style={[
+                                styles.textSaved,
+                                {
+                                    color: "#c70000ff"
+                                }
+                            ]}
+                        >
+                            {t("check_email_verify_account")}
+                        </Text>
+                    }
                 </ScrollView>
             </KeyboardAvoidingView>
 
-            {
-                isSaved &&
-                <View style={styles.contentSaved}>
-                    <Text style={styles.textSaved}>
-                        {t("check_email_verify_account")}
+            <View
+                style={{
+                    gap: 10
+                }}
+            >
+                <Button title={t("sign_up")} onPress={handleSubmit(onSubmit)} />
+                <Pressable
+                    style={({ pressed }) => pressed ? {
+                            opacity: 0.7
+                        } : {}
+                    }
+                    onPress={() => Linking.openURL("https://nextjs.org/")}
+                >
+                    <Text
+                        style={{
+                            fontSize: 16,
+                            color: Colors[colorScheme].tint,
+                            textAlign: "right"
+                        }}
+                    >
+                        {t("want_to_have_your_own_parking")}
                     </Text>
-                </View>
-            }
-
-            <Button title={t("sign_up")} onPress={handleSubmit(onSubmit)} />
+                </Pressable>
+            </View>
 
             {isPending && <Loading />}
         </>
@@ -334,14 +340,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#ff0000"
     },
-    contentSaved: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
     textSaved: {
-        fontSize: 16,
-        color: "rgba(0, 136, 18, 1)",
-        textAlign: "justify"
+        fontSize: 16
     }
 })
 
