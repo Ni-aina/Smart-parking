@@ -48,9 +48,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     description: {
-        fontSize: 16,
-        marginTop: 10
+        fontSize: 16
     }
-});
+})
 
 export default SignInScreen;

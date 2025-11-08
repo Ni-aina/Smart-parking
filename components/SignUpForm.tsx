@@ -83,10 +83,6 @@ const SignUpForm = () => {
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.contentInfo}>
                         <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                            {t("select_your_account_type")} *
-                        </Text>
-
-                        <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
                             {t("full_name")} *
                         </Text>
                         <View style={styles.inputContent}>

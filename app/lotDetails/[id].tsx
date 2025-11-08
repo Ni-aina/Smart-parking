@@ -130,13 +130,14 @@ const LotDetails = () => {
                                 </View>
                             }
                         </ImageBackground>
-                        <View
-                            style={{
+                        <ScrollView
+                            contentContainerStyle={{
                                 flex: 1,
                                 justifyContent: "space-between",
                                 paddingBottom: 30,
                                 backgroundColor: Colors[colorSchema].background
                             }}
+                            showsVerticalScrollIndicator={false}
                         >
                             <View>
                                 <View
@@ -445,7 +446,7 @@ const LotDetails = () => {
                                     </Text>
                                 </Pressable>
                             </View>
-                        </View>
+                        </ScrollView>
                     </>
             }
             <StatusBar style="light" />

@@ -31,7 +31,7 @@ const AppScreen = () => {
             <Carousel
                 ref={carouselRef}
                 width={width}
-                height={height * 0.65}
+                height={height * 0.60}
                 data={sliders as sliderType[]}
                 renderItem={({ item }) => <SliderRender item={item} />}
                 onProgressChange={(_, absoluteProgress) => {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     },
     buttonStyle: {
         position: 'absolute',
-        bottom: 80,
+        bottom: 80
     }
 })
 
