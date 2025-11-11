@@ -7,17 +7,9 @@ import { activeTab, Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme.web';
 import { useTabsHistoryContext } from '@/stores/context/tabsHistoryContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import * as NavigationBar from 'expo-navigation-bar';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
 import { Text } from 'react-native';
-
-const visibleNavigationBars = [
-  "/auth",
-  "/lotDetails", 
-  "/reservation", 
-  "/vehicleControls"
-]
 
 const TabLayout = () => {
 
@@ -31,10 +23,6 @@ const TabLayout = () => {
   } = useTabsHistoryContext();
 
   useEffect(() => {
-
-    if (!visibleNavigationBars.some(navigation => pathname.startsWith(navigation)))
-      NavigationBar.setVisibilityAsync("hidden");
-
     if (
       pathname === "/auth/signIn" ||
       pathname === "/auth/signUp"
