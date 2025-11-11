@@ -1,18 +1,23 @@
 import { useAuthContext } from "@/stores/context/AuthContext";
 import { useTabsHistoryContext } from "@/stores/context/tabsHistoryContext";
+import * as NavigationBar from 'expo-navigation-bar';
 import { RelativePathString, Stack, useRouter } from "expo-router";
 import { useEffect } from "react";
 
 const AuthLayout = () => {
-    const { 
-        session, 
-        loading 
+    const {
+        session,
+        loading
     } = useAuthContext();
     const {
         pathname
     } = useTabsHistoryContext();
     const router = useRouter();
-    
+
+    useEffect(() => {
+        NavigationBar.setVisibilityAsync("visible");
+    }, [])
+
     useEffect(() => {
         if (!loading && session) {
             const redirection = pathname === "/" ? "/(tabs)/account" : pathname;

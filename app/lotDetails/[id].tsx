@@ -6,9 +6,10 @@ import useLot from "@/hooks/useLot";
 import { useLotStore } from "@/stores/zustand/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BlurView } from 'expo-blur';
+import * as NavigationBar from 'expo-navigation-bar';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Dimensions,
     Image,
@@ -47,6 +48,10 @@ const LotDetails = () => {
         router.push("/reservation/selectVehicle");
     }
 
+    useEffect(() => {
+        NavigationBar.setVisibilityAsync("visible");
+    }, [])
+
     if (isPending) return (
         <View style={styles.loading}>
             <LoaderSkeleton />
@@ -57,16 +62,7 @@ const LotDetails = () => {
     const lotImage = lot?.urlImages?.at(indexImage) || null;
 
     return (
-        <ScrollView
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-                <RefreshControl
-                    refreshing={isRefetching}
-                    onRefresh={refetch}
-                />
-            }
-            contentContainerStyle={styles.container}
-        >
+        <View style={styles.container}>
             {
                 !lot ?
                     <RequestTooLong
@@ -75,64 +71,75 @@ const LotDetails = () => {
                     />
                     :
                     <>
-                        <ImageBackground
-                            source={lotImage ? { uri: lotImage } : defaultParking}
-                            style={styles.imageBackground}
+                        <ScrollView
+                            scrollEnabled={false}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={isRefetching}
+                                    onRefresh={refetch}
+                                />
+                            }
                         >
-                            <View style={styles.headerBackground}>
-                                <Icons
-                                    onPress={() => router.back()}
-                                    name="chevron-back"
-                                    color="white"
-                                    size={30}
-                                />
-                                <Icons
-                                    name="share-social-sharp"
-                                    color="white"
-                                    size={30}
-                                />
-                            </View>
-                            {
-                                lotImage &&
-                                <View style={styles.bodyBackgroundWrapper}>
-                                    <BlurView
-                                        intensity={70}
-                                        tint={colorSchema === "dark" ? "dark" : "light"}
-                                        style={{
-                                            padding: 5
-                                        }}
-                                    >
-                                        <ScrollView
-                                            horizontal
-                                            showsHorizontalScrollIndicator={false}
-                                            contentContainerStyle={{
-                                                flexDirection: "row",
-                                                gap: 5
+                            <ImageBackground
+                                source={lotImage ? { uri: lotImage } : defaultParking}
+                                style={styles.imageBackground}
+                            >
+                                <View style={styles.headerBackground}>
+                                    <Icons
+                                        onPress={() => router.back()}
+                                        name="chevron-back"
+                                        color="white"
+                                        size={30}
+                                    />
+                                    <Icons
+                                        name="share-social-sharp"
+                                        color="white"
+                                        size={30}
+                                    />
+                                </View>
+                                {
+                                    lotImage &&
+                                    <View style={styles.bodyBackgroundWrapper}>
+                                        <BlurView
+                                            intensity={70}
+                                            tint={colorSchema === "dark" ? "dark" : "light"}
+                                            style={{
+                                                padding: 5
                                             }}
                                         >
+                                            <ScrollView
+                                                horizontal
+                                                showsHorizontalScrollIndicator={false}
+                                                contentContainerStyle={{
+                                                    flexDirection: "row",
+                                                    gap: 5
+                                                }}
+                                                nestedScrollEnabled={true}
+                                            >
 
-                                            {
-                                                lot.urlImages?.map((item, index) =>
-                                                    <Pressable
-                                                        key={index}
-                                                        onPress={() => setIndexImage(index)}
-                                                    >
-                                                        <Image
-                                                            source={{ uri: item }}
-                                                            alt={item}
-                                                            style={styles.image}
-                                                        />
-                                                    </Pressable>
-                                                )
-                                            }
-                                        </ScrollView>
-                                    </BlurView>
-                                </View>
-                            }
-                        </ImageBackground>
+                                                {
+                                                    lot.urlImages?.map((item, index) =>
+                                                        <Pressable
+                                                            key={index}
+                                                            onPress={() => setIndexImage(index)}
+                                                        >
+                                                            <Image
+                                                                source={{ uri: item }}
+                                                                alt={item}
+                                                                style={styles.image}
+                                                            />
+                                                        </Pressable>
+                                                    )
+                                                }
+                                            </ScrollView>
+                                        </BlurView>
+                                    </View>
+                                }
+                            </ImageBackground>
+                        </ScrollView>
                         <ScrollView
                             contentContainerStyle={{
-                                flex: 1,
+                                flexGrow: 1,
                                 justifyContent: "space-between",
                                 paddingBottom: 30,
                                 backgroundColor: Colors[colorSchema].background
@@ -450,7 +457,7 @@ const LotDetails = () => {
                     </>
             }
             <StatusBar style="light" />
-        </ScrollView>
+        </View>
     )
 }
 

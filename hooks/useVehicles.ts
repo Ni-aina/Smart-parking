@@ -1,4 +1,4 @@
-import { createVehicle, getVehiclesByDriverId, updateVehicle } from "@/actions/vehicle.action";
+import { createVehicle, deleteVehicle, getVehiclesByDriverId, updateVehicle } from "@/actions/vehicle.action";
 import { VehicleInterface } from "@/types/vehicle";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
@@ -46,6 +46,16 @@ const useVehicles = () => {
         onSuccess: () => router.canGoBack() && router.back()
     })
 
+    const {
+        mutate: handleDelete,
+        isPending: isDeleting
+    } = useMutation({
+        mutationFn: (id: string)=> deleteVehicle(id),
+        onSettled: ()=> queryClient.invalidateQueries({
+            queryKey: ["vehicles"]
+        })
+    })
+
     return {
         handleCreate,
         creationError,
@@ -53,6 +63,8 @@ const useVehicles = () => {
         handleUpdate,
         updateError,
         isUpdating,
+        handleDelete,
+        isDeleting,
         vehicles,
         errorFetching,
         isLoading,

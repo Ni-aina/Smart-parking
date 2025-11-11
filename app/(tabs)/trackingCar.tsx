@@ -1,5 +1,6 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Icons from "@/components/ui/icons";
+import Pending from "@/components/ui/pending";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import VehicleItem from "@/components/vehicles/VehicleItem";
@@ -22,7 +23,9 @@ const TrackingCarSceen = () => {
     errorFetching,
     isLoading,
     refetch,
-    isRefetching
+    isRefetching,
+    isDeleting,
+    handleDelete
   } = useVehicles();
 
   const handleAddVehicle = () => {
@@ -77,6 +80,7 @@ const TrackingCarSceen = () => {
               renderItem={({ item }) =>
                 <VehicleItem
                   vehicle={item}
+                  handleDelete={handleDelete}
                 />
               }
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
@@ -86,6 +90,11 @@ const TrackingCarSceen = () => {
             />
         }
       </View>
+      {
+        isDeleting &&
+        <Pending />
+      }
+
     </ProtectedRoute>
   )
 }

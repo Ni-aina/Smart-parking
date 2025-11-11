@@ -2,6 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { VehicleInterface } from "@/types/vehicle";
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
     Image,
     Pressable,
@@ -10,16 +11,21 @@ import {
     useColorScheme,
     View
 } from "react-native";
+import ConfirmModal from "../ui/confirmModal";
 
 interface VehicleItemInterface {
     vehicle: VehicleInterface;
+    handleDelete: (id: string)=> void;
 }
 
 const VehicleItem = ({
-    vehicle
+    vehicle,
+    handleDelete
 }: VehicleItemInterface) => {
     const colorSchema = useColorScheme() || "light";
     const router = useRouter();
+
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const handleNavigateToUpdate = () => {
         router.push({
@@ -28,6 +34,19 @@ const VehicleItem = ({
                 vehicle: JSON.stringify(vehicle)
             }
         })
+    }
+
+    const handleToggleConfirm = () => {
+        setShowConfirm(prev => !prev);
+    }
+
+    const handleDeleteConfirm = () => {
+        const {
+            id
+        } = vehicle;
+        if (!id) return;
+        setShowConfirm(false);
+        handleDelete(id);
     }
 
     const {
@@ -117,6 +136,7 @@ const VehicleItem = ({
                     style={({ pressed }) => pressed && {
                         opacity: 0.6
                     }}
+                    onPress={handleToggleConfirm}
                 >
                     <Feather
                         name="trash"
@@ -125,12 +145,20 @@ const VehicleItem = ({
                     />
                 </Pressable>
             </View>
+            <ConfirmModal
+                visible={showConfirm}
+                title="Danger zone"
+                message={`Are you sure you want to delete ${vehicle.plateNumber} ?`}
+                onConfirm={handleDeleteConfirm}
+                onCancel={handleToggleConfirm}
+            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
