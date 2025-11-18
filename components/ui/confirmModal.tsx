@@ -64,8 +64,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           >{title}</Text>
           <Text
             style={
-              [styles.message,
-              { color: Colors[colorScheme].icon }
+              [
+                styles.message,
+                { color: Colors[colorScheme].icon }
               ]
             }
           >{message}</Text>
