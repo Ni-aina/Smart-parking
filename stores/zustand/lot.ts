@@ -8,8 +8,8 @@ interface LotState {
     maxLength: number;
     vehicleId: string | null;
     startDate: string | null;
+    arrivalTime: string | null;
     durationHours: number | null;
-    ArrivalTime: string | null;
   }
   setLot: (lot: LotState["lot"]) => void;
 }
@@ -23,7 +23,7 @@ export const useLotStore = create<LotState>((set) => ({
     vehicleId: null,
     startDate: null,
     durationHours: null,
-    ArrivalTime: null,
+    arrivalTime: null,
   },
   setLot: (lot) => set({ lot })
 }))
