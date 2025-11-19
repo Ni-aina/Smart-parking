@@ -26,7 +26,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   onCancel
 }) => {
-  const colorScheme = useColorScheme() || "light";
+  const colorSchema = useColorScheme() || "light";
 
   useEffect(() => {
     NavigationBar.setVisibilityAsync("hidden");
@@ -39,7 +39,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       transparent
     >
       <StatusBar
-        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+        barStyle={colorSchema === "dark" ? "light-content" : "dark-content"}
         backgroundColor="rgba(0,0,0,0.1)"
       />
       <View style={styles.overlay}>
@@ -47,7 +47,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           style={
             [
               styles.container,
-              { backgroundColor: Colors[colorScheme].background }
+              { backgroundColor: Colors[colorSchema].background }
             ]
           }
         >
@@ -56,7 +56,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               [
                 styles.title,
                 {
-                  color: Colors[colorScheme].text
+                  color: Colors[colorSchema].text
 
                 }
               ]
@@ -66,7 +66,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             style={
               [
                 styles.message,
-                { color: Colors[colorScheme].icon }
+                { color: Colors[colorSchema].icon }
               ]
             }
           >{message}</Text>
@@ -76,13 +76,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               onPress={onCancel}
               style={({ pressed }) => [
                 styles.button,
-                { backgroundColor: colorScheme === "light" ? "#eee" : "#333" },
+                { backgroundColor: Colors[colorSchema].gray100 },
                 pressed && styles.pressed
               ]}
             >
               <Text
                 style={{
-                  color: colorScheme === "light" ? "#000" : "#fff"
+                  color: colorSchema === "light" ? "#000" : "#fff"
                 }}
               >
                 Cancel

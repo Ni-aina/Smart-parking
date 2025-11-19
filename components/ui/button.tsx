@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import { Dimensions, Pressable, StyleSheet, Text } from "react-native";
 
 interface ButtonProps {
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     button: {
         minWidth,
         paddingVertical: 12,
-        backgroundColor: Colors["light"].tint,
+        backgroundColor: "#001b38ff",
         borderRadius: 8
     },
     buttonText: {

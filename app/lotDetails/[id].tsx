@@ -43,7 +43,7 @@ const LotDetails = () => {
             maxWidth: lot.lotType?.max_width || 0,
             maxHeight: lot.lotType?.max_height || 0,
             maxLength: lot.lotType?.max_length || 0,
-            vehicleId: null
+            vehicleId: ""
         })
         router.push("/reservation/selectVehicle");
     }
@@ -101,7 +101,7 @@ const LotDetails = () => {
                                     lotImage &&
                                     <View style={styles.bodyBackgroundWrapper}>
                                         <BlurView
-                                            intensity={70}
+                                            intensity={20}
                                             tint={colorSchema === "dark" ? "dark" : "light"}
                                             style={{
                                                 padding: 5
