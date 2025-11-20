@@ -22,7 +22,7 @@ const FindParkingScreen = () => {
     const router = useRouter();
 
     const { t } = useTranslation();
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const [layout, setLayout] = useState<"list" | "tile">("list");
 
     const {
@@ -50,8 +50,8 @@ const FindParkingScreen = () => {
                                 name="reorder-four"
                                 size={28}
                                 color={layout === "list" ?
-                                    Colors[colorSchema].tint :
-                                    Colors[colorSchema].icon
+                                    Colors[colorscheme].tint :
+                                    Colors[colorscheme].icon
                                 }
                             />
                         </Pressable>
@@ -63,8 +63,8 @@ const FindParkingScreen = () => {
                                 name="grid-outline"
                                 size={24}
                                 color={layout === "tile" ?
-                                    Colors[colorSchema].tint :
-                                    Colors[colorSchema].icon
+                                    Colors[colorscheme].tint :
+                                    Colors[colorscheme].icon
                                 }
                             />
                         </Pressable>
@@ -75,24 +75,24 @@ const FindParkingScreen = () => {
                 style={[
                     styles.inputSearch,
                     {
-                        borderColor: Colors[colorSchema].icon,
-                        backgroundColor: Colors[colorSchema].background
+                        borderColor: Colors[colorscheme].icon,
+                        backgroundColor: Colors[colorscheme].background
                     }
                 ]}
             >
                 <Ionicons
                     name="search"
                     size={20}
-                    color={Colors[colorSchema].icon}
+                    color={Colors[colorscheme].icon}
                 />
                 <TextInput
                     style={[
                         styles.inputSearchText,
                         {
-                            color: Colors[colorSchema].icon,
+                            color: Colors[colorscheme].icon,
                         }
                     ]}
-                    placeholderTextColor={Colors[colorSchema].icon}
+                    placeholderTextColor={Colors[colorscheme].icon}
                     placeholder="Search"
                 />
             </View>
@@ -101,7 +101,7 @@ const FindParkingScreen = () => {
                     style={{
                         fontSize: 20,
                         fontWeight: "500",
-                        color: Colors[colorSchema].text
+                        color: Colors[colorscheme].text
                     }}
                 >
                     Search Result
@@ -109,7 +109,7 @@ const FindParkingScreen = () => {
                 <Text
                     style={{
                         fontSize: 20,
-                        color: Colors[colorSchema].tint
+                        color: Colors[colorscheme].tint
                     }}
                 >
                     Filters

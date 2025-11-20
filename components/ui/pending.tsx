@@ -4,7 +4,7 @@ import Icons from "./icons";
 
 const Pending = () => {
     const rotateValue = useRef(new Animated.Value(0)).current;
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
 
     const spin = rotateValue.interpolate({
         inputRange: [0, 1],
@@ -34,7 +34,7 @@ const Pending = () => {
                 }}
             >
                 <Icons name="reload-circle" size={48} color={
-                    colorSchema === "light" ?
+                    colorscheme === "light" ?
                         "rgba(0,0,0,0.2)" :
                         "rgba(255,255,255,0.3)"
                 } />

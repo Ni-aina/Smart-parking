@@ -8,16 +8,16 @@ import { Colors } from "@/constants/Colors";
 import useVehicles from "@/hooks/useVehicles";
 import { useRouter } from "expo-router";
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View
+    FlatList,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
 } from "react-native";
 
 const TrackingCarSceen = () => {
   const router = useRouter();
-  const colorSchema = useColorScheme() || "light";
+  const colorscheme = useColorScheme() || "light";
   const {
     vehicles,
     errorFetching,
@@ -55,7 +55,7 @@ const TrackingCarSceen = () => {
           <Text
             style={{
               fontSize: 24,
-              color: Colors[colorSchema].text
+              color: Colors[colorscheme].text
             }}
           >
             My vehicles
@@ -63,7 +63,7 @@ const TrackingCarSceen = () => {
           <Icons
             name="add"
             size={28}
-            color={Colors[colorSchema].icon}
+            color={Colors[colorscheme].icon}
             onPress={handleAddVehicle}
           />
         </View>

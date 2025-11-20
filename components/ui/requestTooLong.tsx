@@ -11,7 +11,7 @@ const RequestTooLong = ({
     refresh,
     message
 }: RequestTooLongInterface) => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
 
     return (
         <Pressable
@@ -24,12 +24,12 @@ const RequestTooLong = ({
             <Ionicons
                 name="refresh-outline"
                 size={16}
-                color={Colors[colorSchema].text}
+                color={Colors[colorscheme].text}
             />
             <Text
                 style={{
                     fontSize: 16,
-                    color: Colors[colorSchema].text
+                    color: Colors[colorscheme].text
                 }}
             >
                 {message}

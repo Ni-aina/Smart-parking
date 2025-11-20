@@ -3,7 +3,7 @@ import { Skeleton } from "moti/skeleton";
 import { useColorScheme } from "react-native";
 
 const LoaderSkeleton = () => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
 
     return (
 
@@ -21,13 +21,13 @@ const LoaderSkeleton = () => {
                 }
             }>
                 <View style={{ maxWidth: "48%" }}>
-                    <Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+                    <Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
                 </View>
                 < View style={{ maxWidth: "48%" }}>
-                    <Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+                    <Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
                 </View>
             </View>
-            < Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+            < Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
             <View style={
                 {
                     marginVertical: 10,
@@ -36,13 +36,13 @@ const LoaderSkeleton = () => {
                 }
             }>
                 <View style={{ maxWidth: "67%" }}>
-                    <Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+                    <Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
                 </View>
                 < View style={{ maxWidth: "30%" }}>
-                    <Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+                    <Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
                 </View>
             </View>
-            < Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+            < Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
             <View style={
                 {
                     marginVertical: 10,
@@ -51,10 +51,10 @@ const LoaderSkeleton = () => {
                 }
             }>
                 <View style={{ maxWidth: "30%" }}>
-                    <Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+                    <Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
                 </View>
                 < View style={{ maxWidth: "67%" }}>
-                    <Skeleton colorMode={colorSchema} width="100%" height={100} radius={5} />
+                    <Skeleton colorMode={colorscheme} width="100%" height={100} radius={5} />
                 </View>
             </View>
         </MotiView>

@@ -17,7 +17,7 @@ import {
 } from "react-native";
 
 const AccountScreen = () => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const {
         currentProfile,
         isPending,
@@ -57,7 +57,7 @@ const AccountScreen = () => {
                             style={[
 
                                 styles.textProfile, {
-                                    color: Colors[colorSchema].text
+                                    color: Colors[colorscheme].text
                                 }]
                             }>
                             {error?.message || currentProfile?.fullName || ""}
@@ -66,7 +66,7 @@ const AccountScreen = () => {
                             style={[
 
                                 styles.emailProfile, {
-                                    color: Colors[colorSchema].icon
+                                    color: Colors[colorscheme].icon
                                 }]
                             }>
                             {currentProfile?.emailAddress || ""}
@@ -81,7 +81,7 @@ const AccountScreen = () => {
                         style={[
 
                             styles.subtitle, {
-                                color: Colors[colorSchema].text
+                                color: Colors[colorscheme].text
                             }]
                         }>
                         Personal Info
@@ -96,12 +96,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="person-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Personal Data
@@ -110,7 +110,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -123,12 +123,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="card-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Payment Account
@@ -137,7 +137,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -150,12 +150,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="shield-checkmark-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Account Security
@@ -164,14 +164,14 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Text
                         style={[
 
                             styles.subtitle, {
-                                color: Colors[colorSchema].text
+                                color: Colors[colorscheme].text
                             }]
                         }>
                         General
@@ -186,12 +186,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="globe-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Languages
@@ -200,7 +200,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -213,12 +213,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="notifications-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Push Notification
@@ -227,7 +227,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -240,12 +240,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="chatbubble-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Messages
@@ -254,7 +254,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -267,12 +267,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="trash-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Clear Data
@@ -281,7 +281,7 @@ const AccountScreen = () => {
                         <Text
                             style={[
                                 styles.textContent, {
-                                    color: Colors[colorSchema].icon
+                                    color: Colors[colorscheme].icon
                                 }]
                             }>
                             88 MB
@@ -291,7 +291,7 @@ const AccountScreen = () => {
                         style={[
 
                             styles.subtitle, {
-                                color: Colors[colorSchema].text
+                                color: Colors[colorscheme].text
                             }]
                         }>
                         About
@@ -306,12 +306,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="help-circle-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Help Center
@@ -320,7 +320,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -333,12 +333,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="lock-closed-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Privacy & Policy
@@ -347,7 +347,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -360,12 +360,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="information-circle-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 About App
@@ -374,7 +374,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                     <Pressable
@@ -387,12 +387,12 @@ const AccountScreen = () => {
                             <Ionicons
                                 name="construct-outline"
                                 size={24}
-                                color={Colors[colorSchema].icon}
+                                color={Colors[colorscheme].icon}
                             />
                             <Text
                                 style={[
                                     styles.textContent, {
-                                        color: Colors[colorSchema].text
+                                        color: Colors[colorscheme].text
                                     }]
                                 }>
                                 Term & Condition
@@ -401,7 +401,7 @@ const AccountScreen = () => {
                         <Ionicons
                             name="chevron-forward"
                             size={28}
-                            color={Colors[colorSchema].icon}
+                            color={Colors[colorscheme].icon}
                         />
                     </Pressable>
                 </ScrollView>
@@ -413,7 +413,7 @@ const AccountScreen = () => {
                         style={
                             [styles.textLogout,
                             {
-                                color: Colors[colorSchema].text
+                                color: Colors[colorscheme].text
                             }]
                         }
                     >
@@ -422,7 +422,7 @@ const AccountScreen = () => {
                     <Ionicons
                         name="log-out-outline"
                         size={24}
-                        color={Colors[colorSchema].icon}
+                        color={Colors[colorscheme].icon}
                     />
                 </Pressable>
             </View>

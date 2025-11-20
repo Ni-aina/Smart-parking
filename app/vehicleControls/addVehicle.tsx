@@ -10,8 +10,8 @@ import {
     View
 } from "react-native";
 
-const AddVehicle = () => {
-    const colorSchema = useColorScheme() || "light";
+const AddVehicleScreen = () => {
+    const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
     return (
@@ -24,7 +24,7 @@ const AddVehicle = () => {
                         style={{
                             fontSize: 20,
                             fontWeight: "700",
-                            color: Colors[colorSchema].text
+                            color: Colors[colorscheme].text
                         }}
                     >
                         Add Vehicle
@@ -32,7 +32,7 @@ const AddVehicle = () => {
                     <Icons
                         name="close"
                         size={28}
-                        color={Colors[colorSchema].text}
+                        color={Colors[colorscheme].text}
                         onPress={() => router.canGoBack() && router.back()}
                     />
                 </View>
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddVehicle;
+export default AddVehicleScreen;

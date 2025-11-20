@@ -23,8 +23,8 @@ import {
     View
 } from "react-native";
 
-const LotDetails = () => {
-    const colorSchema = useColorScheme() || "light";
+const LotDetailsScreen = () => {
+    const colorscheme = useColorScheme() || "light";
     const { id } = useLocalSearchParams<{ id: string }>();
     const [indexImage, setIndexImage] = useState(0);
     const router = useRouter();
@@ -102,7 +102,7 @@ const LotDetails = () => {
                                     <View style={styles.bodyBackgroundWrapper}>
                                         <BlurView
                                             intensity={20}
-                                            tint={colorSchema === "dark" ? "dark" : "light"}
+                                            tint={colorscheme === "dark" ? "dark" : "light"}
                                             style={{
                                                 padding: 5
                                             }}
@@ -142,7 +142,7 @@ const LotDetails = () => {
                                 flexGrow: 1,
                                 justifyContent: "space-between",
                                 paddingBottom: 30,
-                                backgroundColor: Colors[colorSchema].background
+                                backgroundColor: Colors[colorscheme].background
                             }}
                             showsVerticalScrollIndicator={false}
                         >
@@ -161,8 +161,8 @@ const LotDetails = () => {
                                         }}
                                     >
                                         <BlurView
-                                            intensity={colorSchema === "dark" ? 15 : 5}
-                                            tint={colorSchema === "dark" ? "light" : "dark"}
+                                            intensity={colorscheme === "dark" ? 15 : 5}
+                                            tint={colorscheme === "dark" ? "light" : "dark"}
                                             style={{
                                                 paddingHorizontal: 10,
                                                 paddingVertical: 8
@@ -172,7 +172,7 @@ const LotDetails = () => {
                                                 style={{
                                                     fontSize: 16,
                                                     fontWeight: "600",
-                                                    color: Colors[colorSchema].tint
+                                                    color: Colors[colorscheme].tint
                                                 }}
                                             >
                                                 Car parking
@@ -193,7 +193,7 @@ const LotDetails = () => {
                                         />
                                         <Text
                                             style={{
-                                                color: Colors[colorSchema].icon
+                                                color: Colors[colorscheme].icon
                                             }}
                                         >
                                             65 reviews
@@ -215,7 +215,7 @@ const LotDetails = () => {
                                             style={{
                                                 fontSize: 24,
                                                 fontWeight: "bold",
-                                                color: Colors[colorSchema].text
+                                                color: Colors[colorscheme].text
                                             }}
                                         >
                                             {lot.name || ""}
@@ -223,7 +223,7 @@ const LotDetails = () => {
                                         <Text
                                             style={{
                                                 fontSize: 20,
-                                                color: Colors[colorSchema].icon,
+                                                color: Colors[colorscheme].icon,
                                                 opacity: 0.7
                                             }}
                                         >
@@ -237,8 +237,8 @@ const LotDetails = () => {
                                         }}
                                     >
                                         <BlurView
-                                            intensity={colorSchema === "dark" ? 15 : 5}
-                                            tint={colorSchema === "dark" ? "light" : "dark"}
+                                            intensity={colorscheme === "dark" ? 15 : 5}
+                                            tint={colorscheme === "dark" ? "light" : "dark"}
                                             style={{
                                                 padding: 5,
                                                 transform: "rotate(-45deg)"
@@ -247,7 +247,7 @@ const LotDetails = () => {
                                             <Icons
                                                 name="send-sharp"
                                                 size={20}
-                                                color={Colors[colorSchema].tint}
+                                                color={Colors[colorscheme].tint}
                                             />
                                         </BlurView>
                                     </View>
@@ -270,12 +270,12 @@ const LotDetails = () => {
                                         <Ionicons
                                             name="location-outline"
                                             size={20}
-                                            color={Colors[colorSchema].tint}
+                                            color={Colors[colorscheme].tint}
                                         />
                                         <Text
                                             style={{
                                                 fontSize: 16,
-                                                color: Colors[colorSchema].tabIconDefault
+                                                color: Colors[colorscheme].tabIconDefault
                                             }}
                                         >
                                             {lot.distance ? lot.distance.distanceKm.toFixed(2) + " km" : "N/A"}
@@ -291,12 +291,12 @@ const LotDetails = () => {
                                         <Ionicons
                                             name="time-outline"
                                             size={20}
-                                            color={Colors[colorSchema].tint}
+                                            color={Colors[colorscheme].tint}
                                         />
                                         <Text
                                             style={{
                                                 fontSize: 16,
-                                                color: Colors[colorSchema].tabIconDefault
+                                                color: Colors[colorscheme].tabIconDefault
                                             }}
                                         >
                                             {lot.distance?.formatted || "N/A"}
@@ -312,12 +312,12 @@ const LotDetails = () => {
                                         <Ionicons
                                             name="car-outline"
                                             size={20}
-                                            color={Colors[colorSchema].tint}
+                                            color={Colors[colorscheme].tint}
                                         />
                                         <Text
                                             style={{
                                                 fontSize: 16,
-                                                color: Colors[colorSchema].tabIconDefault
+                                                color: Colors[colorscheme].tabIconDefault
                                             }}
                                         >
                                             {(lot?.totalSpots || 0) - (lot?.occupiedSpots || 0)} Spots
@@ -338,7 +338,7 @@ const LotDetails = () => {
                                             style={{
                                                 fontSize: 24,
                                                 fontWeight: "bold",
-                                                color: Colors[colorSchema].text
+                                                color: Colors[colorscheme].text
                                             }}
                                         >
                                             Vehicle category
@@ -357,7 +357,7 @@ const LotDetails = () => {
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            color: Colors[colorSchema].tabIconDefault
+                                            color: Colors[colorscheme].tabIconDefault
                                         }}
                                     >
                                         Width {"< " + lot.lotType?.max_width || "N/A"} m
@@ -365,7 +365,7 @@ const LotDetails = () => {
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            color: Colors[colorSchema].tabIconDefault
+                                            color: Colors[colorscheme].tabIconDefault
                                         }}
                                     >
                                         Height {"< " + lot.lotType?.max_height || "N/A"} m
@@ -373,7 +373,7 @@ const LotDetails = () => {
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            color: Colors[colorSchema].tabIconDefault
+                                            color: Colors[colorscheme].tabIconDefault
                                         }}
                                     >
                                         Length {"< " + lot.lotType?.max_length || "N/A"} m
@@ -391,7 +391,7 @@ const LotDetails = () => {
                                             fontWeight: "600",
                                             paddingHorizontal: 15,
                                             marginBottom: 10,
-                                            color: Colors[colorSchema].text
+                                            color: Colors[colorscheme].text
                                         }}
                                     >
                                         Description
@@ -400,7 +400,7 @@ const LotDetails = () => {
                                         style={{
                                             fontSize: 16,
                                             paddingHorizontal: 15,
-                                            color: Colors[colorSchema].icon,
+                                            color: Colors[colorscheme].icon,
                                             lineHeight: 22
                                         }}
                                     >
@@ -422,7 +422,7 @@ const LotDetails = () => {
                                         style={{
                                             fontSize: 20,
                                             fontWeight: "semibold",
-                                            color: Colors[colorSchema].icon,
+                                            color: Colors[colorscheme].icon,
                                             opacity: 0.7
                                         }}
                                     >
@@ -432,7 +432,7 @@ const LotDetails = () => {
                                         style={{
                                             fontSize: 16,
                                             fontWeight: "600",
-                                            color: Colors[colorSchema].tint
+                                            color: Colors[colorscheme].tint
                                         }}
                                     >
                                         ${lot.pricePerHour?.toFixed(2) || "0.00"} / hr
@@ -508,4 +508,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LotDetails;
+export default LotDetailsScreen;

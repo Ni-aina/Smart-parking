@@ -22,7 +22,7 @@ const VehicleItem = ({
     vehicle,
     handleDelete
 }: VehicleItemInterface) => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
     const [showConfirm, setShowConfirm] = useState(false);
@@ -59,7 +59,7 @@ const VehicleItem = ({
             style={[
                 styles.container,
                 {
-                    borderColor: Colors[colorSchema].icon
+                    borderColor: Colors[colorscheme].icon
                 }
             ]}
         >
@@ -85,7 +85,7 @@ const VehicleItem = ({
                 >
                     <Text
                         style={{
-                            color: Colors[colorSchema].text,
+                            color: Colors[colorscheme].text,
                             fontSize: 16,
                             fontWeight: "700"
                         }}
@@ -94,7 +94,7 @@ const VehicleItem = ({
                     </Text>
                     <Text
                         style={{
-                            color: Colors[colorSchema].icon,
+                            color: Colors[colorscheme].icon,
                             fontSize: 14
                         }}
                     >

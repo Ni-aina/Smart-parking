@@ -19,7 +19,7 @@ interface VehicleSelectItemInterface {
 const VehicleSelectItem = ({
     vehicle
 }: VehicleSelectItemInterface) => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const [error, setError] = useState("");
 
     const {
@@ -82,9 +82,9 @@ const VehicleSelectItem = ({
                 style={({ pressed }) => [
                     styles.container,
                     {
-                        borderColor: Colors[colorSchema].icon,
+                        borderColor: Colors[colorscheme].icon,
                         backgroundColor: isActive ?
-                            Colors[colorSchema === "light" ? "dark" : "light"]?.text :
+                            Colors[colorscheme === "light" ? "dark" : "light"]?.text :
                             "transparent"
                     },
                     pressed && {
@@ -115,7 +115,7 @@ const VehicleSelectItem = ({
                     >
                         <Text
                             style={{
-                                color: Colors[colorSchema].text,
+                                color: Colors[colorscheme].text,
                                 fontSize: 20,
                                 fontWeight: "700"
                             }}
@@ -124,7 +124,7 @@ const VehicleSelectItem = ({
                         </Text>
                         <Text
                             style={{
-                                color: Colors[colorSchema].icon,
+                                color: Colors[colorscheme].icon,
                                 fontSize: 16
                             }}
                         >
@@ -137,8 +137,8 @@ const VehicleSelectItem = ({
                         borderRadius: 50,
                         borderWidth: 1,
                         borderColor: isActive ?
-                            Colors[colorSchema].tint :
-                            Colors[colorSchema].tabIconDefault,
+                            Colors[colorscheme].tint :
+                            Colors[colorscheme].tabIconDefault,
                         padding: 2
                     }}
                 >
@@ -148,10 +148,10 @@ const VehicleSelectItem = ({
                             height: 10,
                             borderRadius: 50,
                             borderWidth: 1,
-                            borderColor: Colors[colorSchema].icon,
+                            borderColor: Colors[colorscheme].icon,
                             backgroundColor: isActive ?
-                                Colors[colorSchema].icon :
-                                Colors[colorSchema].background
+                                Colors[colorscheme].icon :
+                                Colors[colorscheme].background
                         }}
                     />
                 </View>

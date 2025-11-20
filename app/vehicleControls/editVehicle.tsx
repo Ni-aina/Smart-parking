@@ -11,8 +11,8 @@ import {
     View
 } from "react-native";
 
-const EditVehicle = () => {
-    const colorSchema = useColorScheme() || "light";
+const EditVehicleScreen = () => {
+    const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
     const { vehicle } = useLocalSearchParams();
@@ -28,7 +28,7 @@ const EditVehicle = () => {
                         style={{
                             fontSize: 20,
                             fontWeight: "700",
-                            color: Colors[colorSchema].text
+                            color: Colors[colorscheme].text
                         }}
                     >
                         Update Vehicle
@@ -36,7 +36,7 @@ const EditVehicle = () => {
                     <Icons
                         name="close"
                         size={28}
-                        color={Colors[colorSchema].text}
+                        color={Colors[colorscheme].text}
                         onPress={() => router.canGoBack() && router.back()}
                     />
                 </View>
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default EditVehicle;
+export default EditVehicleScreen;

@@ -1,15 +1,15 @@
 import { Colors } from "@/constants/Colors";
 
-const useActiveBar = ({ colorSchema }: { colorSchema: "dark" | "light" }) => {
+const useActiveBar = ({ colorscheme }: { colorscheme: "dark" | "light" }) => {
 
     const barColors = {
         active: {
-            color: Colors[colorSchema].background,
-            backgroundColor: Colors[colorSchema].tint
+            color: Colors[colorscheme].background,
+            backgroundColor: Colors[colorscheme].tint
         },
         inactive: {
-            color: Colors[colorSchema].text,
-            backgroundColor: Colors[colorSchema].background
+            color: Colors[colorscheme].text,
+            backgroundColor: Colors[colorscheme].background
         }
     }
 

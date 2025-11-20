@@ -19,7 +19,7 @@ const Header = ({
     title,
     rightIcon
 }: HeaderInterface) => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
     return (
@@ -30,7 +30,7 @@ const Header = ({
                         justifyContent: "center",
                         alignItems: "center",
                         borderWidth: 1,
-                        borderColor: Colors[colorSchema].icon,
+                        borderColor: Colors[colorscheme].icon,
                         borderRadius: 50,
                         padding: 2
                     },
@@ -41,14 +41,14 @@ const Header = ({
                 <Ionicons
                     name="arrow-back"
                     size={24}
-                    color={Colors[colorSchema].text}
+                    color={Colors[colorscheme].text}
                 />
             </Pressable>
             <Text
                 style={{
                     fontSize: 20,
                     fontWeight: "600",
-                    color: Colors[colorSchema].text
+                    color: Colors[colorscheme].text
                 }}
             >
                 {title}

@@ -15,8 +15,8 @@ const TabLayout = () => {
 
   const { t } = useTranslation();
   const pathname = usePathname();
-  const colorSchema = useColorScheme() || "light";
-  const tabTriggerColor = Colors[colorSchema].tint;
+  const colorscheme = useColorScheme() || "light";
+  const tabTriggerColor = Colors[colorscheme].tint;
 
   const {
     setPathname

@@ -14,7 +14,7 @@ const LotItem = ({
     layout,
     onPress
 }: LotItemInterface) => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
 
     const defaultParking = require("@/assets/images/default-parking.png");
     const lotImage = lot.urlImages?.at(0) || null;
@@ -33,7 +33,7 @@ const LotItem = ({
             style={({ pressed }) => [
                 styles.container,
                 {
-                    backgroundColor: Colors[colorSchema].background
+                    backgroundColor: Colors[colorscheme].background
                 },
                 pressed && styles.pressed
             ]}
@@ -54,7 +54,7 @@ const LotItem = ({
                     style={{
                         fontSize: 16,
                         fontWeight: "600",
-                        color: Colors[colorSchema].text
+                        color: Colors[colorscheme].text
                     }}
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -64,7 +64,7 @@ const LotItem = ({
                 <Text
                     style={{
                         fontSize: 14,
-                        color: Colors[colorSchema].icon
+                        color: Colors[colorscheme].icon
                     }}
                     numberOfLines={1}
                     ellipsizeMode="tail"
@@ -78,12 +78,12 @@ const LotItem = ({
                             <Ionicons
                                 name="time-outline"
                                 size={20}
-                                color={Colors[colorSchema].tint}
+                                color={Colors[colorscheme].tint}
                             />
                             <Text
                                 style={{
                                     fontSize: 16,
-                                    color: Colors[colorSchema].tabIconDefault
+                                    color: Colors[colorscheme].tabIconDefault
                                 }}
                             >
                                {distance?.formatted || "N/A"}
@@ -94,12 +94,12 @@ const LotItem = ({
                         <Ionicons
                             name="car-outline"
                             size={20}
-                            color={Colors[colorSchema].tint}
+                            color={Colors[colorscheme].tint}
                         />
                         <Text
                             style={{
                                 fontSize: 16,
-                                color: Colors[colorSchema].tabIconDefault
+                                color: Colors[colorscheme].tabIconDefault
                             }}
                         >
                             {totalSpots - occupiedSpots} Spots
@@ -108,7 +108,7 @@ const LotItem = ({
                     <Text
                         style={{
                             fontSize: 16,
-                            color: Colors[colorSchema].tint
+                            color: Colors[colorscheme].tint
                         }}
                     >
                         ${pricePerHour} hr

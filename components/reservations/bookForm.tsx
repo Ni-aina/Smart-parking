@@ -1,19 +1,22 @@
 import { Colors } from "@/constants/Colors";
 import { useLotStore } from "@/stores/zustand/lot";
+import { addHours, getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     Pressable,
     StyleSheet,
     Text,
+    TextInput,
     useColorScheme,
     View
 } from "react-native";
 
 const BookForm = () => {
-    const colorschema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const [showDatePicker, setShowDatePicker] = useState(false);
+    const [showTimePicker, setShowTimePicker] = useState(false);
 
     const {
         lot,
@@ -21,26 +24,33 @@ const BookForm = () => {
     } = useLotStore();
 
     const {
-        startDate,
-        arrivalTime,
+        startTime,
+        endTime,
         durationHours
     } = lot;
+
+    useEffect(()=> {
+        setLot({
+            ...lot,
+            endTime: addHours(startTime, Number(durationHours))
+        })
+    }, [startTime, durationHours])
 
     return (
         <View style={styles.container}>
             <Text
                 style={{
                     fontSize: 20,
-                    color: Colors[colorschema].text
+                    color: Colors[colorscheme].text
                 }}
             >
                 Start Date
             </Text>
             <Pressable
                 style={({ pressed }) => [
-                    styles.datePicker,
+                    styles.dateTimePicker,
                     {
-                        borderColor: Colors[colorschema].gray200,
+                        borderColor: Colors[colorscheme].gray200,
                         opacity: pressed ? 0.8 : 1
                     }
                 ]}
@@ -49,30 +59,158 @@ const BookForm = () => {
                 <View style={{ flex: 1 }}>
                     <Text
                         style={{
-                            color: Colors[colorschema].icon
+                            color: Colors[colorscheme].icon
                         }}
                     >
-                        {startDate.toDateString()}
+                        {getDateFormat(startTime)}
                     </Text>
                 </View>
                 <Ionicons
                     size={16}
                     name="calendar"
-                    color={Colors[colorschema].icon}
+                    color={Colors[colorscheme].icon}
                 />
             </Pressable>
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    gap: 10
+                }}
+            >
+                <View
+                    style={{
+                        width: "50%",
+                        gap: 10
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            color: Colors[colorscheme].text
+                        }}
+                    >
+                        Arriving Time
+                    </Text>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.dateTimePicker,
+                            {
+                                borderColor: Colors[colorscheme].gray200,
+                                opacity: pressed ? 0.8 : 1
+                            }
+                        ]}
+                        onPress={() => setShowTimePicker(true)}
+                    >
+                        <View style={{ flex: 1 }}>
+                            <Text
+                                style={{
+                                    color: Colors[colorscheme].icon
+                                }}
+                            >
+                                {getTimeFormat(startTime)}
+                            </Text>
+                        </View>
+                        <Ionicons
+                            size={16}
+                            name="timer"
+                            color={Colors[colorscheme].icon}
+                        />
+                    </Pressable>
+                </View>
+                <View
+                    style={{
+                        width: "50%",
+                        gap: 10
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            color: Colors[colorscheme].text
+                        }}
+                    >
+                        Duration Hours
+                    </Text>
+                    <TextInput
+                        onChangeText={(text) => {
+                            setLot({
+                                ...lot,
+                                durationHours: text
+                            })
+                        }}
+                        value={durationHours}
+                        placeholder="Duration in hours"
+                        keyboardType="number-pad"
+                        style={[
+                            styles.dateTimePicker,
+                            {
+                                color: Colors[colorscheme].text,
+                                borderColor: Colors[colorscheme].gray200
+                            }
+                        ]}
+                    />
+                </View>
+            </View>
+            <Text
+                style={{
+                    fontSize: 20,
+                    color: Colors[colorscheme].text
+                }}
+            >
+                Exiting Time
+            </Text>
+            <View
+                style={[
+                    styles.dateTimePicker,
+                    {
+                        borderColor: Colors[colorscheme].gray200
+                    }
+                ]}
+            >
+                <View style={{ flex: 1 }}>
+                    <Text
+                        style={{
+                            color: Colors[colorscheme].icon
+                        }}
+                    >
+                        {getDateFormat(endTime)} {getTimeFormat(endTime)}
+                    </Text>
+                </View>
+                <Ionicons
+                    size={16}
+                    name="exit-outline"
+                    color={Colors[colorscheme].icon}
+                />
+            </View>
             {
                 showDatePicker &&
                 <DateTimePicker
-                    value={startDate}
+                    value={startTime}
                     onChange={(_, selectedDate) => {
                         selectedDate && setLot({
                             ...lot,
-                            startDate: selectedDate
+                            startTime: selectedDate
                         })
                         setShowDatePicker(false)
                     }}
                     minimumDate={new Date()}
+                    display="spinner"
+                />
+            }
+            {
+                showTimePicker &&
+                <DateTimePicker
+                    value={startTime}
+                    onChange={(_, selectedTime) => {
+                        selectedTime && setLot({
+                            ...lot,
+                            startTime: selectedTime
+                        })
+                        setShowTimePicker(false)
+                    }}
+                    mode="time"
+                    display="spinner"
                 />
             }
         </View>
@@ -84,7 +222,7 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 10
     },
-    datePicker: {
+    dateTimePicker: {
         flexDirection: "row",
         borderRadius: 5,
         padding: 10,

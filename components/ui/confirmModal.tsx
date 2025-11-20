@@ -2,13 +2,13 @@ import { Colors } from "@/constants/Colors";
 import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
 import {
-  Modal,
-  Pressable,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View
+    Modal,
+    Pressable,
+    StatusBar,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
 } from "react-native";
 
 interface ConfirmModalProps {
@@ -26,7 +26,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   onCancel
 }) => {
-  const colorSchema = useColorScheme() || "light";
+  const colorscheme = useColorScheme() || "light";
 
   useEffect(() => {
     NavigationBar.setVisibilityAsync("hidden");
@@ -39,7 +39,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       transparent
     >
       <StatusBar
-        barStyle={colorSchema === "dark" ? "light-content" : "dark-content"}
+        barStyle={colorscheme === "dark" ? "light-content" : "dark-content"}
         backgroundColor="rgba(0,0,0,0.1)"
       />
       <View style={styles.overlay}>
@@ -47,7 +47,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
           style={
             [
               styles.container,
-              { backgroundColor: Colors[colorSchema].background }
+              { backgroundColor: Colors[colorscheme].background }
             ]
           }
         >
@@ -56,7 +56,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               [
                 styles.title,
                 {
-                  color: Colors[colorSchema].text
+                  color: Colors[colorscheme].text
 
                 }
               ]
@@ -66,7 +66,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             style={
               [
                 styles.message,
-                { color: Colors[colorSchema].icon }
+                { color: Colors[colorscheme].icon }
               ]
             }
           >{message}</Text>
@@ -76,13 +76,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
               onPress={onCancel}
               style={({ pressed }) => [
                 styles.button,
-                { backgroundColor: Colors[colorSchema].gray100 },
+                { backgroundColor: Colors[colorscheme].gray100 },
                 pressed && styles.pressed
               ]}
             >
               <Text
                 style={{
-                  color: colorSchema === "light" ? "#000" : "#fff"
+                  color: colorscheme === "light" ? "#000" : "#fff"
                 }}
               >
                 Cancel

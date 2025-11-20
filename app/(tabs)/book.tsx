@@ -12,12 +12,12 @@ import {
 } from "react-native";
 
 const BookScreen = () => {
-    const colorSchema = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
     const [active, setActive] = useState(0);
 
     const {
         barColors
-    } = useActiveBar({ colorSchema });
+    } = useActiveBar({ colorscheme });
 
     return (
         <ProtectedRoute>
@@ -26,12 +26,12 @@ const BookScreen = () => {
                     <Text style={[
                         styles.headerText,
                         {
-                            color: Colors[colorSchema].text
+                            color: Colors[colorscheme].text
                         }
                     ]}>
                         My Booking
                     </Text>
-                    <Icons name="calendar" color={Colors[colorSchema].tint} />
+                    <Icons name="calendar" color={Colors[colorscheme].tint} />
                 </View>
                 <View style={styles.content}>
                     <Pressable

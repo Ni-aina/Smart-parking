@@ -10,8 +10,8 @@ import {
     View
 } from "react-native";
 
-const SelectVehicle = () => {
-    const colorSchema = useColorScheme() || "light";
+const SelectVehicleScreen = () => {
+    const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
     return (
@@ -24,7 +24,7 @@ const SelectVehicle = () => {
                     <Icons
                         name="add"
                         size={30}
-                        color={Colors[colorSchema].text}
+                        color={Colors[colorscheme].text}
                         onPress={() => router.push("/vehicleControls/addVehicle")}
                     />
                 }
@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default SelectVehicle;
+export default SelectVehicleScreen;
