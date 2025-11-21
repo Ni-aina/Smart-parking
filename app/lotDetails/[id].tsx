@@ -43,6 +43,7 @@ const LotDetailsScreen = () => {
             maxWidth: lot.lotType?.max_width || 0,
             maxHeight: lot.lotType?.max_height || 0,
             maxLength: lot.lotType?.max_length || 0,
+            pricPerHour: lot.pricePerHour || 0,
             vehicleId: ""
         })
         router.push("/reservation/selectVehicle");

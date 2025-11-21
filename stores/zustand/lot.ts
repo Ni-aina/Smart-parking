@@ -7,6 +7,7 @@ interface LotState {
     maxHeight: number;
     maxLength: number;
     vehicleId: string;
+    pricPerHour: number;
     startTime: Date;
     endTime: Date;
     durationHours: string;
@@ -21,6 +22,7 @@ export const useLotStore = create<LotState>((set) => ({
     maxHeight: 0,
     maxLength: 0,
     vehicleId: "",
+    pricPerHour: 0,
     startTime: new Date(),
     endTime: new Date(),
     durationHours: ""

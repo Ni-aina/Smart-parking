@@ -8,7 +8,16 @@ export async function getParkingById(parkingId: string): Promise<LotInterface | 
         const request = (async () => {
             const { data: parking, error } = await supabase.from("parking_lots")
                 .select(`
-                    *, 
+                    id, 
+                    name, 
+                    location,
+                    location_lat, 
+                    location_lng, 
+                    created_at, 
+                    total_spots, 
+                    occupied_spots,
+                    price_per_hour, 
+                    url_images, 
                     lotType: type_id(
                     id, 
                     vehicle_type, 
