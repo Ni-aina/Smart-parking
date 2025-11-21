@@ -40,11 +40,14 @@ const LotDetailsScreen = () => {
         setLot({
             ...lotStore,
             id,
+            lotArea: lot.name || "",
+            lotAddress: lot.location || "",
             maxWidth: lot.lotType?.max_width || 0,
             maxHeight: lot.lotType?.max_height || 0,
             maxLength: lot.lotType?.max_length || 0,
             pricPerHour: lot.pricePerHour || 0,
-            vehicleId: ""
+            vehicleId: "",
+            vehicleModel: ""
         })
         router.push("/reservation/selectVehicle");
     }

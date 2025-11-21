@@ -63,7 +63,8 @@ const VehicleSelectItem = ({
 
         setLot({
             ...lot,
-            vehicleId: id
+            vehicleId: id,
+            vehicleModel: model
         })
     }
 
