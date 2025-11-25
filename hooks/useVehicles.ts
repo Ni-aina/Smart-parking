@@ -6,7 +6,7 @@ import useCurrentProfile from "./useCurrentProfile";
 
 const useVehicles = () => {
     const { currentProfile } = useCurrentProfile();
-    const profileId = currentProfile?.id || "";
+    const driverId = currentProfile?.id || "";
 
     const queryClient = useQueryClient();
     const router = useRouter();
@@ -19,7 +19,7 @@ const useVehicles = () => {
         isRefetching
     } = useQuery({
         queryKey: ["vehicles"],
-        queryFn: ()=> getVehiclesByDriverId(profileId)
+        queryFn: ()=> getVehiclesByDriverId(driverId)
     })
 
     const {

@@ -134,9 +134,10 @@ const BookForm = () => {
                     </Text>
                     <TextInput
                         onChangeText={(text) => {
+                            const duration = Math.round(Number(text)) || "";
                             setLot({
                                 ...lot,
-                                durationHours: text
+                                durationHours: duration.toString()
                             })
                         }}
                         value={durationHours}

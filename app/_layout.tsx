@@ -1,5 +1,4 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
 import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
@@ -18,10 +17,6 @@ const RootLayout = () => {
   const colorScheme = useColorScheme();
   const pathname = usePathname();
 
-  const [loaded] = useFonts({
-    SpaceMono_Regular: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  })
-
   useEffect(() => {
     if (!pathname.startsWith("/lotDetails"))
       NavigationBar.setVisibilityAsync("hidden");
@@ -33,9 +28,6 @@ const RootLayout = () => {
     }
     initLang();
   }, [])
-
-  if (!loaded) return null;
-
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

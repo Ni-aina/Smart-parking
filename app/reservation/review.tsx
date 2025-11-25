@@ -1,24 +1,49 @@
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
+import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
+import useCurrentProfile from "@/hooks/useCurrentProfile";
+import useReservation from "@/hooks/useReservation";
 import { useLotStore } from "@/stores/zustand/lot";
 import { getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const ReviewScreen = () => {
+    const { currentProfile } = useCurrentProfile();
+    const driverId = currentProfile?.id || "";
+
     const colorscheme = useColorScheme() || "light";
     const {
         lot: {
+            id,
             lotArea,
             lotAddress,
+            vehicleId,
             vehicleModel,
             startTime,
-            durationHours
+            endTime,
+            durationHours,
+            pricPerHour
         }
     } = useLotStore();
 
-    const handleBook = () => {
+    const {
+        handleCreate,
+        creationError,
+        isCreating
+    } = useReservation();
 
+    const handleBook = () => {
+        handleCreate({
+            id: "",
+            driverId,
+            lotId: id,
+            vehicleId,
+            startTime: startTime.toISOString(),
+            endTime: endTime.toISOString(),
+            status: "pending",
+            createdAt: ""
+        })
     }
 
 
@@ -32,7 +57,8 @@ const ReviewScreen = () => {
                 />
                 <View
                     style={{
-                        flex: 1
+                        flex: 1,
+                        gap: 10
                     }}
                 >
                     <View
@@ -152,7 +178,7 @@ const ReviewScreen = () => {
                                     color: Colors[colorscheme].icon
                                 }}
                             >
-                                Duration
+                                Hours
                             </Text>
                             <Text
                                 style={{
@@ -160,7 +186,7 @@ const ReviewScreen = () => {
                                     color: Colors[colorscheme].text
                                 }}
                             >
-                                {durationHours}
+                                {getTimeFormat(startTime)}
                             </Text>
                         </View>
                         <View
@@ -176,7 +202,7 @@ const ReviewScreen = () => {
                                     color: Colors[colorscheme].icon
                                 }}
                             >
-                                Hours
+                                Duration
                             </Text>
                             <Text
                                 style={{
@@ -184,16 +210,90 @@ const ReviewScreen = () => {
                                     color: Colors[colorscheme].text
                                 }}
                             >
-                                {getTimeFormat(startTime)}
+                                {durationHours} {+durationHours < 2 ? "hour" : "hours"}
                             </Text>
                         </View>
                     </View>
+                    <View
+                        style={[
+                            styles.card,
+                            {
+                                borderColor: Colors[colorscheme].gray200
+                            }
+                        ]}
+                    >
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                gap: 5
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    color: Colors[colorscheme].icon
+                                }}
+                            >
+                                Amount
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    color: Colors[colorscheme].icon
+                                }}
+                            >
+                                ${pricPerHour}/hour
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                gap: 5
+                            }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    fontWeight: "bold",
+                                    color: Colors[colorscheme].text
+                                }}
+                            >
+                                Total
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    fontWeight: "bold",
+                                    color: Colors[colorscheme].text
+                                }}
+                            >
+                                $ {pricPerHour * +durationHours}
+                            </Text>
+                        </View>
+                    </View>
+                    {
+                        creationError &&
+                        <Text
+                            style={{
+                                fontSize: 14,
+                                color: "#ff0000"
+                            }}
+                        >
+                            {creationError.message}
+                        </Text>
+                    }
                 </View>
                 <Button
                     title="Book Now"
                     onPress={handleBook}
                 />
-            </View>
+            </View >
+            {
+                isCreating &&
+                <Loading />
+            }
         </>
     )
 }

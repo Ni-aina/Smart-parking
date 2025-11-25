@@ -200,7 +200,7 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorscheme].icon
                                             }}
                                         >
-                                            65 reviews
+                                            {(Math.random() * 100).toFixed(0)} reviews
                                         </Text>
                                     </View>
                                 </View>

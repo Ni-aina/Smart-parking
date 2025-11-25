@@ -11,3 +11,14 @@ export const normalizeData = (data: Record<string, any>) => {
     }
    return normalized;
 }
+
+export const denormalizeData = (data: Record<string, any>) => {
+  const denormalized: Record<string, any> = {}
+
+  for (const [key, value] of Object.entries(data)) {
+    const newKey = key.replace(/([A-Z])/g, '_$1').toLowerCase()
+    denormalized[newKey] = value
+  }
+  
+  return denormalized;
+}

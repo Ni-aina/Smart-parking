@@ -328,7 +328,7 @@ const VehicleForm = ({
                             creationError &&
                             <Text style={styles.inputError}>{creationError.message}</Text>
                         }
-                         {
+                        {
                             updateError &&
                             <Text style={styles.inputError}>{updateError.message}</Text>
                         }

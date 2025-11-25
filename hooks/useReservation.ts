@@ -1,0 +1,46 @@
+import { createReservation, getReservationsByDriverId } from "@/actions/reservation.action";
+import { ReservationInterface } from "@/types/reservation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "expo-router";
+import useCurrentProfile from "./useCurrentProfile";
+
+const useReservation = () => {
+    const { currentProfile } = useCurrentProfile();
+    const driverId = currentProfile?.id || "";
+
+    const queryClient = useQueryClient();
+    const router = useRouter();
+
+    const {
+        data: reservations,
+        isLoading
+    } = useQuery({
+        queryKey: [`fetch-reservation-${driverId}`],
+        queryFn: () => getReservationsByDriverId(driverId)
+    })
+
+    const {
+        mutate: handleCreate,
+        error: creationError,
+        isPending: isCreating
+    } = useMutation({
+        mutationKey: ["create-reservation"],
+        mutationFn: (reservation: ReservationInterface) => createReservation(reservation),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [`fetch-reservation-${driverId}`, "parking-lots"]
+            })
+            router.push("/(tabs)/book");
+        }
+    })
+
+    return {
+        reservations,
+        isLoading,
+        handleCreate,
+        creationError,
+        isCreating
+    }
+}
+
+export default useReservation;
