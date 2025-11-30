@@ -1,5 +1,5 @@
 import { createReservation, getReservationsByDriverId } from "@/actions/reservation.action";
-import { ReservationInterface } from "@/types/reservation";
+import { ReservationPostInterface } from "@/types/reservation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import useCurrentProfile from "./useCurrentProfile";
@@ -25,7 +25,7 @@ const useReservation = () => {
         isPending: isCreating
     } = useMutation({
         mutationKey: ["create-reservation"],
-        mutationFn: (reservation: ReservationInterface) => createReservation(reservation),
+        mutationFn: (reservation: ReservationPostInterface) => createReservation(reservation),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: [`fetch-reservation-${driverId}`, "parking-lots"]

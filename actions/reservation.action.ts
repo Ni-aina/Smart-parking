@@ -1,13 +1,13 @@
 import { supabase } from "@/lib/supabase";
-import { ReservationInterface } from "@/types/reservation";
+import { ReservationInterface, ReservationPostInterface } from "@/types/reservation";
 import { isUUID } from "@/utils/isUUID";
 import { denormalizeData, normalizeData } from "@/utils/normalizeData";
 import { rejectTimeout } from "@/utils/rejectTimeout";
 
-export async function createReservation(reservation: ReservationInterface)
-    : Promise<ReservationInterface> {
+export async function createReservation(reservation: ReservationPostInterface)
+    : Promise<ReservationPostInterface> {
     try {
-        const { id, created_at, ...payload } = denormalizeData(reservation);
+        const { ...payload } = denormalizeData(reservation);
 
         const request = (async () => {
             const { data: newReservation, error } = await supabase.from("reservations")
@@ -16,7 +16,7 @@ export async function createReservation(reservation: ReservationInterface)
             if (!newReservation || error) throw new Error(`An error occured during reservation creation, 
                 ${error.message}`)
 
-            return normalizeData(newReservation) as ReservationInterface;
+            return normalizeData(newReservation) as ReservationPostInterface;
         })()
 
         return Promise.race([
@@ -35,9 +35,16 @@ export async function getReservationsByDriverId(driverId: string)
 
         const request = (async () => {
             const { data: reservations, error } = await supabase.from("reservations")
-                .select("*")
+                .select(`
+                    *,
+                    driver: driver_id(*),
+                    lot: lot_id(*),
+                    vehicle: vehicle_id(*)
+                `)
                 .eq("driver_id", driverId)
-                .gte("created_at", new Date().toISOString())
+                .order("created_at", {
+                    ascending: false
+                })
 
             if (!reservations) throw new Error(`Reservation fetching error, ${error.message}`);
             const normalizedData = reservations.map(item => normalizeData(item));
