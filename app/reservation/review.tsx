@@ -35,14 +35,12 @@ const ReviewScreen = () => {
 
     const handleBook = () => {
         handleCreate({
-            id: "",
             driverId,
             lotId: id,
             vehicleId,
             startTime: startTime.toISOString(),
             endTime: endTime.toISOString(),
-            status: "pending",
-            createdAt: ""
+            status: "pending"
         })
     }
 
