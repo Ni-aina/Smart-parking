@@ -15,6 +15,7 @@ const MyBooking = () => {
 
     return (
         <FlatList
+            showsVerticalScrollIndicator={false}
             data={reservations}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <BookCard reservation={item} />}
@@ -23,5 +24,5 @@ const MyBooking = () => {
         />
     )
 }
- 
+
 export default MyBooking;

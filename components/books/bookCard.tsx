@@ -1,139 +1,214 @@
 import { Colors } from "@/constants/Colors";
 import { defaultParking } from "@/lib/defaultImages";
 import { ReservationInterface } from "@/types/reservation";
+import { getStatusColor } from "@/utils/statusColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { useRouter } from "expo-router";
+import {
+    Image,
+    Pressable,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
+} from "react-native";
 
 interface BookCardProps {
     reservation: ReservationInterface
 }
 
 const BookCard = ({ reservation }: BookCardProps) => {
+    const router = useRouter();
+
     const colorScheme = useColorScheme() || 'light';
-    const lotImage = reservation.lot.urlImages.length > 0 ? reservation.lot.urlImages[0] : null;
+    const lotImage = reservation.lot.urlImages.length > 0 ?
+        reservation.lot.urlImages[0] :
+        null;
 
     return (
         <View
             style={[
-                styles.card,
+                styles.content,
                 {
                     borderColor: Colors[colorScheme].gray200
                 }
-            ]}>
-            <Image
-                source={lotImage ? { uri: lotImage } : defaultParking()}
-                style={styles.image}
-            />
+            ]}
+        >
             <View
-                style={{
-                    flex: 1,
-                    alignSelf: 'stretch',
-                    gap: 8
-                }}
-            >
+                style={styles.card}>
+                <Image
+                    source={lotImage ? { uri: lotImage } : defaultParking()}
+                    style={styles.image}
+                />
                 <View
                     style={{
+                        flex: 1,
                         alignSelf: 'stretch',
-                        flexDirection: 'row',
-                        gap: 4,
-                        alignItems: 'center',
-                        justifyContent: 'space-between'
+                        gap: 8
                     }}
                 >
                     <View
                         style={{
-                            backgroundColor:
-                                reservation.status === 'cancelled' ?
-                                    'rgba(255, 0, 0, 0.1)' :
-                                    'rgba(0, 122, 255, 0.1)',
-                            padding: 8,
-                            borderRadius: 50
+                            alignSelf: 'stretch',
+                            flexDirection: 'row',
+                            gap: 4,
+                            alignItems: 'center',
+                            justifyContent: 'space-between'
                         }}
                     >
-                        <Text
+                        <View
                             style={{
-                                fontWeight: "700",
-                                color:
-                                    reservation.status === 'cancelled' ?
-                                        'red' :
-                                        Colors[colorScheme].tint,
-                                fontSize: 10
+                                borderWidth: 1,
+                                borderColor: Colors[colorScheme].gray100,
+                                padding: 8,
+                                borderRadius: 50
                             }}
                         >
-                            {reservation.status.toUpperCase()}
-                        </Text>
+                            <Text
+                                style={{
+                                    fontWeight: "700",
+                                    color: getStatusColor(reservation.status) ?? Colors[colorScheme].tint,
+                                    fontSize: 10
+                                }}
+                            >
+                                {reservation.status.toUpperCase()}
+                            </Text>
+                        </View>
+                        <View
+                            style={{
+                                flexDirection: 'row',
+                                gap: 2,
+                                alignItems: 'center'
+                            }}
+                        >
+                            <Ionicons
+                                name="star"
+                                color="#ffbf00"
+                                size={18}
+                            />
+                            <Text
+                                style={{
+                                    color: Colors[colorScheme].icon,
+                                    fontWeight: 'bold'
+                                }}
+                            >
+
+                                {(Math.random() * (5 - 3.8) + 3.8).toFixed(1)}
+                            </Text>
+                        </View>
                     </View>
+                    <Text
+                        style={{
+                            color: Colors[colorScheme].text,
+                            fontSize: 16,
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        {reservation.lot.name}
+                    </Text>
                     <View
                         style={{
                             flexDirection: 'row',
-                            gap: 2,
+                            gap: 4,
                             alignItems: 'center'
                         }}
                     >
                         <Ionicons
-                            name="star"
-                            color="#ffbf00"
+                            name="location"
                             size={18}
+                            color={Colors[colorScheme].tint}
                         />
                         <Text
                             style={{
-                                color: Colors[colorScheme].icon,
-                                fontWeight: 'bold'
+                                color: Colors[colorScheme].text
                             }}
                         >
-
-                            {(Math.random() * (5 - 3.8) + 3.8).toFixed(1)}
+                            {reservation.lot.location}
                         </Text>
                     </View>
+                    <Text
+                        style={{
+                            fontWeight: 'bold',
+                            color: Colors[colorScheme].text
+                        }}
+                    >
+                        $ {reservation.lot.pricePerHour} / hour
+                    </Text>
                 </View>
-                <Text
-                    style={{
-                        color: Colors[colorScheme].text,
-                        fontSize: 16,
-                        fontWeight: 'bold'
+            </View>
+            <View
+                style={{
+                    marginTop: 8,
+                    marginBottom: 4,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 4
+                }}
+            >
+                <Pressable
+                    android_ripple={{
+                        color: '#00000020'
                     }}
+                    style={({ pressed }) => [
+                        styles.button,
+                        {
+                            borderColor: Colors[colorScheme].gray200
+                        },
+                        pressed ? {
+                            opacity: 0.6
+                        } : null
+                    ]}
                 >
-                    {reservation.lot.name}
-                </Text>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        gap: 4,
-                        alignItems: 'center'
-                    }}
-                >
-                    <Ionicons
-                        name="location"
-                        size={18}
-                        color={Colors[colorScheme].tint}
-                    />
                     <Text
                         style={{
                             color: Colors[colorScheme].text
                         }}
                     >
-                        {reservation.lot.location}
+                        Cancel
                     </Text>
-                </View>
-                <Text
-                    style={{
-                        fontWeight: 'bold',
-                        color: Colors[colorScheme].text
+                </Pressable>
+                <Pressable
+                    onPress={() => router.push(`/books/${reservation.id}`)}
+                    android_ripple={{
+                        color: '#00000020'
                     }}
+                    style={({ pressed }) => [
+                        styles.button,
+                        {
+                            backgroundColor: Colors[colorScheme].tint
+                        },
+                        pressed ? {
+                            opacity: 0.6
+                        } : null
+                    ]}
                 >
-                    $ {reservation.lot.pricePerHour} / hour
-                </Text>
+                    <Text
+                        style={{
+                            color: '#FFFFFF',
+                            fontWeight: 'bold'
+                        }}
+                    >
+                        {
+                            reservation.status.toLowerCase() === 'pending' ?
+                                'Pay Now' :
+                                'E-Ticket'
+                        }
+                    </Text>
+                </Pressable>
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    card: {
+    content: {
         borderWidth: 1,
         borderRadius: 8,
         padding: 8,
-        marginVertical: 8,
+        marginVertical: 8
+    },
+    card: {
         flexDirection: 'row',
         alignItems: 'center'
     },
@@ -142,6 +217,13 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 8,
         marginRight: 16
+    },
+    button: {
+        width: '48%',
+        alignItems: 'center',
+        padding: 8,
+        borderRadius: 5,
+        borderWidth: 1,
     }
 })
 

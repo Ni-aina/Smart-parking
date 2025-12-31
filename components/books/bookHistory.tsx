@@ -16,6 +16,7 @@ const BookHistory = () => {
 
     return (
         <FlatList
+            showsVerticalScrollIndicator={false}
             data={booksHistory}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => <BookCard reservation={item} />}
