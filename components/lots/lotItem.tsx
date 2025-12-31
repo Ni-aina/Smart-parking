@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { defaultParking } from "@/lib/defaultImages";
 import { LotInterface } from "@/types/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
@@ -16,7 +17,6 @@ const LotItem = ({
 }: LotItemInterface) => {
     const colorscheme = useColorScheme() || "light";
 
-    const defaultParking = require("@/assets/images/default-parking.png");
     const lotImage = lot.urlImages?.at(0) || null;
 
     const {
@@ -40,7 +40,7 @@ const LotItem = ({
             onPress={onPress}
         >
             <Image
-                source={lotImage ? { uri: lotImage } : defaultParking}
+                source={lotImage ? { uri: lotImage } : defaultParking()}
                 style={{
                     width: layout === "tile" ? "100%" : 70,
                     height: layout === "tile" ? 120 : 70,

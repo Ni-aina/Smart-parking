@@ -67,7 +67,7 @@ export async function getParkingLots(): Promise<LotInterface[] | null> {
                         max_length, 
                         max_height
                     )
-                `);
+                `)
 
             if (!parkings || error) throw new Error(`An error occured during fetching parkings, ${error?.message}`);
             const normalized = parkings.map((item: any) => normalizeData(item));

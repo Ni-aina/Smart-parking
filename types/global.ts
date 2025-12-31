@@ -1,1 +1,1 @@
-export type StatusType = "pending" | "confirmed" | "cancel"
+export type StatusType = "pending" | "confirmed" | "cancelled" | "completed" | "active";

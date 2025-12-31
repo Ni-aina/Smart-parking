@@ -92,8 +92,8 @@ const VehicleForm = ({
                                         value: 4
                                     },
                                     maxLength: {
-                                        message: "Enter 8 maximum characters",
-                                        value: 8
+                                        message: "Enter 10 maximum characters",
+                                        value: 10
                                     }
                                 }}
                                 render={({ field: { onChange, value } }) => (

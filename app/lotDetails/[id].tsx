@@ -3,6 +3,7 @@ import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useLot from "@/hooks/useLot";
+import { defaultParking } from "@/lib/defaultImages";
 import { useLotStore } from "@/stores/zustand/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BlurView } from 'expo-blur';
@@ -42,9 +43,9 @@ const LotDetailsScreen = () => {
             id,
             lotArea: lot.name || "",
             lotAddress: lot.location || "",
-            maxWidth: lot.lotType?.max_width || 0,
-            maxHeight: lot.lotType?.max_height || 0,
-            maxLength: lot.lotType?.max_length || 0,
+            maxWidth: lot.lotType?.maxWidth || 0,
+            maxHeight: lot.lotType?.maxHeight || 0,
+            maxLength: lot.lotType?.maxLength || 0,
             pricPerHour: lot.pricePerHour || 0,
             vehicleId: "",
             vehicleModel: ""
@@ -53,7 +54,7 @@ const LotDetailsScreen = () => {
     }
 
     useEffect(() => {
-        NavigationBar.setVisibilityAsync("visible");
+        NavigationBar.setVisibilityAsync("hidden");
     }, [])
 
     if (isPending) return (
@@ -62,7 +63,6 @@ const LotDetailsScreen = () => {
         </View>
     )
 
-    const defaultParking = require("@/assets/images/default-parking.png");
     const lotImage = lot?.urlImages?.at(indexImage) || null;
 
     return (
@@ -85,7 +85,7 @@ const LotDetailsScreen = () => {
                             }
                         >
                             <ImageBackground
-                                source={lotImage ? { uri: lotImage } : defaultParking}
+                                source={lotImage ? { uri: lotImage } : defaultParking()}
                                 style={styles.imageBackground}
                             >
                                 <View style={styles.headerBackground}>
@@ -364,7 +364,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorscheme].tabIconDefault
                                         }}
                                     >
-                                        Width {"< " + lot.lotType?.max_width || "N/A"} m
+                                        Width {"< " + lot.lotType?.maxWidth || "N/A"} m
                                     </Text>
                                     <Text
                                         style={{
@@ -372,7 +372,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorscheme].tabIconDefault
                                         }}
                                     >
-                                        Height {"< " + lot.lotType?.max_height || "N/A"} m
+                                        Height {"< " + lot.lotType?.maxHeight || "N/A"} m
                                     </Text>
                                     <Text
                                         style={{
@@ -380,7 +380,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorscheme].tabIconDefault
                                         }}
                                     >
-                                        Length {"< " + lot.lotType?.max_length || "N/A"} m
+                                        Length {"< " + lot.lotType?.maxLength || "N/A"} m
                                     </Text>
                                 </View>
                                 <View

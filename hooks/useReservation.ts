@@ -13,7 +13,9 @@ const useReservation = () => {
 
     const {
         data: reservations,
-        isLoading
+        isLoading,
+        refetch,
+        isRefetching
     } = useQuery({
         queryKey: [`fetch-reservation-${driverId}`],
         queryFn: () => getReservationsByDriverId(driverId)
@@ -37,6 +39,8 @@ const useReservation = () => {
     return {
         reservations,
         isLoading,
+        refetch,
+        isRefetching,
         handleCreate,
         creationError,
         isCreating

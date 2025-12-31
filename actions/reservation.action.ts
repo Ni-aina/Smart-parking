@@ -33,6 +33,42 @@ export async function getReservationsByDriverId(driverId: string)
     try {
         if (!isUUID(driverId)) throw new Error("You have to be authenticated");
 
+        const d = new Date();
+        d.setMonth(d.getMonth() - 6);
+
+        const request = (async () => {
+            const { data: reservations, error } = await supabase.from("reservations")
+                .select(`
+                    *,
+                    driver: driver_id(*),
+                    lot: lot_id(*),
+                    vehicle: vehicle_id(*)
+                `)
+                .eq("driver_id", driverId)
+                .gte("created_at", d.toISOString())
+                .order("created_at", {
+                    ascending: false
+                })
+
+            if (!reservations) throw new Error(`Reservation fetching error, ${error.message}`);
+            const normalizedData = reservations.map(item => normalizeData(item));
+            return normalizedData as ReservationInterface[];
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function getBooksHistoryByDriverId(driverId: string)
+    : Promise<ReservationInterface[]> {
+    try {
+        if (!isUUID(driverId)) throw new Error("You have to be authenticated");
+
         const request = (async () => {
             const { data: reservations, error } = await supabase.from("reservations")
                 .select(`

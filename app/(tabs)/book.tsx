@@ -1,3 +1,5 @@
+import BookHistory from "@/components/books/bookHistory";
+import MyBooking from "@/components/books/myBooking";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Icons from "@/components/ui/icons";
 import { Colors } from "@/constants/Colors";
@@ -13,7 +15,7 @@ import {
 
 const BookScreen = () => {
     const colorscheme = useColorScheme() || "light";
-    const [active, setActive] = useState(0);
+    const [active, setActive] = useState<0 | 1>(0);
 
     const {
         barColors
@@ -89,6 +91,11 @@ const BookScreen = () => {
                         </View>
                     </Pressable>
                 </View>
+                {
+                    active === 0 ?
+                        <MyBooking /> :
+                        <BookHistory />
+                }
             </View>
         </ProtectedRoute>
     )

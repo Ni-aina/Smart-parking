@@ -3,11 +3,11 @@ export interface LotInterface {
     ownerId: string;
     lotType: {
         id: string;
-        vehicle_type: string;
+        vehicleType: string;
         description: string;
-        max_width: number;
-        max_length: number;
-        max_height: number;
+        maxWidth: number;
+        maxLength: number;
+        maxHeight: number;
     };
     name: string;
     location: string;

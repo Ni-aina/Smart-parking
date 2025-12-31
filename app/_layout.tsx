@@ -3,17 +3,19 @@ import { Stack, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
+import Loading from '@/components/ui/loading';
 import { initI18n } from '@/i18n';
 import { AuthContextProvider } from '@/stores/context/AuthContext';
 import { TabsHistoryContextProvider } from '@/stores/context/tabsHistoryContext';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as NavigationBar from 'expo-navigation-bar';
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
 const queryClient = new QueryClient();
 
 const RootLayout = () => {
+  const [ready, setReady] = useState(false);
   const colorScheme = useColorScheme();
   const pathname = usePathname();
 
@@ -22,12 +24,16 @@ const RootLayout = () => {
       NavigationBar.setVisibilityAsync("hidden");
   }, [pathname])
 
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     const initLang = async () => {
       await initI18n();
+      setReady(true);
     }
     initLang();
   }, [])
+
+  if (!ready) return <Loading />;
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
