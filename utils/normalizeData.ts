@@ -1,5 +1,5 @@
 
-export const normalizeData = (data: any): any => {
+export const normalizeData = (data: Record<string, any>): Record<string, any> => {
     if (data === null || data === undefined) {
         return data;
     }
