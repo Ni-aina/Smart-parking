@@ -1,3 +1,4 @@
+import { initialLotState } from "@/data/lot";
 import { create } from "zustand";
 
 interface LotState {
@@ -19,19 +20,6 @@ interface LotState {
 }
 
 export const useLotStore = create<LotState>((set) => ({
-  lot: {
-    id: "",
-    lotArea: "",
-    lotAddress: "",
-    maxWidth: 0,
-    maxHeight: 0,
-    maxLength: 0,
-    vehicleId: "",
-    vehicleModel: "",
-    pricPerHour: 0,
-    startTime: new Date(),
-    endTime: new Date(),
-    durationHours: ""
-  },
+  lot: initialLotState,
   setLot: (lot) => set({ lot })
 }))

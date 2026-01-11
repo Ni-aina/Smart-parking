@@ -13,11 +13,13 @@ import {
 interface HeaderInterface {
     title: string;
     rightIcon?: ReactNode;
+    customBackAction?: () => void;
 }
 
 const Header = ({
     title,
-    rightIcon
+    rightIcon,
+    customBackAction
 }: HeaderInterface) => {
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
@@ -36,7 +38,11 @@ const Header = ({
                     },
                     pressed && { opacity: 0.7 }
                 ]}
-                onPress={() => router.canGoBack() && router.back()}
+                onPress={() => 
+                    customBackAction ?
+                    customBackAction() :
+                    router.canGoBack() && router.back()
+                }
             >
                 <Ionicons
                     name="arrow-back"

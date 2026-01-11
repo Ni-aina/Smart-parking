@@ -1,7 +1,6 @@
 import { getParkingLots } from "@/actions/lots.action";
 import { useLocationStore } from "@/stores/zustand/location";
-import { LotInterface } from "@/types/lot";
-import { getDistanceTime } from "@/utils/getDistanceTime";
+import { getDistanceTimeFromPostGIS } from "@/utils/getDistanceTime";
 import { useQuery } from "@tanstack/react-query";
 
 const useLots = () => {
@@ -9,6 +8,9 @@ const useLots = () => {
         location,
         refreshLocation
     } = useLocationStore();
+
+    const latitude = location?.latitude || null;
+    const longitude = location?.longitude || null;
     
     const {
         data: lots,
@@ -17,35 +19,27 @@ const useLots = () => {
         refetch,
         isRefetching
     } = useQuery({
-        queryKey: ["parking-lots"],
+        queryKey: ["parking-lots", latitude, longitude],
         queryFn: ()=> {
             refreshLocation();
-            return getParkingLots();
+            return getParkingLots({
+                location: {
+                    latitude,
+                    longitude
+                }
+            });
         } 
     })
 
     const lotsFormated = lots?.map(item => {
         return {
             ...item,
-            distance: getDistanceTime(
-                location?.latitude,
-                location?.longitude,
-                item.locationLat,
-                item.locationLng
+            distance: getDistanceTimeFromPostGIS(
+                item.distanceM,
+                70
             )
         }
-    }) || []
-
-    lotsFormated.sort((a: LotInterface, b: LotInterface) => {
-        const aDistance = a.distance?.distanceKm;
-        const bDistance = b.distance?.distanceKm;
-
-        if (aDistance == null && bDistance == null) return 0;
-        if (aDistance == null) return 1;
-        if (bDistance == null) return -1;
-
-        return aDistance - bDistance;
-    })
+    }) || [];
 
     return {
         lots: lotsFormated,

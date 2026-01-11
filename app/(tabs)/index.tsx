@@ -70,6 +70,9 @@ const FindParkingScreen = () => {
                         </Pressable>
                     </View>
                 }
+                customBackAction={() => 
+                    router.replace("/home")
+                }
             />
             <View
                 style={[

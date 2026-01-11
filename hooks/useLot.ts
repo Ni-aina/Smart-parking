@@ -9,13 +9,16 @@ const useLot = ({ id }: { id: string }) => {
         refreshLocation
     } = useLocationStore();
 
+    const latitude = location?.latitude;
+    const longitude = location?.longitude;
+
     const {
         data: lot,
         isPending,
         refetch,
         isRefetching
     } = useQuery({
-        queryKey: [`lot-details-${id}`],
+        queryKey: [`lot-details-${id}`, latitude, longitude],
         queryFn: () => {
             refreshLocation();
             return getParkingById(id);
@@ -25,8 +28,8 @@ const useLot = ({ id }: { id: string }) => {
     const lotFormated = {
         ...lot,
         distance: getDistanceTime(
-            location?.latitude,
-            location?.longitude,
+            latitude,
+            longitude,
             lot?.locationLat,
             lot?.locationLng
         )

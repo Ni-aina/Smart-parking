@@ -20,6 +20,7 @@ export interface LotInterface {
     urlImages: string[];
     createdAt: string;
     distance?: DistanceTimeInterface;
+    distanceM?: number;
 }
 
 export interface DistanceTimeInterface {

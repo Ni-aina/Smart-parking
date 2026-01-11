@@ -1,4 +1,6 @@
 import { createReservation, getReservationsByDriverId } from "@/actions/reservation.action";
+import { initialLotState } from "@/data/lot";
+import { useLotStore } from "@/stores/zustand/lot";
 import { ReservationPostInterface } from "@/types/reservation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
@@ -10,6 +12,8 @@ const useReservation = () => {
 
     const queryClient = useQueryClient();
     const router = useRouter();
+
+    const { setLot } = useLotStore();
 
     const {
         data: reservations,
@@ -32,6 +36,7 @@ const useReservation = () => {
             queryClient.invalidateQueries({
                 queryKey: [`fetch-reservation-${driverId}`, "parking-lots"]
             })
+            setLot(initialLotState);
             router.push("/(tabs)/book");
         }
     })

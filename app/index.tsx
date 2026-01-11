@@ -1,7 +1,7 @@
 import SliderRender from "@/components/SliderRender";
 import Button from "@/components/ui/button";
 import { Colors } from "@/constants/Colors";
-import { sliders } from "@/lib/sliders";
+import { sliders } from "@/data/sliders";
 import { sliderType } from "@/types/slider";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
