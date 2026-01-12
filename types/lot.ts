@@ -8,7 +8,7 @@ export interface LotInterface {
         maxWidth: number;
         maxLength: number;
         maxHeight: number;
-    };
+    }
     name: string;
     location: string;
     locationLat: number;
@@ -21,6 +21,7 @@ export interface LotInterface {
     createdAt: string;
     distance?: DistanceTimeInterface;
     distanceM?: number;
+    totalLots: number;
 }
 
 export interface DistanceTimeInterface {

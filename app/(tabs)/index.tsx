@@ -3,11 +3,11 @@ import Header from "@/components/ui/header";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
-import useLots from "@/hooks/useLots";
+import useLots from "@/hooks/Lots/useLots";
+import useDebounce from "@/hooks/useDebounce";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
     FlatList,
     Pressable,
@@ -21,17 +21,28 @@ import {
 const FindParkingScreen = () => {
     const router = useRouter();
 
-    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const [layout, setLayout] = useState<"list" | "tile">("list");
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
+    const {
+        debouncedValue: debouncedSearchTerm
+    } = useDebounce({
+        value: searchTerm,
+        delay: 1000 * 3
+    });
 
     const {
         lots,
         isPending,
         error,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching
-    } = useLots();
+    } = useLots({
+        searchTerm: debouncedSearchTerm
+    });
 
     const handleShowDetails = (id: string) => {
         router.push(`/lotDetails/${id}`)
@@ -97,6 +108,8 @@ const FindParkingScreen = () => {
                     ]}
                     placeholderTextColor={Colors[colorscheme].icon}
                     placeholder="Search"
+                    value={searchTerm}
+                    onChangeText={setSearchTerm}
                 />
             </View>
             <View style={styles.filterContent}>
@@ -148,6 +161,19 @@ const FindParkingScreen = () => {
                             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                             columnWrapperStyle={layout === "tile" ? { gap: 10 } : undefined}
                             showsVerticalScrollIndicator={false}
+                            onEndReached={() => {
+                                if (hasNextPage) {
+                                    fetchNextPage();
+                                }
+                            }}
+                            onEndReachedThreshold={0.5}
+                            ListFooterComponent={
+                                hasNextPage ?
+                                    <View style={{ paddingVertical: 20 }}>
+                                        <LoaderSkeleton />
+                                    </View> :
+                                    null
+                            }
                             refreshing={isRefetching}
                             onRefresh={refetch}
                         />

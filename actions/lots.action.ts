@@ -45,21 +45,25 @@ export async function getParkingById(parkingId: string): Promise<LotInterface | 
 }
 
 export async function getParkingLots(
-params: {
-    searchTerm?: string;
-    filters?: {
-        type?: string;
-        priceRange?: [number, number];
-    }
-    location?: {
-        latitude: number | null;
-        longitude: number | null;
-    }
-    pagination?: {
-        page: number;
-        limit: number;
-    }
-} = {}): Promise<LotInterface[]> {
+    params: {
+        searchTerm?: string;
+        filters?: {
+            type?: string;
+            priceRange?: [number, number];
+        }
+        location?: {
+            latitude: number | null;
+            longitude: number | null;
+        }
+        pagination?: {
+            page: number;
+            limit: number;
+        }
+    } = {}): Promise<{
+        data: LotInterface[];
+        hasMore: boolean;
+        nextPage?: number;
+    }> {
     try {
 
         const {
@@ -91,9 +95,17 @@ params: {
                 }
             )
 
+            const hasMore = parkings.length * pagination.page < parkings[0]?.total_lots;
+
             if (!parkings || error) throw new Error(`An error occured during fetching parkings, ${error?.message}`);
             const normalized = parkings.map((item: any) => normalizeData(item));
-            return normalized as LotInterface[];
+            return {
+                data: normalized as LotInterface[],
+                hasMore,
+                nextPage: hasMore ?
+                    pagination.page + 1 :
+                    undefined
+            }
         })()
         return Promise.race([
             request,
