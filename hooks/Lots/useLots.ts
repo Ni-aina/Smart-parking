@@ -43,7 +43,7 @@ const useLots = ({
                 },
                 pagination: {
                     page: pageParam,
-                    limit: 5
+                    limit: 10
                 }
             });
         },

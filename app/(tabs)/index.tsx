@@ -29,7 +29,7 @@ const FindParkingScreen = () => {
         debouncedValue: debouncedSearchTerm
     } = useDebounce({
         value: searchTerm,
-        delay: 1000 * 3
+        delay: 1000
     });
 
     const {
