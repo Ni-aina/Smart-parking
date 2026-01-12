@@ -23,7 +23,7 @@ const HomeScreen = () => {
                         name="arrow-back"
                         size={28}
                         color="white"
-                        onPress={() => router.back()}
+                        onPress={() => router.replace("/")}
                     />
                     <Text style={styles.text}>
                         {t('find_the_best_car_parking_spot')}

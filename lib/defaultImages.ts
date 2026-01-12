@@ -1,1 +1,1 @@
-export const defaultParking = ()=> require("@/assets/images/default-parking.png");
+export const defaultParking = ()=> require("@/assets/images/default-parking.jpg");

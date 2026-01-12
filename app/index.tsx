@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { sliders } from "@/data/sliders";
 import { sliderType } from "@/types/slider";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Dimensions, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
@@ -67,6 +68,7 @@ const AppScreen = () => {
                     }}
                 />
             </View>
+            <StatusBar style="dark" />
         </View>
     )
 }

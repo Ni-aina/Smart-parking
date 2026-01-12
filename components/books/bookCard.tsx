@@ -185,7 +185,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                 >
                     <Text
                         style={{
-                            color: '#FFFFFF',
+                            color: colorScheme === 'light' ? '#FFFFFF' : '#000000',
                             fontWeight: 'bold'
                         }}
                     >
