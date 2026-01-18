@@ -25,6 +25,15 @@ const BookCard = ({ reservation }: BookCardProps) => {
         reservation.lot.urlImages[0] :
         null;
 
+    const durationHours = Math.ceil(
+        (new Date(reservation.endTime).getTime() - new Date(reservation.startTime).getTime()) /
+        (1000 * 60 * 60)
+    )
+
+    const id = reservation.id;
+    const amount = reservation.lot.pricePerHour * durationHours;
+    const status = reservation.status;
+
     return (
         <View
             style={[
@@ -169,7 +178,11 @@ const BookCard = ({ reservation }: BookCardProps) => {
                     </Text>
                 </Pressable>
                 <Pressable
-                    onPress={() => router.push(`/books/${reservation.id}`)}
+                    onPress={() => 
+                        status.toLowerCase() === 'pending' ?
+                        router.push(`/books/checkout?id=${id}&amount=${amount}`) :
+                        router.push(`/books/${id}`)
+                    }
                     android_ripple={{
                         color: '#00000020'
                     }}
@@ -190,7 +203,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                         }}
                     >
                         {
-                            reservation.status.toLowerCase() === 'pending' ?
+                            status.toLowerCase() === 'pending' ?
                                 'Pay Now' :
                                 'E-Ticket'
                         }

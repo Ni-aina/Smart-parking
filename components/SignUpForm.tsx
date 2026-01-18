@@ -1,5 +1,6 @@
 import { createProfile } from "@/actions/profile.action";
 import { createUser } from "@/actions/user.action";
+import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
 import { RegisterType } from "@/types/signUp";
 import * as Linking from "expo-linking";
@@ -287,7 +288,7 @@ const SignUpForm = () => {
                             opacity: 0.7
                         } : {}
                     }
-                    onPress={() => Linking.openURL("https://nextjs.org/")}
+                    onPress={() => Linking.openURL(`${webBaseUrl}`)}
                 >
                     <Text
                         style={{

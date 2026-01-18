@@ -1,8 +1,10 @@
 import Header from "@/components/ui/header";
+import { useLocalSearchParams } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 const ETicket = () => {
-
+    const { id } = useLocalSearchParams<{id: string}>();
+    
     return (
         <View style={styles.container}>
             <Header
