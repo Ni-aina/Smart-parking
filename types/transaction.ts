@@ -3,10 +3,9 @@ import { ReservationInterface } from "./reservation";
 
 export interface TransactionPostInterface {
     reservationId: string;
-    amount: number;
-    method: string;
     status: StatusType;
     transactionId: string;
+    amount: number;
 }
 
 export interface TransactionInterface {

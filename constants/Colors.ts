@@ -8,17 +8,17 @@ export const Colors = {
     icon: "#687076",
     tabIconDefault: "#687076",
     tabIconSelected: "#001b38ff",
-    gray100: "#eee",
-    gray200: "#ddd"
+    gray100: "#eeeeee",
+    gray200: "#dddddd"
   },
   dark: {
     text: "#ECEDEE",
     background: "#151718",
-    tint: "#fff",
+    tint: "#ffffff",
     icon: "#9BA1A6",
     tabIconDefault: "#9BA1A6",
-    tabIconSelected: "#fff",
-    gray100: "#333",
-    gray200: "#222"
+    tabIconSelected: "#ffffff",
+    gray100: "#333333",
+    gray200: "#222222"
   }
 }
