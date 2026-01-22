@@ -2,4 +2,4 @@ export const supabaseUrl="https://vhigwhnrvzqtblknamtn.supabase.co"
 export const supabaseAnonKey="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZoaWd3aG5ydnpxdGJsa25hbXRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUxNjQ0MzEsImV4cCI6MjA3MDc0MDQzMX0.oHJBcSLrNZLKA4mKOYmuVicQJScH_TD-sXaeTTwz-Xw"
 
 export const stripePublicKey="pk_test_51SlsMTGr3toHy8tff6u5qgvs2HxpuAHmC8HkOlgBGGVh3DohVot3Qb5q5KttLdpJo7Chl7ebWsd1p7a14HxvdqGN00ueCIL4O2"
-export const webBaseUrl="https://smart-parking-admin-git-main-niainas-projects-27febbc9.vercel.app"
+export const webBaseUrl="https://smart-parking-admin-b5qv56los-niainas-projects-27febbc9.vercel.app"
