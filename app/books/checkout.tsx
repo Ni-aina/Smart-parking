@@ -1,4 +1,3 @@
-import { createTransaction } from "@/actions/payment.action";
 import { createPaymentIntent } from "@/actions/stripe.action";
 import Button from "@/components/ui/button";
 import ErrorModal from "@/components/ui/errorModal";
@@ -7,6 +6,7 @@ import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
+import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { StyleSheet, useColorScheme, View } from "react-native";
@@ -14,6 +14,8 @@ import { StyleSheet, useColorScheme, View } from "react-native";
 const Checkout = () => {
     const colorScheme = useColorScheme() || "light";
     const router = useRouter();
+
+    const queryClient = useQueryClient();
 
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [pendingPayment, setPendingPayment] = useState(false);
@@ -31,7 +33,7 @@ const Checkout = () => {
     } = useCurrentProfile();
 
     const amount = Number.parseFloat(amountString);
-    const userId = currentProfile?.id;
+    const driverId = currentProfile?.id;
 
     const { confirmPayment } = useStripe();
 
@@ -39,39 +41,47 @@ const Checkout = () => {
         try {
             setPendingPayment(true);
 
-            const { clientSecret } = await createPaymentIntent(
-                userId!,
+            const { 
+                clientSecret, 
+                error: createPaymentError 
+            } = await createPaymentIntent(
+                driverId!,
                 id,
                 amount
             )
 
-            const { error, paymentIntent } = await confirmPayment(
+            if (createPaymentError) {
+                throw new Error(createPaymentError);
+            }
+
+            const { error: confirmError, paymentIntent } = await confirmPayment(
                 clientSecret,
                 {
                     paymentMethodType: "Card"
                 }
             )
 
-            if (error) {
-                setErrorMessage(error.message)
+            if (confirmError) {
+                throw new Error(confirmError.message);
             } else {
                 const transactionId = paymentIntent.id!;
 
-                const newTransaction = await createTransaction({
-                    reservationId: id,
-                    status: "pending",
-                    transactionId,
-                    amount
-                })
-
-                if (!newTransaction) {
-                    setErrorMessage("Failed to create transaction.")
-                    return;
+                if (!transactionId) {
+                    throw new Error("Payment failed. No transaction ID found.");
                 }
+                
+                await queryClient.invalidateQueries({
+                    queryKey: [`fetch-reservation-${driverId}`, "parking-lots"]
+                })
 
                 router.push("/(tabs)/book");
             }
-        } finally {
+        } catch (error) {
+            setErrorMessage((error instanceof Error ? error.message : 
+                "An unexpected error occurred.")
+            )
+        }
+        finally {
             setPendingPayment(false);
         }
     }
