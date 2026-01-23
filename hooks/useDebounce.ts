@@ -14,15 +14,12 @@ const useDebounce = <T>({
 ) => {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
-    let debounceTime: ReturnType<typeof setTimeout> | undefined;
-
     useEffect(() => {
-        clearTimeout(debounceTime);
-
-        debounceTime = setTimeout(() => {
+        const debounceTime = setTimeout(() => {
             setDebouncedValue(value);
         }, delay);
         
+        return () => clearTimeout(debounceTime);
     }, [value])
 
     return {

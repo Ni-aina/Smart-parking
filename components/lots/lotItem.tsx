@@ -2,12 +2,21 @@ import { Colors } from "@/constants/Colors";
 import { defaultParking } from "@/lib/defaultImages";
 import { LotInterface } from "@/types/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Image, Pressable, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Skeleton } from "moti/skeleton";
+import { useState } from "react";
+import {
+    Image,
+    Pressable,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
+} from "react-native";
 
 interface LotItemInterface {
     lot: LotInterface;
     layout: "list" | "tile";
-    onPress: ()=> void;
+    onPress: () => void;
 }
 
 const LotItem = ({
@@ -18,6 +27,7 @@ const LotItem = ({
     const colorscheme = useColorScheme() || "light";
 
     const lotImage = lot.urlImages?.at(0) || null;
+    const [loadingImage, setLoadingImage] = useState<boolean>();
 
     const {
         name,
@@ -39,13 +49,33 @@ const LotItem = ({
             ]}
             onPress={onPress}
         >
+            {
+                loadingImage &&
+                <View>
+                    <Skeleton
+                        colorMode={colorscheme}
+                        width={
+                            layout === "tile" ?
+                                "100%" :
+                                70
+                        }
+                        height={
+                            layout === "tile" ?
+                                120 :
+                                70
+                        }
+                    />
+                </View>
+            }
             <Image
                 source={lotImage ? { uri: lotImage } : defaultParking()}
                 style={{
-                    width: layout === "tile" ? "100%" : 70,
-                    height: layout === "tile" ? 120 : 70,
+                    width: loadingImage ? 0 : (layout === "tile" ? "100%" : 70),
+                    height: loadingImage ? 0 : (layout === "tile" ? 120 : 70),
                     borderRadius: 8
                 }}
+                onLoadStart={() => setLoadingImage(true)}
+                onLoadEnd={() => setLoadingImage(false)}
             />
             <View
                 style={styles.itemContent}
@@ -86,7 +116,7 @@ const LotItem = ({
                                     color: Colors[colorscheme].tabIconDefault
                                 }}
                             >
-                               {distance?.formatted || "N/A"}
+                                {distance?.formatted || "N/A"}
                             </Text>
                         </View>
                     }
@@ -126,7 +156,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "flex-start",
         flexWrap: "wrap",
-        gap: 5,
+        gap: 10,
         padding: 10,
         borderRadius: 10
     },

@@ -44,7 +44,8 @@ const BookCard = ({ reservation }: BookCardProps) => {
             ]}
         >
             <View
-                style={styles.card}>
+                style={styles.card}
+            >
                 <Image
                     source={lotImage ? { uri: lotImage } : defaultParking()}
                     style={styles.image}
