@@ -1,4 +1,4 @@
-import useVehicles from "@/hooks/useVehicles";
+import useVehicles from "@/hooks/vehicles/useVehicles";
 import { useLotStore } from "@/stores/zustand/lot";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";

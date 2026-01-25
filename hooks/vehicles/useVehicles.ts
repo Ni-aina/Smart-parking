@@ -2,7 +2,7 @@ import { createVehicle, deleteVehicle, getVehiclesByDriverId, updateVehicle } fr
 import { VehicleInterface } from "@/types/vehicle";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import useCurrentProfile from "./useCurrentProfile";
+import useCurrentProfile from "../useCurrentProfile";
 
 const useVehicles = () => {
     const { currentProfile } = useCurrentProfile();

@@ -4,7 +4,7 @@ import { useLotStore } from "@/stores/zustand/lot";
 import { ReservationPostInterface } from "@/types/reservation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
-import useCurrentProfile from "./useCurrentProfile";
+import useCurrentProfile from "../useCurrentProfile";
 
 const useReservation = () => {
     const { currentProfile } = useCurrentProfile();

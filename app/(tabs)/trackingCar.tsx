@@ -5,14 +5,14 @@ import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import VehicleItem from "@/components/vehicles/VehicleItem";
 import { Colors } from "@/constants/Colors";
-import useVehicles from "@/hooks/useVehicles";
+import useVehicles from "@/hooks/vehicles/useVehicles";
 import { useRouter } from "expo-router";
 import {
-    FlatList,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View
+  FlatList,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View
 } from "react-native";
 
 const TrackingCarSceen = () => {

@@ -1,0 +1,24 @@
+export interface PaymentInterface {
+    id: string;
+    reservation: {
+        id: string;
+        lot: {
+            id: string;
+            name: string;
+            location: string;
+        }
+        vehicle: {
+            id: string;
+            make: string;
+            model: string;
+            plateNumber: string;
+        }
+        startTime: string;
+        endTime: string;
+    }
+    amount: number;
+    method: string;
+    status: string;
+    transactionId: string;
+    createdAt: string;
+}

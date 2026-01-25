@@ -3,7 +3,7 @@ import Header from "@/components/ui/header";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
-import useLots from "@/hooks/Lots/useLots";
+import useLots from "@/hooks/lots/useLots";
 import useDebounce from "@/hooks/useDebounce";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";

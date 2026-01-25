@@ -1,6 +1,6 @@
 import { getBooksHistoryByDriverId } from "@/actions/reservation.action";
 import { useQuery } from "@tanstack/react-query";
-import useCurrentProfile from "./useCurrentProfile";
+import useCurrentProfile from "../useCurrentProfile";
 
 const useBookHistory = () => {
     const { currentProfile } = useCurrentProfile();

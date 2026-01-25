@@ -1,4 +1,4 @@
-import useReservation from "@/hooks/useReservation";
+import useReservation from "@/hooks/reservations/useReservation";
 import { FlatList } from "react-native";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";

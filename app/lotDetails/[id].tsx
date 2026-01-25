@@ -2,7 +2,7 @@ import Icons from "@/components/ui/icons";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
-import useLot from "@/hooks/Lots/useLot";
+import useLot from "@/hooks/lots/useLot";
 import { defaultParking } from "@/lib/defaultImages";
 import { useLotStore } from "@/stores/zustand/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";

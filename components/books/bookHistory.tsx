@@ -1,4 +1,4 @@
-import useBookHistory from "@/hooks/useBookHistory";
+import useBookHistory from "@/hooks/books/useBookHistory";
 import { FlatList } from "react-native";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";

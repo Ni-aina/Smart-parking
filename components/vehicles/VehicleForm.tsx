@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
-import useVehicles from "@/hooks/useVehicles";
+import useVehicles from "@/hooks/vehicles/useVehicles";
 import { VehicleInterface } from "@/types/vehicle";
 import { Controller, useForm } from "react-hook-form";
 import {
