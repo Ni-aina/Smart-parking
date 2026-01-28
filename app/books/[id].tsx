@@ -4,7 +4,9 @@ import Header from "@/components/ui/header";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import usePaymentReservation from "@/hooks/payments/usePaymentReservation";
+import { ticketHmtl } from "@/lib/ticketHtml";
 import { getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
+import * as Print from 'expo-print';
 import { useLocalSearchParams } from "expo-router";
 import {
     StyleSheet,
@@ -43,8 +45,23 @@ const ETicket = () => {
         paymentReservationLoading
     } = usePaymentReservation(id);
 
-    const handlePrint = () => {
+    const handlePrint = async () => {
+        const htmlToPrint = ticketHmtl({
+            transactionId,
+            lotName,
+            lotLocation,
+            plateNumber,
+            amount,
+            status,
+            startTime,
+            endTime
+        })
 
+        if (!htmlToPrint) return;
+
+        await Print.printAsync({
+            html: htmlToPrint
+        })
     }
 
     if (paymentReservationLoading) return (
