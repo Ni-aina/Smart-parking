@@ -38,12 +38,12 @@ export async function getPaymentByReservationId(reservationId: string)
                 `)
                 .eq('reservation_id', reservationId)
                 .maybeSingle();
-
-            if (!paymentData || errorPayment) {
+            
+            if (errorPayment) {
                 throw errorPayment;
             }
 
-            return normalizeData(paymentData) as PaymentInterface;
+            return normalizeData(paymentData || {}) as PaymentInterface;
         }
         )()
 

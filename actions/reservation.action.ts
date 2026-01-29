@@ -28,6 +28,35 @@ export async function createReservation(reservation: ReservationPostInterface)
     }
 }
 
+export async function getReservationById(id: string)
+    : Promise<ReservationInterface> {
+    try {
+        if (!id) throw new Error("Reservation id is required");
+
+        const request = (async () => {
+            const { data: reservation, error } = await supabase.from("reservations")
+                .select(`
+                    *,
+                    driver: driver_id(*),
+                    lot: lot_id(*),
+                    vehicle: vehicle_id(*)
+                `)
+                .eq("id", id)
+                ?.single()
+
+            if (!reservation || error) throw new Error(`Reservation fetching error, ${error?.message}`);
+            return normalizeData(reservation) as ReservationInterface;
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function getReservationsByDriverId(driverId: string)
     : Promise<ReservationInterface[]> {
     try {
@@ -50,7 +79,7 @@ export async function getReservationsByDriverId(driverId: string)
                     ascending: false
                 })
 
-            if (!reservations) throw new Error(`Reservation fetching error, ${error.message}`);
+            if (!reservations || error) throw new Error(`Reservations fetching error, ${error.message}`);
             const normalizedData = reservations.map(item => normalizeData(item));
             return normalizedData as ReservationInterface[];
         })()

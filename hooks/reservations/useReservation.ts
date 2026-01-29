@@ -1,54 +1,18 @@
-import { createReservation, getReservationsByDriverId } from "@/actions/reservation.action";
-import { initialLotState } from "@/data/lot";
-import { useLotStore } from "@/stores/zustand/lot";
-import { ReservationPostInterface } from "@/types/reservation";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
-import useCurrentProfile from "../useCurrentProfile";
+import { getReservationById } from "@/actions/reservation.action";
+import { useQuery } from "@tanstack/react-query";
 
-const useReservation = () => {
-    const { currentProfile } = useCurrentProfile();
-    const driverId = currentProfile?.id || "";
-
-    const queryClient = useQueryClient();
-    const router = useRouter();
-
-    const { setLot } = useLotStore();
-
+const useReservation = (id: string) => {
     const {
-        data: reservations,
+        data: reservation,
         isLoading,
-        refetch,
-        isRefetching
     } = useQuery({
-        queryKey: [`fetch-reservation-${driverId}`],
-        queryFn: () => getReservationsByDriverId(driverId)
-    })
-
-    const {
-        mutate: handleCreate,
-        error: creationError,
-        isPending: isCreating
-    } = useMutation({
-        mutationKey: ["create-reservation"],
-        mutationFn: (reservation: ReservationPostInterface) => createReservation(reservation),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: [`fetch-reservation-${driverId}`, "parking-lots"]
-            })
-            setLot(initialLotState);
-            router.push("/(tabs)/book");
-        }
+        queryKey: [`fetch-reservation-${id}`],
+        queryFn: () => getReservationById(id)
     })
 
     return {
-        reservations,
-        isLoading,
-        refetch,
-        isRefetching,
-        handleCreate,
-        creationError,
-        isCreating
+        reservation,
+        isLoading
     }
 }
 

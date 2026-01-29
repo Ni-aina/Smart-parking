@@ -1,10 +1,15 @@
+import { getPaymentByReservationId } from "@/actions/payment.action";
 import { createPaymentIntent } from "@/actions/stripe.action";
+import ReviewReservation from "@/components/reservations/reviewReservation";
 import Button from "@/components/ui/button";
 import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
+import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
+import useReservation from "@/hooks/reservations/useReservation";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import { calculateDurationHours } from "@/utils/dateTimeAction";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -26,7 +31,12 @@ const Checkout = () => {
     } = useLocalSearchParams<{
         id: string,
         amount: string
-    }>();
+    }>()
+
+    const {
+        isLoading,
+        reservation
+    } = useReservation(id);
 
     const {
         currentProfile
@@ -40,10 +50,20 @@ const Checkout = () => {
     const pay = async () => {
         try {
             setPendingPayment(true);
+            const paymentReservation = await getPaymentByReservationId(id);
 
-            const { 
-                clientSecret, 
-                error: createPaymentError 
+            const alreadyPaid = paymentReservation?.transactionId &&
+                paymentReservation.status === "succeeded";
+
+            if (alreadyPaid) {
+                setErrorMessage("You have already paid this reservation");
+                setPendingPayment(false);
+                return;
+            }
+
+            const {
+                clientSecret,
+                error: createPaymentError
             } = await createPaymentIntent(
                 driverId!,
                 id,
@@ -69,7 +89,7 @@ const Checkout = () => {
                 if (!transactionId) {
                     throw new Error("Payment failed. No transaction ID found.");
                 }
-                
+
                 await queryClient.invalidateQueries({
                     queryKey: [`fetch-reservation-${driverId}`, "parking-lots"]
                 })
@@ -77,7 +97,7 @@ const Checkout = () => {
                 router.push("/(tabs)/book");
             }
         } catch (error) {
-            setErrorMessage((error instanceof Error ? error.message : 
+            setErrorMessage((error instanceof Error ? error.message :
                 "An unexpected error occurred.")
             )
         }
@@ -86,6 +106,32 @@ const Checkout = () => {
         }
     }
 
+    if (isLoading) return (
+        <View
+            style={styles.container}
+        >
+            <LoaderSkeleton />
+        </View>
+    )
+
+    if (!reservation) return;
+
+    const {
+        lot: {
+            name: lotArea,
+            location: lotAddress,
+            pricePerHour
+        },
+        vehicle: {
+            model: vehicleModel
+        },
+        startTime: startTimeStr,
+        endTime: endTimeStr
+    } = reservation;
+
+    const startTime = new Date(startTimeStr);
+    const durationHours = calculateDurationHours(startTimeStr, endTimeStr)
+
     return (
         <>
             <View style={styles.container}>
@@ -93,24 +139,40 @@ const Checkout = () => {
                     title="Checkout"
                 />
                 <View style={styles.content}>
-                    <CardField
-                        postalCodeEnabled={false}
-                        placeholders={{
-                            number: "4242 4242 4242 4242"
-                        }}
-                        cardStyle={{
-                            backgroundColor: colorScheme === "light" ? 
-                                Colors.light.background : 
-                                Colors.dark.tint,
-                            textColor: Colors[colorScheme].text,
-                            borderRadius: 5
-                        }}
+                    <View
                         style={{
-                            width: "100%",
-                            height: 50,
-                            marginVertical: 10
+                            flex: 1,
+                            justifyContent: "flex-start",
+                            gap: 20
                         }}
-                    />
+                    >
+                        <ReviewReservation
+                            lotArea={lotArea}
+                            lotAddress={lotAddress}
+                            vehicleModel={vehicleModel}
+                            pricePerHour={pricePerHour}
+                            durationHours={durationHours}
+                            startTime={startTime}
+                        />
+                        <CardField
+                            postalCodeEnabled={false}
+                            placeholders={{
+                                number: "4242 4242 4242 4242"
+                            }}
+                            cardStyle={{
+                                backgroundColor: colorScheme === "light" ?
+                                    Colors.light.background :
+                                    Colors.dark.tint,
+                                textColor: Colors[colorScheme].text,
+                                borderRadius: 5
+                            }}
+                            style={{
+                                width: "100%",
+                                height: 50,
+                                marginVertical: 10
+                            }}
+                        />
+                    </View>
                     <Button
                         title="Pay Now"
                         onPress={pay}
@@ -142,8 +204,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        justifyContent: "space-between",
-        gap: 20
+        justifyContent: "space-between"
     }
 })
 

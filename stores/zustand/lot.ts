@@ -11,7 +11,7 @@ interface LotState {
     maxLength: number;
     vehicleId: string;
     vehicleModel: string;
-    pricPerHour: number;
+    pricePerHour: number;
     startTime: Date;
     endTime: Date;
     durationHours: string;

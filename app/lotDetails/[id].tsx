@@ -46,7 +46,7 @@ const LotDetailsScreen = () => {
             maxWidth: lot.lotType?.maxWidth || 0,
             maxHeight: lot.lotType?.maxHeight || 0,
             maxLength: lot.lotType?.maxLength || 0,
-            pricPerHour: lot.pricePerHour || 0,
+            pricePerHour: lot.pricePerHour || 0,
             vehicleId: "",
             vehicleModel: ""
         })

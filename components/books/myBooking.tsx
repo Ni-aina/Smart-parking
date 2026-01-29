@@ -1,4 +1,4 @@
-import useReservation from "@/hooks/reservations/useReservation";
+import useReservations from "@/hooks/reservations/useReservations";
 import { FlatList } from "react-native";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";
@@ -9,7 +9,7 @@ const MyBooking = () => {
         isLoading,
         refetch,
         isRefetching
-    } = useReservation();
+    } = useReservations();
 
     if (isLoading) return <LoaderSkeleton />
 
