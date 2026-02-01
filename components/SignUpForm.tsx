@@ -293,6 +293,7 @@ const SignUpForm = () => {
                     <Text
                         style={{
                             fontSize: 16,
+                            textDecorationLine: "underline",
                             color: Colors[colorScheme].tint,
                             textAlign: "right"
                         }}

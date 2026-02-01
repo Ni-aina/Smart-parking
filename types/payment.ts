@@ -6,6 +6,7 @@ export interface PaymentInterface {
             id: string;
             name: string;
             location: string;
+            pricePerHour: number;
         }
         vehicle: {
             id: string;

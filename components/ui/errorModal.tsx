@@ -1,3 +1,4 @@
+import { Colors } from '@/constants/Colors';
 import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
 import {
@@ -35,18 +36,30 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
             animationType="fade"
             transparent
         >
-            <StatusBar
-                barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
-                backgroundColor="rgba(0,0,0,0.1)"
+            <StatusBar 
+                barStyle={colorScheme === "dark" ? "dark-content" : "light-content"}
+                backgroundColor={Colors[colorScheme].background}
             />
-            <View style={styles.overlay}>
-                <View style={[
-                    styles.content,
-                    {
-                        backgroundColor: colorScheme === "dark" ?
-                            "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.03)"
+            <View
+                style={
+                    [
+                        styles.overlay,
+                        {
+                            backgroundColor: Colors[colorScheme].background
+                        }
+                    ]
+                }
+            >
+                <View
+                    style={
+                        [
+                            styles.content,
+                            {
+                                backgroundColor: Colors[colorScheme].gray100
+                            }
+                        ]
                     }
-                ]}>
+                >
                     <View
                         style={styles.container}
                     >
@@ -55,19 +68,18 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
                                 [
                                     styles.title,
                                     {
-                                        color: "#777"
+                                        color: Colors[colorScheme].text
                                     }
                                 ]
                             }
-                        >{title}</Text>
+                        >
+                            {title}
+                        </Text>
                         <Text
-                            style={
-                                [
-                                    styles.message,
-                                    { color: "#b65353ff" }
-                                ]
-                            }
-                        >{message}</Text>
+                            style={styles.message}
+                        >
+                            {message}
+                        </Text>
                     </View>
                     <Icons
                         name="close"
@@ -88,7 +100,6 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: "#00000014",
         justifyContent: "center",
         alignItems: "center"
     },
@@ -109,7 +120,8 @@ const styles = StyleSheet.create({
     },
     message: {
         fontSize: 16,
-        marginBottom: 20
+        marginBottom: 20,
+        color: "rgb(215, 72, 72)"
     }
 })
 

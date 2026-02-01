@@ -92,12 +92,20 @@ const LotDetailsScreen = () => {
                                     <Icons
                                         onPress={() => router.back()}
                                         name="chevron-back"
-                                        color="white"
+                                        color={
+                                            lotImage ?
+                                                "white" :
+                                                "#555"
+                                        }
                                         size={30}
                                     />
                                     <Icons
                                         name="share-social-sharp"
-                                        color="white"
+                                        color={
+                                            lotImage ?
+                                                "white" :
+                                                "#555"
+                                        }
                                         size={30}
                                     />
                                 </View>
@@ -146,7 +154,8 @@ const LotDetailsScreen = () => {
                                 flexGrow: 1,
                                 justifyContent: "space-between",
                                 paddingBottom: 30,
-                                backgroundColor: Colors[colorscheme].background
+                                backgroundColor: !lotImage && colorscheme === "light" ? "white" :
+                                    Colors[colorscheme].background
                             }}
                             showsVerticalScrollIndicator={false}
                         >
@@ -460,7 +469,7 @@ const LotDetailsScreen = () => {
                         </ScrollView>
                     </>
             }
-            <StatusBar style="light" />
+            <StatusBar style="auto" />
         </View>
     )
 }

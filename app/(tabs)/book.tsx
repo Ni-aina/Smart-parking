@@ -4,6 +4,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import Icons from "@/components/ui/icons";
 import { Colors } from "@/constants/Colors";
 import useActiveBar from "@/hooks/useActiveBar";
+import useCurrentProfile from "@/hooks/useCurrentProfile";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
     Pressable,
@@ -14,12 +16,22 @@ import {
 } from "react-native";
 
 const BookScreen = () => {
+    const {
+        currentProfile
+    } = useCurrentProfile();
+
+    const currentRoles = currentProfile?.roles;
+    const accessToScan = currentRoles?.includes("owner") || currentRoles?.includes("agent");
+    const router = useRouter();
+
     const colorscheme = useColorScheme() || "light";
     const [active, setActive] = useState<0 | 1>(0);
 
     const {
         barColors
     } = useActiveBar({ colorscheme });
+    
+    const handleScan = ()=> router.push("/scanner");
 
     return (
         <ProtectedRoute>
@@ -33,7 +45,25 @@ const BookScreen = () => {
                     ]}>
                         My Booking
                     </Text>
-                    <Icons name="calendar" color={Colors[colorscheme].tint} />
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            gap: 5
+                        }}
+                    >
+                        {
+                            accessToScan &&
+                            <Icons
+                                name="scan"
+                                color={Colors[colorscheme].tint}
+                                onPress={handleScan}
+                            />
+                        }
+                        <Icons
+                            name="calendar"
+                            color={Colors[colorscheme].tint}
+                        />
+                    </View>
                 </View>
                 <View style={styles.content}>
                     <Pressable
@@ -107,6 +137,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingTop: 60,
         gap: 15
+    },
+    camera: {
+        width: '100%',
+        height: 200,
+        borderRadius: 8,
+        overflow: 'hidden'
     },
     content: {
         flexDirection: "row",

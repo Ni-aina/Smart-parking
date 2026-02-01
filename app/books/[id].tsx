@@ -45,32 +45,13 @@ const ETicket = () => {
         paymentReservationLoading
     } = usePaymentReservation(id);
 
-    const handlePrint = async () => {
-        const htmlToPrint = ticketHmtl({
-            transactionId,
-            lotName,
-            lotLocation,
-            plateNumber,
-            amount,
-            status,
-            startTime,
-            endTime
-        })
-
-        if (!htmlToPrint) return;
-
-        await Print.printAsync({
-            html: htmlToPrint
-        })
-    }
-
     if (paymentReservationLoading) return (
         <View style={styles.container}>
             <LoaderSkeleton />
         </View>
     )
 
-    if (!paymentReservation) {
+    if (!paymentReservation?.transactionId) {
         return (
             <View style={styles.container}>
                 <Header
@@ -100,6 +81,25 @@ const ETicket = () => {
         status,
         transactionId
     } = paymentReservation;
+
+    const handlePrint = async () => {
+        const htmlToPrint = ticketHmtl({
+            transactionId,
+            lotName,
+            lotLocation,
+            plateNumber,
+            amount,
+            status,
+            startTime,
+            endTime
+        })
+
+        if (!htmlToPrint) return;
+
+        await Print.printAsync({
+            html: htmlToPrint
+        })
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: Colors[colorscheme].background }]}>

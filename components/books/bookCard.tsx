@@ -4,6 +4,8 @@ import { ReservationInterface } from "@/types/reservation";
 import { getStatusColor } from "@/utils/statusColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
+import { Skeleton } from "moti/skeleton";
+import { useState } from "react";
 import {
     Image,
     Pressable,
@@ -18,7 +20,10 @@ interface BookCardProps {
 }
 
 const BookCard = ({ reservation }: BookCardProps) => {
+    const colorscheme = useColorScheme() || "light";
     const router = useRouter();
+
+    const [loadingImage, setLoadingImage] = useState(true);
 
     const colorScheme = useColorScheme() || 'light';
     const lotImage = reservation.lot.urlImages.length > 0 ?
@@ -46,9 +51,29 @@ const BookCard = ({ reservation }: BookCardProps) => {
             <View
                 style={styles.card}
             >
+                {
+                    loadingImage &&
+                    <View>
+                        <Skeleton
+                            colorMode={colorscheme}
+                            width={100}
+                            height={100}
+                        />
+                    </View>
+                }
                 <Image
                     source={lotImage ? { uri: lotImage } : defaultParking()}
-                    style={styles.image}
+                    style={
+                        loadingImage ?
+                        styles.loadingImage :
+                        styles.image
+                    }
+                    onLoadStart={
+                        () => setLoadingImage(true)
+                    }
+                    onLoadEnd={
+                        () => setLoadingImage(false)
+                    }
                 />
                 <View
                     style={{
@@ -179,10 +204,10 @@ const BookCard = ({ reservation }: BookCardProps) => {
                     </Text>
                 </Pressable>
                 <Pressable
-                    onPress={() => 
+                    onPress={() =>
                         status.toLowerCase() === 'pending' ?
-                        router.push(`/books/checkout?id=${id}&amount=${amount}`) :
-                        router.push(`/books/${id}`)
+                            router.push(`/books/checkout?id=${id}&amount=${amount}`) :
+                            router.push(`/books/${id}`)
                     }
                     android_ripple={{
                         color: '#00000020'
@@ -231,6 +256,10 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 8,
         marginRight: 16
+    },
+    loadingImage: {
+        width: 0,
+        height: 0
     },
     button: {
         width: '48%',
