@@ -1,12 +1,11 @@
 import { getPaymentByTransactionId } from "@/actions/payment.action";
+import PaymentReview from "@/components/books/paymentReview";
 import NoDataFound from "@/components/noDataFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import ReviewReservation from "@/components/reservations/reviewReservation";
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
-import { calculateDurationHours } from "@/utils/dateTimeAction";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useState } from "react";
@@ -17,12 +16,13 @@ const QRCodeScanner = () => {
 
     const [permission, requestPermission] = useCameraPermissions();
     const [payment, setPayment] = useState<{
-        lotArea: string;
-        lotAddress: string;
-        vehicleModel: string;
-        pricePerHour: number;
-        durationHours: number;
+        lotName: string;
+        lotLocation: string;
+        plateNumber: string;
+        status: string;
         startTime: Date;
+        endTime: Date;
+        amount: number;
     } | null>();
     const [scanning, setScanning] = useState(false);
     const [isPending, setIsPending] = useState(false);
@@ -39,28 +39,30 @@ const QRCodeScanner = () => {
             const {
                 reservation: {
                     lot: {
-                        name: lotArea,
-                        location: lotAddress,
-                        pricePerHour
+                        name: lotName,
+                        location: lotLocation,
                     },
                     vehicle: {
-                        model: vehicleModel
+                        plateNumber
                     },
                     startTime: startTimeStr,
-                    endTime: endTimeStr
-                }
+                    endTime: endTimeStr,
+                },
+                amount,
+                status
             } = paymentData;
 
             const startTime = new Date(startTimeStr);
-            const durationHours = calculateDurationHours(startTimeStr, endTimeStr);
+            const endTime = new Date(endTimeStr);
 
             setPayment({
-                lotArea,
-                lotAddress,
-                vehicleModel,
-                pricePerHour,
-                durationHours,
-                startTime
+                lotName,
+                lotLocation,
+                plateNumber,
+                status,
+                startTime,
+                endTime,
+                amount
             })
         } catch (error) {
             setPayment(null);
@@ -127,14 +129,29 @@ const QRCodeScanner = () => {
                         />
                         :
                         payment &&
-                        <ReviewReservation
-                            lotArea={payment.lotArea}
-                            lotAddress={payment.lotAddress}
-                            vehicleModel={payment.vehicleModel}
-                            pricePerHour={payment.pricePerHour}
-                            durationHours={payment.durationHours}
-                            startTime={payment.startTime}
-                        />
+                        <View
+                            style={{
+                                backgroundColor:
+                                    colorScheme === "light" ?
+                                        "#F5F5F5" :
+                                        "#1E1E1E",
+                                borderWidth: 1,
+                                borderColor: Colors[colorScheme].gray200,
+                                borderRadius: 15,
+                                padding: 30,
+                                gap: 40
+                            }}
+                        >
+                            <PaymentReview
+                                lotName={payment.lotName}
+                                lotLocation={payment.lotLocation}
+                                startTime={payment.startTime}
+                                endTime={payment.endTime}
+                                plateNumber={payment.plateNumber}
+                                status={payment.status}
+                                amount={payment.amount}
+                            />
+                        </View>
                 }
                 {
                     scanning &&
@@ -155,38 +172,49 @@ const QRCodeScanner = () => {
                 }
                 {
                     scanning ?
-                        <Button
-                            title="Stop scan"
-                            onPress={
-                                () => setScanning(false)
-                            }
-                        />
-                        :
                         <View
                             style={{
-                                gap: 30
+                                marginTop: 15
                             }}
                         >
-                            <View
-                                style={{
-                                    alignSelf: "stretch",
-                                    flexDirection: "row",
-                                    justifyContent: "center"
-                                }}
-                            >
-                                <Ionicons
-                                    size={200}
-                                    name="scan-outline"
-                                    color={Colors[colorScheme].gray200}
-                                />
-                            </View>
                             <Button
-                                title="Scan now"
+                                title="Stop scan"
                                 onPress={
-                                    () => setScanning(true)
+                                    () => setScanning(false)
                                 }
                             />
                         </View>
+                        :
+                        <>
+                            {
+                                payment === undefined &&
+                                <View
+                                    style={{
+                                        alignSelf: "stretch",
+                                        flexDirection: "row",
+                                        justifyContent: "center"
+                                    }}
+                                >
+                                    <Ionicons
+                                        size={200}
+                                        name="scan-outline"
+                                        color={Colors[colorScheme].gray200}
+                                    />
+                                </View>
+                            }
+                            <View
+                                style={{
+                                    marginTop: 15
+                                }}
+                            >
+                                <Button
+                                    title="Scan now"
+                                    onPress={
+                                        () => setScanning(true)
+                                    }
+                                />
+                            </View>
+                        </>
                 }
             </View>
             {

@@ -1,3 +1,4 @@
+import PaymentReview from "@/components/books/paymentReview";
 import NoDataFound from "@/components/noDataFound";
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
@@ -5,36 +6,14 @@ import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import usePaymentReservation from "@/hooks/payments/usePaymentReservation";
 import { ticketHmtl } from "@/lib/ticketHtml";
-import { getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
 import * as Print from 'expo-print';
 import { useLocalSearchParams } from "expo-router";
 import {
     StyleSheet,
-    Text,
     useColorScheme,
     View
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
-
-const TextWeight = ({
-    text,
-}: { text: string }) => {
-    const colorscheme = useColorScheme() || "light";
-
-    return (
-        <Text
-            style={{
-                fontSize: 16,
-                color: Colors[colorscheme].text,
-                fontWeight: "600"
-            }}
-            numberOfLines={1}
-            ellipsizeMode="tail"
-        >
-            {text}
-        </Text>
-    )
-}
 
 const ETicket = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -170,155 +149,20 @@ const ETicket = () => {
                                 }}
                             />
                         </View>
-                    </View>
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            gap: 16
-                        }}
-                    >
                         <View
                             style={{
-                                width: "50%",
-                                gap: 10
+                                marginTop: 30
                             }}
                         >
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Name
-                                </Text>
-                                <TextWeight text={lotName} />
-                            </View>
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Location
-                                </Text>
-                                <TextWeight text={lotLocation} />
-                            </View>
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Arrival Date
-                                </Text>
-                                <TextWeight
-                                    text={
-                                        getDateFormat(new Date(startTime))
-                                    }
-                                />
-                            </View>
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Arrival Time
-                                </Text>
-                                <TextWeight
-                                    text={
-                                        getTimeFormat(new Date(startTime))
-                                    }
-                                />
-                            </View>
-                        </View>
-                        <View
-                            style={{
-                                width: "50%",
-                                gap: 10
-                            }}
-                        >
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Vehicle Number
-                                </Text>
-                                <TextWeight text={plateNumber} />
-                            </View>
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Payment  Status
-                                </Text>
-                                <TextWeight text={status} />
-                            </View>
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Exit Date
-                                </Text>
-                                <TextWeight
-                                    text={
-                                        getDateFormat(new Date(endTime))
-                                    }
-                                />
-                            </View>
-                            <View
-                                style={{
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{ color: Colors[colorscheme].icon }}
-                                >
-                                    Exit Time
-                                </Text>
-                                <TextWeight
-                                    text={
-                                        getTimeFormat(new Date(endTime))
-                                    }
-                                />
-                            </View>
-                            <View
-                                style={{
-                                    marginTop: 10,
-                                    gap: 5
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontWeight: "700",
-                                        color: Colors[colorscheme].icon
-                                    }}
-                                >
-                                    Total Payment
-                                </Text>
-                                <TextWeight text={`$ ${amount}`} />
-                            </View>
+                            <PaymentReview
+                                lotName={lotName}
+                                lotLocation={lotLocation}
+                                startTime={startTime}
+                                endTime={endTime}
+                                plateNumber={plateNumber}
+                                status={status}
+                                amount={amount}
+                            />
                         </View>
                     </View>
                 </View>
