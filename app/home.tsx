@@ -39,7 +39,13 @@ const HomeScreen = () => {
                     />
                     <Text style={styles.description}>
                         {t("dont_have_an_account")} {" "}
-                        <Link href="/auth/signUp" style={{ color: "#5b9c47e7" }}>
+                        <Link
+                            href="/auth/signUp"
+                            style={{
+                                color: "#51c12fe7",
+                                textDecorationLine: "underline"
+                            }}
+                        >
                             {t("create_an_account")}
                         </Link>
                     </Text>

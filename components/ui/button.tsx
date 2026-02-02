@@ -1,4 +1,5 @@
-import { Dimensions, Pressable, StyleSheet, Text } from "react-native";
+import { Colors } from "@/constants/Colors";
+import { Dimensions, Pressable, StyleSheet, Text, useColorScheme } from "react-native";
 
 interface ButtonProps {
     title: string;
@@ -6,6 +7,7 @@ interface ButtonProps {
 }
 
 const Button = ({ title, onPress }: ButtonProps) => {
+    const colorScheme = useColorScheme() || "light";
 
     return (
         <Pressable
@@ -15,10 +17,21 @@ const Button = ({ title, onPress }: ButtonProps) => {
             }}
             style={({ pressed }) => [
                 styles.button,
+                {
+                    backgroundColor: Colors[colorScheme].tint
+                },
                 pressed ? styles.pressed : null
             ]}
         >
-            <Text style={styles.buttonText}>
+            <Text style={
+                [
+                    styles.buttonText,
+                    {
+                        color: Colors[colorScheme].background
+                    }
+                ]
+            }
+            >
                 {title}
             </Text>
         </Pressable>
@@ -31,11 +44,9 @@ const styles = StyleSheet.create({
     button: {
         minWidth,
         paddingVertical: 12,
-        backgroundColor: "#001b38ff",
         borderRadius: 8
     },
     buttonText: {
-        color: '#FFFFFF',
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 'bold'

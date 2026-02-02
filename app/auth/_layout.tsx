@@ -21,7 +21,7 @@ const AuthLayout = () => {
     useEffect(() => {
         if (!loading && session) {
             const publicPaths = ["", "/home"];
-            const redirection = publicPaths.includes(pathname) ? "/(tabs)/account" : pathname;
+            const redirection = !publicPaths.includes(pathname) ? "/(tabs)/account" : pathname;
             router.replace(redirection as RelativePathString);
         }
     }, [loading, session])

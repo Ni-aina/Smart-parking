@@ -7,6 +7,7 @@ import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
 import { calculateDurationHours } from "@/utils/dateTimeAction";
+import { Ionicons } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
@@ -137,13 +138,20 @@ const QRCodeScanner = () => {
                 }
                 {
                     scanning &&
-                    <CameraView
-                        style={styles.camera}
-                        barcodeScannerSettings={{
-                            barcodeTypes: ["qr"],
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            justifyContent: "center"
                         }}
-                        onBarcodeScanned={handleBarcodeScanned}
-                    />
+                    >
+                        <CameraView
+                            style={styles.camera}
+                            barcodeScannerSettings={{
+                                barcodeTypes: ["qr"],
+                            }}
+                            onBarcodeScanned={handleBarcodeScanned}
+                        />
+                    </View>
                 }
                 {
                     scanning ?
@@ -154,12 +162,31 @@ const QRCodeScanner = () => {
                             }
                         />
                         :
-                        <Button
-                            title="Scan now"
-                            onPress={
-                                () => setScanning(true)
-                            }
-                        />
+                        <View
+                            style={{
+                                gap: 30
+                            }}
+                        >
+                            <View
+                                style={{
+                                    alignSelf: "stretch",
+                                    flexDirection: "row",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <Ionicons
+                                    size={200}
+                                    name="scan-outline"
+                                    color={Colors[colorScheme].gray200}
+                                />
+                            </View>
+                            <Button
+                                title="Scan now"
+                                onPress={
+                                    () => setScanning(true)
+                                }
+                            />
+                        </View>
                 }
             </View>
             {
@@ -179,8 +206,8 @@ const styles = StyleSheet.create({
         gap: 20
     },
     camera: {
-        width: "100%",
-        height: 300,
+        width: "65%",
+        height: 215,
         borderRadius: 8,
         overflow: "hidden"
     }

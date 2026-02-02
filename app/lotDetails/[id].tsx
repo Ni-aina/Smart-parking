@@ -10,6 +10,7 @@ import { BlurView } from 'expo-blur';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { Skeleton } from "moti/skeleton";
 import { useEffect, useState } from "react";
 import {
     Dimensions,
@@ -25,7 +26,7 @@ import {
 } from "react-native";
 
 const LotDetailsScreen = () => {
-    const colorscheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() || "light";
     const { id } = useLocalSearchParams<{ id: string }>();
     const [indexImage, setIndexImage] = useState(0);
     const router = useRouter();
@@ -36,6 +37,8 @@ const LotDetailsScreen = () => {
         refetch,
         isRefetching
     } = useLot({ id })
+
+    const [loadingImage, setLoadingImage] = useState(true);
 
     const handleBook = () => {
         setLot({
@@ -84,9 +87,28 @@ const LotDetailsScreen = () => {
                                 />
                             }
                         >
+                            {
+                                loadingImage &&
+                                <Skeleton
+                                    width={screenWidth}
+                                    height={screenHeight / 2}
+                                    colorMode={colorScheme}
+                                />
+                            }
                             <ImageBackground
                                 source={lotImage ? { uri: lotImage } : defaultParking()}
-                                style={styles.imageBackground}
+                                style={
+                                    loadingImage ?
+                                        styles.loadingImage
+                                        :
+                                        styles.imageBackground
+                                }
+                                onLoadStart={
+                                    () => setLoadingImage(true)
+                                }
+                                onLoadEnd={
+                                    () => setLoadingImage(false)
+                                }
                             >
                                 <View style={styles.headerBackground}>
                                     <Icons
@@ -114,7 +136,7 @@ const LotDetailsScreen = () => {
                                     <View style={styles.bodyBackgroundWrapper}>
                                         <BlurView
                                             intensity={20}
-                                            tint={colorscheme === "dark" ? "dark" : "light"}
+                                            tint={colorScheme === "dark" ? "dark" : "light"}
                                             style={{
                                                 padding: 5
                                             }}
@@ -154,8 +176,8 @@ const LotDetailsScreen = () => {
                                 flexGrow: 1,
                                 justifyContent: "space-between",
                                 paddingBottom: 30,
-                                backgroundColor: !lotImage && colorscheme === "light" ? "white" :
-                                    Colors[colorscheme].background
+                                backgroundColor: !lotImage && colorScheme === "light" ? "white" :
+                                    Colors[colorScheme].background
                             }}
                             showsVerticalScrollIndicator={false}
                         >
@@ -174,8 +196,8 @@ const LotDetailsScreen = () => {
                                         }}
                                     >
                                         <BlurView
-                                            intensity={colorscheme === "dark" ? 15 : 5}
-                                            tint={colorscheme === "dark" ? "light" : "dark"}
+                                            intensity={colorScheme === "dark" ? 15 : 5}
+                                            tint={colorScheme === "dark" ? "light" : "dark"}
                                             style={{
                                                 paddingHorizontal: 10,
                                                 paddingVertical: 8
@@ -185,7 +207,7 @@ const LotDetailsScreen = () => {
                                                 style={{
                                                     fontSize: 16,
                                                     fontWeight: "600",
-                                                    color: Colors[colorscheme].tint
+                                                    color: Colors[colorScheme].tint
                                                 }}
                                             >
                                                 Car parking
@@ -206,7 +228,7 @@ const LotDetailsScreen = () => {
                                         />
                                         <Text
                                             style={{
-                                                color: Colors[colorscheme].icon
+                                                color: Colors[colorScheme].icon
                                             }}
                                         >
                                             {(Math.random() * 100).toFixed(0)} reviews
@@ -228,7 +250,7 @@ const LotDetailsScreen = () => {
                                             style={{
                                                 fontSize: 24,
                                                 fontWeight: "bold",
-                                                color: Colors[colorscheme].text
+                                                color: Colors[colorScheme].text
                                             }}
                                         >
                                             {lot.name || ""}
@@ -236,7 +258,7 @@ const LotDetailsScreen = () => {
                                         <Text
                                             style={{
                                                 fontSize: 20,
-                                                color: Colors[colorscheme].icon,
+                                                color: Colors[colorScheme].icon,
                                                 opacity: 0.7
                                             }}
                                         >
@@ -250,8 +272,8 @@ const LotDetailsScreen = () => {
                                         }}
                                     >
                                         <BlurView
-                                            intensity={colorscheme === "dark" ? 15 : 5}
-                                            tint={colorscheme === "dark" ? "light" : "dark"}
+                                            intensity={colorScheme === "dark" ? 15 : 5}
+                                            tint={colorScheme === "dark" ? "light" : "dark"}
                                             style={{
                                                 padding: 5,
                                                 transform: "rotate(-45deg)"
@@ -260,7 +282,7 @@ const LotDetailsScreen = () => {
                                             <Icons
                                                 name="send-sharp"
                                                 size={20}
-                                                color={Colors[colorscheme].tint}
+                                                color={Colors[colorScheme].tint}
                                             />
                                         </BlurView>
                                     </View>
@@ -283,12 +305,12 @@ const LotDetailsScreen = () => {
                                         <Ionicons
                                             name="location-outline"
                                             size={20}
-                                            color={Colors[colorscheme].tint}
+                                            color={Colors[colorScheme].tint}
                                         />
                                         <Text
                                             style={{
                                                 fontSize: 16,
-                                                color: Colors[colorscheme].tabIconDefault
+                                                color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
                                             {lot.distance ? lot.distance.distanceKm.toFixed(2) + " km" : "N/A"}
@@ -304,12 +326,12 @@ const LotDetailsScreen = () => {
                                         <Ionicons
                                             name="time-outline"
                                             size={20}
-                                            color={Colors[colorscheme].tint}
+                                            color={Colors[colorScheme].tint}
                                         />
                                         <Text
                                             style={{
                                                 fontSize: 16,
-                                                color: Colors[colorscheme].tabIconDefault
+                                                color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
                                             {lot.distance?.formatted || "N/A"}
@@ -325,12 +347,12 @@ const LotDetailsScreen = () => {
                                         <Ionicons
                                             name="car-outline"
                                             size={20}
-                                            color={Colors[colorscheme].tint}
+                                            color={Colors[colorScheme].tint}
                                         />
                                         <Text
                                             style={{
                                                 fontSize: 16,
-                                                color: Colors[colorscheme].tabIconDefault
+                                                color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
                                             {(lot?.totalSpots || 0) - (lot?.occupiedSpots || 0)} Spots
@@ -351,7 +373,7 @@ const LotDetailsScreen = () => {
                                             style={{
                                                 fontSize: 24,
                                                 fontWeight: "bold",
-                                                color: Colors[colorscheme].text
+                                                color: Colors[colorScheme].text
                                             }}
                                         >
                                             Vehicle category
@@ -370,7 +392,7 @@ const LotDetailsScreen = () => {
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            color: Colors[colorscheme].tabIconDefault
+                                            color: Colors[colorScheme].tabIconDefault
                                         }}
                                     >
                                         Width {"< " + lot.lotType?.maxWidth || "N/A"} m
@@ -378,7 +400,7 @@ const LotDetailsScreen = () => {
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            color: Colors[colorscheme].tabIconDefault
+                                            color: Colors[colorScheme].tabIconDefault
                                         }}
                                     >
                                         Height {"< " + lot.lotType?.maxHeight || "N/A"} m
@@ -386,7 +408,7 @@ const LotDetailsScreen = () => {
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            color: Colors[colorscheme].tabIconDefault
+                                            color: Colors[colorScheme].tabIconDefault
                                         }}
                                     >
                                         Length {"< " + lot.lotType?.maxLength || "N/A"} m
@@ -404,7 +426,7 @@ const LotDetailsScreen = () => {
                                             fontWeight: "600",
                                             paddingHorizontal: 15,
                                             marginBottom: 10,
-                                            color: Colors[colorscheme].text
+                                            color: Colors[colorScheme].text
                                         }}
                                     >
                                         Description
@@ -413,7 +435,7 @@ const LotDetailsScreen = () => {
                                         style={{
                                             fontSize: 16,
                                             paddingHorizontal: 15,
-                                            color: Colors[colorscheme].icon,
+                                            color: Colors[colorScheme].icon,
                                             lineHeight: 22
                                         }}
                                     >
@@ -435,7 +457,7 @@ const LotDetailsScreen = () => {
                                         style={{
                                             fontSize: 20,
                                             fontWeight: "semibold",
-                                            color: Colors[colorscheme].icon,
+                                            color: Colors[colorScheme].icon,
                                             opacity: 0.7
                                         }}
                                     >
@@ -445,7 +467,7 @@ const LotDetailsScreen = () => {
                                         style={{
                                             fontSize: 16,
                                             fontWeight: "600",
-                                            color: Colors[colorscheme].tint
+                                            color: Colors[colorScheme].tint
                                         }}
                                     >
                                         ${lot.pricePerHour?.toFixed(2) || "0.00"} / hr
@@ -457,11 +479,21 @@ const LotDetailsScreen = () => {
                                     }}
                                     style={({ pressed }) => [
                                         styles.button,
+                                        {
+                                            backgroundColor: Colors[colorScheme].tint
+                                        },
                                         pressed ? styles.pressed : null
                                     ]}
                                     onPress={handleBook}
                                 >
-                                    <Text style={styles.buttonText}>
+                                    <Text
+                                        style={[
+                                            styles.buttonText,
+                                            {
+                                                color: Colors[colorScheme].background
+                                            }
+                                        ]}
+                                    >
                                         Book Now
                                     </Text>
                                 </Pressable>
@@ -474,6 +506,7 @@ const LotDetailsScreen = () => {
     )
 }
 
+const screenWidth = Dimensions.get("screen").width;
 const screenHeight = Dimensions.get("screen").height;
 
 const styles = StyleSheet.create({
@@ -486,6 +519,10 @@ const styles = StyleSheet.create({
         paddingVertical: 35,
         paddingHorizontal: 10,
         justifyContent: "space-between"
+    },
+    loadingImage: {
+        width: 0,
+        height: 0
     },
     headerBackground: {
         flexDirection: "row",
@@ -503,11 +540,9 @@ const styles = StyleSheet.create({
     button: {
         width: "50%",
         paddingVertical: 12,
-        backgroundColor: Colors["light"].tint,
         borderRadius: 8
     },
     buttonText: {
-        color: '#FFFFFF',
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 'bold'
