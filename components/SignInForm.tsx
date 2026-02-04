@@ -1,7 +1,7 @@
 import { login } from "@/actions/user.action";
 import { Colors } from "@/constants/Colors";
 import { LoginType } from "@/types/signIn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,6 +12,7 @@ import {
     View
 } from "react-native";
 import Button from "./ui/button";
+import ErrorModal from "./ui/errorModal";
 import Icons from "./ui/icons";
 import Loading from "./ui/loading";
 
@@ -20,6 +21,7 @@ const SignInForm = () => {
     const { t } = useTranslation();
     const [isPending, setIsPending] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [signInError, setSignInError] = useState("");
 
     const {
         control,
@@ -36,12 +38,24 @@ const SignInForm = () => {
             setIsPending(true);
             await login(email, password);
             reset();
-        } catch (error) {
-            console.error(error);
+        } catch {
+            setSignInError(t("failed_authentication"));
         } finally {
             setIsPending(false);
         }
     }
+
+    useEffect(() => {
+        if (!signInError) return;
+
+        const errorTimedOut = setTimeout(() => {
+            setSignInError("")
+        }, 2000)
+
+        return () => {
+            clearTimeout(errorTimedOut)
+        }
+    }, [signInError])
 
     return (
         <>
@@ -120,7 +134,17 @@ const SignInForm = () => {
                 </View>
             </View>
             <Button title={t("sign_in")} onPress={handleSubmit(onSubmit)} />
+
             {isPending && <Loading />}
+
+            <ErrorModal
+                visible={!!signInError}
+                title={t("error_sign_in")}
+                message={signInError}
+                onClose={
+                    () => setSignInError("")
+                }
+            />
         </>
     )
 }

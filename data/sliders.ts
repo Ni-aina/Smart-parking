@@ -5,13 +5,13 @@ export const sliders = [
         image: require("@/assets/images/find-park.png")
     },
     {
-        title: "book_and_pay_parking_quickly_and_shortly",
-        description: "book_and_pay_parking_quickly_and_shortly_description",
+        title: "book_and_pay_parking_quickly_and_easily",
+        description: "book_and_pay_parking_quickly_and_easily_description",
         image: require("@/assets/images/book-park.png")
     },
     {
-        title: "expand_parking_time_as_you_need",
-        description: "expand_parking_time_as_you_need_description",
+        title: "extend_parking_time_as_needed",
+        description: "extend_parking_time_as_needed_description",
         image: require("@/assets/images/expand-park.png")
     }
 ]

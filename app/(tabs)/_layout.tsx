@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     minWidth: 60,
+    maxWidth: 80,
     textAlign: "center",
     fontSize: 14
   }

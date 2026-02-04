@@ -26,11 +26,11 @@ const HomeScreen = () => {
                         onPress={() => router.replace("/")}
                     />
                     <Text style={styles.text}>
-                        {t('find_the_best_car_parking_spot')}
+                        {t('find_the_best_parking_spot')}
                     </Text>
                 </View>
                 <Text style={styles.description}>
-                    {t('find_the_best_car_parking_spot_description')}
+                    {t('find_the_best_parking_spot_description')}
                 </Text>
                 <View style={styles.accountContainer}>
                     <Button

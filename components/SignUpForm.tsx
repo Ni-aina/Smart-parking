@@ -4,7 +4,7 @@ import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
 import { RegisterType } from "@/types/signUp";
 import * as Linking from "expo-linking";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
@@ -21,6 +21,7 @@ import {
 import { isValidPhoneNumber } from "react-phone-number-input";
 import PhoneInput from "react-phone-number-input/react-native-input";
 import Button from "./ui/button";
+import ErrorModal from "./ui/errorModal";
 import Icons from "./ui/icons";
 import Loading from "./ui/loading";
 
@@ -29,6 +30,7 @@ const SignUpForm = () => {
     const { t } = useTranslation();
     const [isPending, setIsPending] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
+    const [savingError, setSavingError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
 
     const {
@@ -53,7 +55,7 @@ const SignUpForm = () => {
             } = data;
 
             const user = await createUser(emailAddress, password);
-            if (!user) return;
+            if (!user) throw new Error();
 
             const profile = await createProfile({
                 id: user.id,
@@ -63,16 +65,29 @@ const SignUpForm = () => {
                 phoneNumber,
             })
 
-            if (!profile) return;
+            if (!profile) throw new Error();
 
             setIsSaved(true);
             reset();
         } catch (err) {
             setIsSaved(false);
+            setSavingError(t("register_failed"));
         } finally {
             setIsPending(false);
         }
     }
+
+    useEffect(() => {
+        if (!savingError) return;
+
+        const errorTimedOut = setTimeout(() => {
+            setSavingError("")
+        }, 2000)
+
+        return () => {
+            clearTimeout(errorTimedOut)
+        }
+    }, [savingError])
 
     return (
         <>
@@ -231,7 +246,7 @@ const SignUpForm = () => {
                                     rules={{
                                         required: t("this_field_is_required") as string,
                                         validate: curr =>
-                                            watch("password") === curr || t("password_do_not_match")
+                                            watch("password") === curr || t("passwords_do_not_match")
                                     }}
                                     render={({ field: { onChange, value } }) => (
                                         <TextInput
@@ -263,11 +278,11 @@ const SignUpForm = () => {
                     </View>
                     {
                         isSaved &&
-                        <Text 
+                        <Text
                             style={[
                                 styles.textSaved,
                                 {
-                                    color: "#c70000ff"
+                                    color: "rgb(28, 151, 0)"
                                 }
                             ]}
                         >
@@ -285,8 +300,8 @@ const SignUpForm = () => {
                 <Button title={t("sign_up")} onPress={handleSubmit(onSubmit)} />
                 <Pressable
                     style={({ pressed }) => pressed ? {
-                            opacity: 0.7
-                        } : {}
+                        opacity: 0.7
+                    } : {}
                     }
                     onPress={() => Linking.openURL(`${webBaseUrl}`)}
                 >
@@ -298,12 +313,21 @@ const SignUpForm = () => {
                             textAlign: "right"
                         }}
                     >
-                        {t("want_to_have_your_own_parking")}
+                        {t("want_to_become_parking_owner")}
                     </Text>
                 </Pressable>
             </View>
 
             {isPending && <Loading />}
+
+            <ErrorModal
+                visible={!!savingError}
+                title={t("error_sign_up")}
+                message={savingError}
+                onClose={
+                    ()=> setSavingError("")
+                }
+            />
         </>
     )
 }
