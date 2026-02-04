@@ -2,6 +2,7 @@ import useVehicles from "@/hooks/vehicles/useVehicles";
 import { useLotStore } from "@/stores/zustand/lot";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { FlatList, View } from "react-native";
 import Button from "../ui/button";
 import ErrorModal from "../ui/errorModal";
@@ -10,6 +11,7 @@ import LoaderSkeleton from "../ui/Skeleton";
 import VehicleSelectItem from "./VehicleSelectItem";
 
 const VehicleList = () => {
+    const { t } = useTranslation()
     const [error, setError] = useState("");
     const router = useRouter();
 
@@ -74,13 +76,13 @@ const VehicleList = () => {
                         />
                 }
                 <Button
-                    title="Continue"
+                    title={t("continue")}
                     onPress={handleContinue}
                 />
             </View>
             <ErrorModal
                 visible={!!error}
-                title="No selected vehicle"
+                title={t("no_selected_vehicle")}
                 message={error}
                 onClose={() => setError("")}
             />

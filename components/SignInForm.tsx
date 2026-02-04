@@ -78,7 +78,7 @@ const SignInForm = () => {
                             <TextInput
                                 value={value}
                                 onChangeText={onChange}
-                                placeholder="example@email.com"
+                                placeholder={t("email_placeholder")}
                                 style={[
                                     styles.input,
                                     {

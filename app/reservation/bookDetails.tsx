@@ -5,10 +5,11 @@ import Header from "@/components/ui/header";
 import { useLotStore } from "@/stores/zustand/lot";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
 
 const BookDetailsScreen = () => {
-
+    const { t } = useTranslation();
     const [error, setError] = useState("");
     const router = useRouter();
 
@@ -26,7 +27,7 @@ const BookDetailsScreen = () => {
             !endTime ||
             !durationHours
         ) {
-            setError("Duration field is required");
+            setError(t("duration_required"));
             return;
         }
         router.push("/reservation/review");
@@ -45,17 +46,17 @@ const BookDetailsScreen = () => {
                 style={styles.container}
             >
                 <Header
-                    title="Book Details"
+                    title={t("book_details")}
                 />
                 <BookForm />
                 <Button
-                    title="Continue"
+                    title={t("continue")}
                     onPress={handleContinue}
                 />
             </View>
             <ErrorModal
                 visible={!!error}
-                title="Required information"
+                title={t("required_information")}
                 message={error}
                 onClose={() => setError("")}
             />

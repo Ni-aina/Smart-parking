@@ -6,6 +6,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { Skeleton } from "moti/skeleton";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Image,
     Pressable,
@@ -20,6 +21,7 @@ interface BookCardProps {
 }
 
 const BookCard = ({ reservation }: BookCardProps) => {
+    const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
@@ -53,7 +55,11 @@ const BookCard = ({ reservation }: BookCardProps) => {
             >
                 {
                     loadingImage &&
-                    <View>
+                    <View
+                        style={{
+                            marginRight: 16
+                        }}
+                    >
                         <Skeleton
                             colorMode={colorscheme}
                             width={100}
@@ -230,8 +236,8 @@ const BookCard = ({ reservation }: BookCardProps) => {
                     >
                         {
                             status.toLowerCase() === 'pending' ?
-                                'Pay Now' :
-                                'E-Ticket'
+                                t("pay_now") :
+                                t("e_ticket")
                         }
                     </Text>
                 </Pressable>

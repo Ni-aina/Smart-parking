@@ -1,14 +1,15 @@
 import { Colors } from "@/constants/Colors";
 import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
-    Modal,
-    Pressable,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View
+  Modal,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View
 } from "react-native";
 
 interface ConfirmModalProps {
@@ -21,11 +22,12 @@ interface ConfirmModalProps {
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
   visible,
-  title = "Confirm Delete",
-  message = "Are you sure you want to delete this item?",
+  title,
+  message,
   onConfirm,
   onCancel
 }) => {
+  const { t } = useTranslation()
   const colorscheme = useColorScheme() || "light";
 
   useEffect(() => {
@@ -85,7 +87,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                   color: colorscheme === "light" ? "#000" : "#fff"
                 }}
               >
-                Cancel
+                {t("cancel_btn")}
               </Text>
             </Pressable>
 
@@ -102,7 +104,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                   color: "white"
                 }}
               >
-                Delete
+                {t("delete_btn")}
               </Text>
             </Pressable>
           </View>

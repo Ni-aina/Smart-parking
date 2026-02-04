@@ -8,6 +8,7 @@ import useDebounce from "@/hooks/useDebounce";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     FlatList,
     Pressable,
@@ -19,6 +20,7 @@ import {
 } from "react-native";
 
 const FindParkingScreen = () => {
+    const { t } = useTranslation();
     const router = useRouter();
 
     const colorscheme = useColorScheme() || "light";
@@ -30,7 +32,7 @@ const FindParkingScreen = () => {
     } = useDebounce({
         value: searchTerm,
         delay: 1000
-    });
+    })
 
     const {
         lots,
@@ -42,7 +44,7 @@ const FindParkingScreen = () => {
         isRefetching
     } = useLots({
         searchTerm: debouncedSearchTerm
-    });
+    })
 
     const handleShowDetails = (id: string) => {
         router.push(`/lotDetails/${id}`)
@@ -51,7 +53,7 @@ const FindParkingScreen = () => {
     return (
         <View style={styles.container}>
             <Header
-                title="Search"
+                title={t("search")}
                 rightIcon={
                     <View style={styles.layoutToggle}>
                         <Pressable
@@ -107,7 +109,7 @@ const FindParkingScreen = () => {
                         }
                     ]}
                     placeholderTextColor={Colors[colorscheme].icon}
-                    placeholder="Search"
+                    placeholder={t("search")}
                     value={searchTerm}
                     onChangeText={setSearchTerm}
                 />
@@ -120,7 +122,7 @@ const FindParkingScreen = () => {
                         color: Colors[colorscheme].text
                     }}
                 >
-                    Search Result
+                    {t("search_result")}
                 </Text>
                 <Text
                     style={{
@@ -128,7 +130,7 @@ const FindParkingScreen = () => {
                         color: Colors[colorscheme].tint
                     }}
                 >
-                    Filters
+                    {t("filters")}
                 </Text>
             </View>
             {

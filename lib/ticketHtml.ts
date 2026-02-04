@@ -1,5 +1,17 @@
 import { getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
 
+const defaultLabels = {
+    name: "Name",
+    location: "Location",
+    arrivalDate: "Arrival Date",
+    arrivalTime: "Arrival Time",
+    vehicleNumber: "Vehicle Number",
+    paymentStatus: "Payment Status",
+    exitDate: "Exit Date",
+    exitTime: "Exit Time",
+    totalPayment: "Total Payment"
+}
+
 export const ticketHmtl = ({
     transactionId,
     lotName,
@@ -8,7 +20,8 @@ export const ticketHmtl = ({
     amount,
     status,
     startTime,
-    endTime
+    endTime,
+    labels = defaultLabels
 }: {
     transactionId: string,
     lotName: string,
@@ -17,7 +30,8 @@ export const ticketHmtl = ({
     amount: number,
     status: string,
     startTime: string,
-    endTime: string
+    endTime: string,
+    labels?: typeof defaultLabels
 })=> {
     if (
         !transactionId ||
@@ -117,41 +131,41 @@ export const ticketHmtl = ({
                         <div class="info-container">
                             <div class="info-column">
                                 <div class="info-item">
-                                    <div class="label">Name</div>
+                                    <div class="label">${labels.name}</div>
                                     <div class="value">${lotName}</div>
                                 </div>
                                 <div class="info-item">
-                                    <div class="label">Location</div>
+                                    <div class="label">${labels.location}</div>
                                     <div class="value">${lotLocation}</div>
                                 </div>
                                 <div class="info-item">
-                                    <div class="label">Arrival Date</div>
+                                    <div class="label">${labels.arrivalDate}</div>
                                     <div class="value">${getDateFormat(new Date(startTime))}</div>
                                 </div>
                                 <div class="info-item">
-                                    <div class="label">Arrival Time</div>
+                                    <div class="label">${labels.arrivalTime}</div>
                                     <div class="value">${getTimeFormat(new Date(startTime))}</div>
                                 </div>
                             </div>
                             <div class="info-column">
                                 <div class="info-item">
-                                    <div class="label">Vehicle Number</div>
+                                    <div class="label">${labels.vehicleNumber}</div>
                                     <div class="value">${plateNumber}</div>
                                 </div>
                                 <div class="info-item">
-                                    <div class="label">Payment Status</div>
+                                    <div class="label">${labels.paymentStatus}</div>
                                     <div class="value">${status}</div>
                                 </div>
                                 <div class="info-item">
-                                    <div class="label">Exit Date</div>
+                                    <div class="label">${labels.exitDate}</div>
                                     <div class="value">${getDateFormat(new Date(endTime))}</div>
                                 </div>
                                 <div class="info-item">
-                                    <div class="label">Exit Time</div>
+                                    <div class="label">${labels.exitTime}</div>
                                     <div class="value">${getTimeFormat(new Date(endTime))}</div>
                                 </div>
                                 <div class="total-section">
-                                    <div class="total-label">Total Payment</div>
+                                    <div class="total-label">${labels.totalPayment}</div>
                                     <div class="value">$ ${amount}</div>
                                 </div>
                             </div>

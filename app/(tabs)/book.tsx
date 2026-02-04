@@ -7,6 +7,7 @@ import useActiveBar from "@/hooks/useActiveBar";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Pressable,
     StyleSheet,
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 const BookScreen = () => {
+    const { t } = useTranslation();
     const {
         currentProfile
     } = useCurrentProfile();
@@ -43,7 +45,7 @@ const BookScreen = () => {
                             color: Colors[colorscheme].text
                         }
                     ]}>
-                        My Booking
+                        {t("my_bookings")}
                     </Text>
                     <View
                         style={{
@@ -89,7 +91,7 @@ const BookScreen = () => {
                                     color: barColors["inactive"].color
                                 }
                             ]}>
-                                My Booking
+                                {t("my_bookings")}
                             </Text>
                         </View>
                     </Pressable>
@@ -116,7 +118,7 @@ const BookScreen = () => {
                                     color: barColors["inactive"].color
                                 }
                             ]}>
-                                History
+                                {t("history")}
                             </Text>
                         </View>
                     </Pressable>

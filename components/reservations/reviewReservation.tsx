@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
 interface ReviewReservationInterface {
@@ -19,7 +20,7 @@ const ReviewReservation = ({
     durationHours,
     startTime
 }: ReviewReservationInterface) => {
-
+    const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
 
     return (
@@ -45,7 +46,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Parking Area
+                        {t("parking_area")}
                     </Text>
                     <Text
                         style={{
@@ -69,7 +70,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Address
+                        {t("address")}
                     </Text>
                     <Text
                         style={{
@@ -93,7 +94,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Vehicle
+                        {t("vehicle")}
                     </Text>
                     <Text
                         style={{
@@ -117,7 +118,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Date
+                        {t("date")}
                     </Text>
                     <Text
                         style={{
@@ -141,7 +142,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Hours
+                        {t("hours")}
                     </Text>
                     <Text
                         style={{
@@ -165,7 +166,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Duration
+                        {t("duration")}
                     </Text>
                     <Text
                         style={{
@@ -173,7 +174,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].text
                         }}
                     >
-                        {durationHours} {durationHours < 2 ? "hour" : "hours"}
+                        {durationHours} {durationHours < 2 ? t("hour") : t("hours")}
                     </Text>
                 </View>
             </View>
@@ -198,7 +199,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Amount
+                        {t("amount")}
                     </Text>
                     <Text
                         style={{
@@ -223,7 +224,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].text
                         }}
                     >
-                        Total
+                        {t("total")}
                     </Text>
                     <Text
                         style={{

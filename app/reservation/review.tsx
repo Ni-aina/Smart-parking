@@ -5,9 +5,11 @@ import Loading from "@/components/ui/loading";
 import useReservations from "@/hooks/reservations/useReservations";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { useLotStore } from "@/stores/zustand/lot";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
 const ReviewScreen = () => {
+    const { t } = useTranslation();
     const { currentProfile } = useCurrentProfile();
     const driverId = currentProfile?.id || "";
 
@@ -49,7 +51,7 @@ const ReviewScreen = () => {
                 style={styles.container}
             >
                 <Header
-                    title="Review Summary"
+                    title={t("review_summary")}
                 />
                 <View
                     style={{
@@ -78,7 +80,7 @@ const ReviewScreen = () => {
                     }
                 </View>
                 <Button
-                    title="Book Now"
+                    title={t("book_now")}
                     onPress={handleBook}
                 />
             </View >

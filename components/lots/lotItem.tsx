@@ -4,6 +4,7 @@ import { LotInterface } from "@/types/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Skeleton } from "moti/skeleton";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Image,
     Pressable,
@@ -24,6 +25,7 @@ const LotItem = ({
     layout,
     onPress
 }: LotItemInterface) => {
+    const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
 
     const lotImage = lot.urlImages?.at(0) || null;
@@ -116,7 +118,7 @@ const LotItem = ({
                                     color: Colors[colorscheme].tabIconDefault
                                 }}
                             >
-                                {distance?.formatted || "N/A"}
+                                {distance?.formatted || t("na")}
                             </Text>
                         </View>
                     }
@@ -132,7 +134,7 @@ const LotItem = ({
                                 color: Colors[colorscheme].tabIconDefault
                             }}
                         >
-                            {totalSpots - occupiedSpots} Spots
+                            {totalSpots - occupiedSpots} {t("spots")}
                         </Text>
                     </View>
                     <Text
@@ -141,7 +143,7 @@ const LotItem = ({
                             color: Colors[colorscheme].tint
                         }}
                     >
-                        ${pricePerHour} hr
+                        ${pricePerHour} {t("hr")}
                     </Text>
                 </View>
             </View>

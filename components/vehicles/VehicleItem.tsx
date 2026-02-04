@@ -3,6 +3,7 @@ import { VehicleInterface } from "@/types/vehicle";
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Image,
     Pressable,
@@ -22,6 +23,7 @@ const VehicleItem = ({
     vehicle,
     handleDelete
 }: VehicleItemInterface) => {
+    const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
@@ -147,8 +149,8 @@ const VehicleItem = ({
             </View>
             <ConfirmModal
                 visible={showConfirm}
-                title="Danger zone"
-                message={`Are you sure you want to delete ${vehicle.plateNumber} ?`}
+                title={t("danger_zone")}
+                message={t("confirm_delete_vehicle", { plateNumber: vehicle.plateNumber })}
                 onConfirm={handleDeleteConfirm}
                 onCancel={handleToggleConfirm}
             />

@@ -14,9 +14,11 @@ import { CardField, useStripe } from "@stripe/stripe-react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, useColorScheme, View } from "react-native";
 
 const Checkout = () => {
+    const { t } = useTranslation();
     const colorScheme = useColorScheme() || "light";
     const router = useRouter();
 
@@ -56,7 +58,7 @@ const Checkout = () => {
                 paymentReservation.status === "succeeded";
 
             if (alreadyPaid) {
-                setErrorMessage("You have already paid this reservation");
+                setErrorMessage(t("already_paid_reservation"));
                 setPendingPayment(false);
                 return;
             }
@@ -87,7 +89,7 @@ const Checkout = () => {
                 const transactionId = paymentIntent.id!;
 
                 if (!transactionId) {
-                    throw new Error("Payment failed. No transaction ID found.");
+                    throw new Error(t("payment_failed_no_transaction"));
                 }
 
                 await queryClient.invalidateQueries({
@@ -98,7 +100,7 @@ const Checkout = () => {
             }
         } catch (error) {
             setErrorMessage((error instanceof Error ? error.message :
-                "An unexpected error occurred.")
+                t("unexpected_error"))
             )
         }
         finally {
@@ -136,7 +138,7 @@ const Checkout = () => {
         <>
             <View style={styles.container}>
                 <Header
-                    title="Checkout"
+                    title={t("checkout")}
                 />
                 <View style={styles.content}>
                     <View
@@ -157,7 +159,7 @@ const Checkout = () => {
                         <CardField
                             postalCodeEnabled={false}
                             placeholders={{
-                                number: "4242 4242 4242 4242"
+                                number: t("card_placeholder")
                             }}
                             cardStyle={{
                                 backgroundColor: colorScheme === "light" ?
@@ -174,7 +176,7 @@ const Checkout = () => {
                         />
                     </View>
                     <Button
-                        title="Pay Now"
+                        title={t("pay_now")}
                         onPress={pay}
                     />
                 </View>

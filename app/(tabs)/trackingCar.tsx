@@ -7,6 +7,7 @@ import VehicleItem from "@/components/vehicles/VehicleItem";
 import { Colors } from "@/constants/Colors";
 import useVehicles from "@/hooks/vehicles/useVehicles";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import {
   FlatList,
   StyleSheet,
@@ -16,6 +17,7 @@ import {
 } from "react-native";
 
 const TrackingCarSceen = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const colorscheme = useColorScheme() || "light";
   const {
@@ -58,7 +60,7 @@ const TrackingCarSceen = () => {
               color: Colors[colorscheme].text
             }}
           >
-            My vehicles
+            {t("my_vehicles")}
           </Text>
           <Icons
             name="add"

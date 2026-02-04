@@ -12,6 +12,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Skeleton } from "moti/skeleton";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Dimensions,
     Image,
@@ -26,6 +27,7 @@ import {
 } from "react-native";
 
 const LotDetailsScreen = () => {
+    const { t } = useTranslation();
     const colorScheme = useColorScheme() || "light";
     const { id } = useLocalSearchParams<{ id: string }>();
     const [indexImage, setIndexImage] = useState(0);
@@ -74,7 +76,7 @@ const LotDetailsScreen = () => {
                 !lot ?
                     <RequestTooLong
                         refresh={refetch}
-                        message="Request too long"
+                        message={t("request_too_long")}
                     />
                     :
                     <>
@@ -210,7 +212,7 @@ const LotDetailsScreen = () => {
                                                     color: Colors[colorScheme].tint
                                                 }}
                                             >
-                                                Car parking
+                                                {t("car_parking")}
                                             </Text>
                                         </BlurView>
                                     </View>
@@ -231,7 +233,7 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorScheme].icon
                                             }}
                                         >
-                                            {(Math.random() * 100).toFixed(0)} reviews
+                                            {(Math.random() * 100).toFixed(0)} {t("reviews")}
                                         </Text>
                                     </View>
                                 </View>
@@ -313,7 +315,7 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {lot.distance ? lot.distance.distanceKm.toFixed(2) + " km" : "N/A"}
+                                            {lot.distance ? lot.distance.distanceKm.toFixed(2) + " km" : t("na")}
                                         </Text>
                                     </View>
                                     <View
@@ -334,7 +336,7 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {lot.distance?.formatted || "N/A"}
+                                            {lot.distance?.formatted || t("na")}
                                         </Text>
                                     </View>
                                     <View
@@ -355,7 +357,7 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {(lot?.totalSpots || 0) - (lot?.occupiedSpots || 0)} Spots
+                                            {(lot?.totalSpots || 0) - (lot?.occupiedSpots || 0)} {t("spots")}
                                         </Text>
                                     </View>
                                 </View>
@@ -376,7 +378,7 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorScheme].text
                                             }}
                                         >
-                                            Vehicle category
+                                            {t("vehicle_category")}
                                         </Text>
                                     </View>
                                 </View>
@@ -395,7 +397,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorScheme].tabIconDefault
                                         }}
                                     >
-                                        Width {"< " + lot.lotType?.maxWidth || "N/A"} m
+                                        {t("width")} {"< " + lot.lotType?.maxWidth || t("na")} m
                                     </Text>
                                     <Text
                                         style={{
@@ -403,7 +405,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorScheme].tabIconDefault
                                         }}
                                     >
-                                        Height {"< " + lot.lotType?.maxHeight || "N/A"} m
+                                        {t("height")} {"< " + lot.lotType?.maxHeight || t("na")} m
                                     </Text>
                                     <Text
                                         style={{
@@ -411,7 +413,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorScheme].tabIconDefault
                                         }}
                                     >
-                                        Length {"< " + lot.lotType?.maxLength || "N/A"} m
+                                        {t("length")} {"< " + lot.lotType?.maxLength || t("na")} m
                                     </Text>
                                 </View>
                                 <View
@@ -429,7 +431,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorScheme].text
                                         }}
                                     >
-                                        Description
+                                        {t("description")}
                                     </Text>
                                     <Text
                                         style={{
@@ -439,7 +441,7 @@ const LotDetailsScreen = () => {
                                             lineHeight: 22
                                         }}
                                     >
-                                        {lot.lotType?.description || "No description available."}
+                                        {lot.lotType?.description || t("no_description_available")}
                                     </Text>
                                 </View>
                             </View>
@@ -461,7 +463,7 @@ const LotDetailsScreen = () => {
                                             opacity: 0.7
                                         }}
                                     >
-                                        Price
+                                        {t("price")}
                                     </Text>
                                     <Text
                                         style={{
@@ -470,7 +472,7 @@ const LotDetailsScreen = () => {
                                             color: Colors[colorScheme].tint
                                         }}
                                     >
-                                        ${lot.pricePerHour?.toFixed(2) || "0.00"} / hr
+                                        ${lot.pricePerHour?.toFixed(2) || "0.00"} {t("per_hr")}
                                     </Text>
                                 </View>
                                 <Pressable
@@ -494,7 +496,7 @@ const LotDetailsScreen = () => {
                                             }
                                         ]}
                                     >
-                                        Book Now
+                                        {t("book_now")}
                                     </Text>
                                 </Pressable>
                             </View>

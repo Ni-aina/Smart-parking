@@ -3,6 +3,7 @@ import Icons from "@/components/ui/icons";
 import VehicleForm from "@/components/vehicles/VehicleForm";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import {
     StyleSheet,
     Text,
@@ -11,6 +12,7 @@ import {
 } from "react-native";
 
 const AddVehicleScreen = () => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
@@ -27,7 +29,7 @@ const AddVehicleScreen = () => {
                             color: Colors[colorscheme].text
                         }}
                     >
-                        Add Vehicle
+                        {t("add_vehicle")}
                     </Text>
                     <Icons
                         name="close"

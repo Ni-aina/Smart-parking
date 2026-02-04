@@ -4,6 +4,7 @@ import VehicleForm from "@/components/vehicles/VehicleForm";
 import { Colors } from "@/constants/Colors";
 import { VehicleInterface } from "@/types/vehicle";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import {
     StyleSheet,
     Text,
@@ -12,6 +13,7 @@ import {
 } from "react-native";
 
 const EditVehicleScreen = () => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
@@ -31,7 +33,7 @@ const EditVehicleScreen = () => {
                             color: Colors[colorscheme].text
                         }}
                     >
-                        Update Vehicle
+                        {t("update_vehicle")}
                     </Text>
                     <Icons
                         name="close"

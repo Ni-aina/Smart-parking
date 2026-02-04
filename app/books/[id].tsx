@@ -8,6 +8,7 @@ import usePaymentReservation from "@/hooks/payments/usePaymentReservation";
 import { ticketHmtl } from "@/lib/ticketHtml";
 import * as Print from 'expo-print';
 import { useLocalSearchParams } from "expo-router";
+import { useTranslation } from "react-i18next";
 import {
     StyleSheet,
     useColorScheme,
@@ -16,6 +17,7 @@ import {
 import QRCode from "react-native-qrcode-svg";
 
 const ETicket = () => {
+    const { t } = useTranslation();
     const { id } = useLocalSearchParams<{ id: string }>();
     const colorscheme = useColorScheme() || "light";
 
@@ -34,10 +36,10 @@ const ETicket = () => {
         return (
             <View style={styles.container}>
                 <Header
-                    title="E-Ticket"
+                    title={t("e_ticket")}
                 />
                 <NoDataFound
-                    message="No payment reservation found"
+                    message={t("no_payment_reservation_found")}
                     iconName="card-outline"
                 />
             </View>
@@ -70,7 +72,18 @@ const ETicket = () => {
             amount,
             status,
             startTime,
-            endTime
+            endTime,
+            labels: {
+                name: t("name"),
+                location: t("location"),
+                arrivalDate: t("arrival_date"),
+                arrivalTime: t("arrival_time"),
+                vehicleNumber: t("vehicle_number"),
+                paymentStatus: t("payment_status"),
+                exitDate: t("exit_date"),
+                exitTime: t("exit_time"),
+                totalPayment: t("total_payment")
+            }
         })
 
         if (!htmlToPrint) return;
@@ -83,7 +96,7 @@ const ETicket = () => {
     return (
         <View style={[styles.container, { backgroundColor: Colors[colorscheme].background }]}>
             <Header
-                title="E-Ticket"
+                title={t("e_ticket")}
             />
             <View
                 style={{
@@ -167,7 +180,7 @@ const ETicket = () => {
                     </View>
                 </View>
                 <Button
-                    title="Print"
+                    title={t("print")}
                     onPress={handlePrint}
                 />
             </View>

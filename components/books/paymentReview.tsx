@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
+import { useTranslation } from "react-i18next";
 import { Text, useColorScheme, View } from "react-native";
 
 const TextWeight = ({
@@ -41,6 +42,7 @@ const PaymentReview = ({
     status,
     amount
 }: PaymentReviewProps) => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
 
     return (
@@ -65,7 +67,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Name
+                        {t("name")}
                     </Text>
                     <TextWeight text={lotName} />
                 </View>
@@ -77,7 +79,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Location
+                        {t("location")}
                     </Text>
                     <TextWeight text={lotLocation} />
                 </View>
@@ -89,7 +91,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Arrival Date
+                        {t("arrival_date")}
                     </Text>
                     <TextWeight
                         text={
@@ -105,7 +107,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Arrival Time
+                        {t("arrival_time")}
                     </Text>
                     <TextWeight
                         text={
@@ -128,7 +130,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Vehicle Number
+                        {t("vehicle_number")}
                     </Text>
                     <TextWeight text={plateNumber} />
                 </View>
@@ -140,7 +142,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Payment  Status
+                        {t("payment_status")}
                     </Text>
                     <TextWeight text={status} />
                 </View>
@@ -152,7 +154,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Exit Date
+                        {t("exit_date")}
                     </Text>
                     <TextWeight
                         text={
@@ -168,7 +170,7 @@ const PaymentReview = ({
                     <Text
                         style={{ color: Colors[colorscheme].icon }}
                     >
-                        Exit Time
+                        {t("exit_time")}
                     </Text>
                     <TextWeight
                         text={
@@ -188,7 +190,7 @@ const PaymentReview = ({
                             color: Colors[colorscheme].icon
                         }}
                     >
-                        Total Payment
+                        {t("total_payment")}
                     </Text>
                     <TextWeight text={`$ ${amount}`} />
                 </View>

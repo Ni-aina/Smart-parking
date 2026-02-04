@@ -9,9 +9,11 @@ import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const QRCodeScanner = () => {
+    const { t } = useTranslation();
     const colorScheme = useColorScheme() || "light";
 
     const [permission, requestPermission] = useCameraPermissions();
@@ -35,7 +37,7 @@ const QRCodeScanner = () => {
         try {
             setIsPending(true);
             const paymentData = await getPaymentByTransactionId(data);
-            if (!paymentData) throw new Error("Payment not found");
+            if (!paymentData) throw new Error(t("payment_not_found"));
             const {
                 reservation: {
                     lot: {
@@ -81,10 +83,10 @@ const QRCodeScanner = () => {
         <ProtectedRoute>
             <View style={styles.container}>
                 <Header
-                    title="Scanner"
+                    title={t("scanner")}
                 />
                 <NoDataFound
-                    message="Persmission denied"
+                    message={t("permission_denied")}
                     iconName="accessibility-outline"
                 />
             </View>
@@ -95,18 +97,17 @@ const QRCodeScanner = () => {
         <ProtectedRoute>
             <View style={styles.container}>
                 <Header
-                    title="Scanner"
+                    title={t("scanner")}
                 />
                 <Text
                     style={{
                         color: Colors[colorScheme].text
                     }}
                 >
-                    To scan QR codes and check in bookings, we need access to your device's camera.
-                    Your privacy is important to us - the camera will only be used for scanning purposes.
+                    {t("camera_permission_message")}
                 </Text>
                 <Button
-                    title="Grant Permission"
+                    title={t("grant_permission")}
                     onPress={requestPermission}
                 />
             </View>
@@ -119,12 +120,12 @@ const QRCodeScanner = () => {
                 style={styles.container}
             >
                 <Header
-                    title="Scanner"
+                    title={t("scanner")}
                 />
                 {
                     payment === null ?
                         <NoDataFound
-                            message="Payment not found"
+                            message={t("payment_not_found")}
                             iconName="card-outline"
                         />
                         :
@@ -178,7 +179,7 @@ const QRCodeScanner = () => {
                             }}
                         >
                             <Button
-                                title="Stop scan"
+                                title={t("stop_scan")}
                                 onPress={
                                     () => setScanning(false)
                                 }
@@ -208,7 +209,7 @@ const QRCodeScanner = () => {
                                 }}
                             >
                                 <Button
-                                    title="Scan now"
+                                    title={t("scan_now")}
                                     onPress={
                                         () => setScanning(true)
                                     }

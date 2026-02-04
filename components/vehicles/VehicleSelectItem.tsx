@@ -2,6 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { useLotStore } from "@/stores/zustand/lot";
 import { VehicleInterface } from "@/types/vehicle";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Image,
     Pressable,
@@ -19,6 +20,7 @@ interface VehicleSelectItemInterface {
 const VehicleSelectItem = ({
     vehicle
 }: VehicleSelectItemInterface) => {
+    const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
     const [error, setError] = useState("");
 
@@ -45,19 +47,19 @@ const VehicleSelectItem = ({
 
     const handleVehicleSelected = () => {
         if (!id) {
-            setError("Vehicle not found");
+            setError(t("vehicle_not_found"));
             return;
         }
         if (Number(width) > maxWidth) {
-            setError("Your vehicle is too large");
+            setError(t("vehicle_too_large"));
             return;
         }
         if (Number(height) > maxHeight) {
-            setError("Your vehicle is too tall");
+            setError(t("vehicle_too_tall"));
             return;
         }
         if (Number(length) > maxLength) {
-            setError("Your vehicle is too long");
+            setError(t("vehicle_too_long"));
             return;
         }
 
@@ -159,7 +161,7 @@ const VehicleSelectItem = ({
             </Pressable>
             <ErrorModal
                 visible={!!error}
-                title="Failed to select vehicle"
+                title={t("failed_to_select_vehicle")}
                 message={error}
                 onClose={()=> setError("")}
             />

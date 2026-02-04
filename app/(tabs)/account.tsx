@@ -6,6 +6,7 @@ import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Image,
     Pressable,
@@ -17,6 +18,7 @@ import {
 } from "react-native";
 
 const AccountScreen = () => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const {
         currentProfile,
@@ -30,7 +32,7 @@ const AccountScreen = () => {
             setIsSignOut(true);
             await logout();
         } catch (err) {
-            alert("Log out failed");
+            alert(t("log_out_failed"));
         } finally {
             setIsSignOut(false);
         }
@@ -48,7 +50,7 @@ const AccountScreen = () => {
                 <View style={styles.header}>
                     <Image
                         source={require("@/assets/images/accounts/default-user.png")}
-                        alt="Default user"
+                        alt={t("default_user")}
                         style={styles.iconProfile}
                         borderRadius={50}
                     />
@@ -84,7 +86,7 @@ const AccountScreen = () => {
                                 color: Colors[colorscheme].text
                             }]
                         }>
-                        Personal Info
+                        {t("personal_info")}
                     </Text>
                     <Pressable
                         style={({ pressed }) => [
@@ -104,7 +106,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Personal Data
+                                {t("personal_data")}
                             </Text>
                         </View>
                         <Ionicons
@@ -131,7 +133,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Payment Account
+                                {t("payment_account")}
                             </Text>
                         </View>
                         <Ionicons
@@ -158,7 +160,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Account Security
+                                {t("account_security")}
                             </Text>
                         </View>
                         <Ionicons
@@ -174,7 +176,7 @@ const AccountScreen = () => {
                                 color: Colors[colorscheme].text
                             }]
                         }>
-                        General
+                        {t("general")}
                     </Text>
                     <Pressable
                         style={({ pressed }) => [
@@ -194,7 +196,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Languages
+                                {t("languages")}
                             </Text>
                         </View>
                         <Ionicons
@@ -221,7 +223,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Push Notification
+                                {t("push_notification")}
                             </Text>
                         </View>
                         <Ionicons
@@ -248,7 +250,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Messages
+                                {t("messages")}
                             </Text>
                         </View>
                         <Ionicons
@@ -275,7 +277,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Clear Data
+                                {t("clear_data")}
                             </Text>
                         </View>
                         <Text
@@ -294,7 +296,7 @@ const AccountScreen = () => {
                                 color: Colors[colorscheme].text
                             }]
                         }>
-                        About
+                        {t("about")}
                     </Text>
                     <Pressable
                         style={({ pressed }) => [
@@ -314,7 +316,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Help Center
+                                {t("help_center")}
                             </Text>
                         </View>
                         <Ionicons
@@ -341,7 +343,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Privacy & Policy
+                                {t("privacy_and_policy")}
                             </Text>
                         </View>
                         <Ionicons
@@ -368,7 +370,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                About App
+                                {t("about_app")}
                             </Text>
                         </View>
                         <Ionicons
@@ -395,7 +397,7 @@ const AccountScreen = () => {
                                         color: Colors[colorscheme].text
                                     }]
                                 }>
-                                Term & Condition
+                                {t("term_and_condition")}
                             </Text>
                         </View>
                         <Ionicons
@@ -417,7 +419,7 @@ const AccountScreen = () => {
                             }]
                         }
                     >
-                        Logout
+                        {t("logout")}
                     </Text>
                     <Ionicons
                         name="log-out-outline"

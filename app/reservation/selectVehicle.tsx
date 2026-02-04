@@ -4,6 +4,7 @@ import VehicleList from "@/components/vehicles/VehicleList";
 import { Colors } from "@/constants/Colors";
 import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { useTranslation } from "react-i18next";
 import {
     StyleSheet,
     useColorScheme,
@@ -11,6 +12,7 @@ import {
 } from "react-native";
 
 const SelectVehicleScreen = () => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
 
@@ -19,7 +21,7 @@ const SelectVehicleScreen = () => {
             style={styles.container}
         >
             <Header
-                title="Select Vehicle"
+                title={t("select_vehicle")}
                 rightIcon={
                     <Icons
                         name="add"

@@ -1,6 +1,7 @@
 import { Colors } from '@/constants/Colors';
 import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Modal,
     StatusBar,
@@ -20,11 +21,14 @@ interface ErrorModalProps {
 
 const ErrorModal: React.FC<ErrorModalProps> = ({
     visible,
-    title = "Error!",
-    message = "Something went wrong.",
+    title,
+    message,
     onClose
 }) => {
+    const { t } = useTranslation()
     const colorScheme = useColorScheme() || "light";
+    const modalTitle = title ?? t("error_title");
+    const modalMessage = message ?? t("something_went_wrong");
 
     useEffect(() => {
         NavigationBar.setVisibilityAsync("hidden");
@@ -73,12 +77,12 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
                                 ]
                             }
                         >
-                            {title}
+                            {modalTitle}
                         </Text>
                         <Text
                             style={styles.message}
                         >
-                            {message}
+                            {modalMessage}
                         </Text>
                     </View>
                     <Icons

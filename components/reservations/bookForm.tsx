@@ -4,6 +4,7 @@ import { addHours, getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Pressable,
     StyleSheet,
@@ -14,6 +15,7 @@ import {
 } from "react-native";
 
 const BookForm = () => {
+    const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
@@ -44,7 +46,7 @@ const BookForm = () => {
                     color: Colors[colorscheme].text
                 }}
             >
-                Start Date
+                {t("start_date")}
             </Text>
             <Pressable
                 style={({ pressed }) => [
@@ -90,7 +92,7 @@ const BookForm = () => {
                             color: Colors[colorscheme].text
                         }}
                     >
-                        Arriving Time
+                        {t("arriving_time")}
                     </Text>
                     <Pressable
                         style={({ pressed }) => [
@@ -130,7 +132,7 @@ const BookForm = () => {
                             color: Colors[colorscheme].text
                         }}
                     >
-                        Duration Hours
+                        {t("duration_hours_label")}
                     </Text>
                     <TextInput
                         onChangeText={(text) => {
@@ -141,7 +143,7 @@ const BookForm = () => {
                             })
                         }}
                         value={durationHours}
-                        placeholder="Duration in hours"
+                        placeholder={t("duration_hours_placeholder")}
                         keyboardType="number-pad"
                         style={[
                             styles.dateTimePicker,
@@ -159,7 +161,7 @@ const BookForm = () => {
                     color: Colors[colorscheme].text
                 }}
             >
-                Exiting Time
+                {t("exiting_time")}
             </Text>
             <View
                 style={[

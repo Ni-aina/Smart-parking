@@ -3,6 +3,7 @@ import useCurrentProfile from "@/hooks/useCurrentProfile";
 import useVehicles from "@/hooks/vehicles/useVehicles";
 import { VehicleInterface } from "@/types/vehicle";
 import { Controller, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import {
     KeyboardAvoidingView,
     Platform,
@@ -23,6 +24,7 @@ interface VehicleFormInterface {
 const VehicleForm = ({
     vehicle
 }: VehicleFormInterface) => {
+    const { t } = useTranslation()
     const colorScheme = useColorScheme() || "light";
     const { currentProfile } = useCurrentProfile();
 
@@ -80,19 +82,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                Plate number *
+                                {t("plate_number_label")} *
                             </Text>
                             <Controller
                                 name="plateNumber"
                                 control={control}
                                 rules={{
-                                    required: "This field is required",
+                                    required: t("this_field_is_required") as string,
                                     minLength: {
-                                        message: "Enter 4 minimum characters",
+                                        message: t("enter_4_min_chars"),
                                         value: 4
                                     },
                                     maxLength: {
-                                        message: "Enter 10 maximum characters",
+                                        message: t("enter_10_max_chars"),
                                         value: 10
                                     }
                                 }}
@@ -100,7 +102,7 @@ const VehicleForm = ({
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle plate number"
+                                        placeholder={t("vehicle_plate_placeholder")}
                                         style={[
                                             styles.inputForm,
                                             {
@@ -122,19 +124,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                Make *
+                                {t("make_label")} *
                             </Text>
                             <Controller
                                 name="make"
                                 control={control}
                                 rules={{
-                                    required: "This field is required"
+                                    required: t("this_field_is_required") as string
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle made"
+                                        placeholder={t("vehicle_made_placeholder")}
                                         style={[
                                             styles.inputForm,
                                             {
@@ -156,19 +158,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                Model *
+                                {t("model_label")} *
                             </Text>
                             <Controller
                                 name="model"
                                 control={control}
                                 rules={{
-                                    required: "This field is required"
+                                    required: t("this_field_is_required") as string
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle model"
+                                        placeholder={t("vehicle_model_placeholder")}
                                         style={[
                                             styles.inputForm,
                                             {
@@ -190,19 +192,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                Year *
+                                {t("year_label")} *
                             </Text>
                             <Controller
                                 name="year"
                                 control={control}
                                 rules={{
-                                    required: "This field is required"
+                                    required: t("this_field_is_required") as string
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle year"
+                                        placeholder={t("vehicle_year_placeholder")}
                                         keyboardType="number-pad"
                                         style={[
                                             styles.inputForm,
@@ -225,19 +227,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                Width (m) *
+                                {t("width_label")} *
                             </Text>
                             <Controller
                                 name="width"
                                 control={control}
                                 rules={{
-                                    required: "This field is required"
+                                    required: t("this_field_is_required") as string
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle width"
+                                        placeholder={t("vehicle_width_placeholder")}
                                         keyboardType="number-pad"
                                         style={[
                                             styles.inputForm,
@@ -260,19 +262,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                Length (m) *
+                                {t("length_label")} *
                             </Text>
                             <Controller
                                 name="length"
                                 control={control}
                                 rules={{
-                                    required: "This field is required"
+                                    required: t("this_field_is_required") as string
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle length"
+                                        placeholder={t("vehicle_length_placeholder")}
                                         keyboardType="number-pad"
                                         style={[
                                             styles.inputForm,
@@ -295,19 +297,19 @@ const VehicleForm = ({
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                height (m) *
+                                {t("height_label")} *
                             </Text>
                             <Controller
                                 name="height"
                                 control={control}
                                 rules={{
-                                    required: "This field is required"
+                                    required: t("this_field_is_required") as string
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         onChangeText={onChange}
                                         value={value}
-                                        placeholder="Vehicle height"
+                                        placeholder={t("vehicle_height_placeholder")}
                                         keyboardType="number-pad"
                                         style={[
                                             styles.inputForm,
@@ -341,7 +343,7 @@ const VehicleForm = ({
                 }}
             >
                 <Button
-                    title={watch("id") ? "Update vehicle" : "Add vehicle"}
+                    title={watch("id") ? t("update_vehicle_btn") : t("add_vehicle_btn")}
                     onPress={handleSubmit(onSubmit)}
                 />
             </View>
