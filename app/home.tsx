@@ -1,5 +1,6 @@
 import Button from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
+import { BlurView } from "expo-blur";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
@@ -29,9 +30,24 @@ const HomeScreen = () => {
                         {t('find_the_best_parking_spot')}
                     </Text>
                 </View>
-                <Text style={styles.description}>
-                    {t('find_the_best_parking_spot_description')}
-                </Text>
+                <View
+                    style={{
+                        borderRadius: 10,
+                        overflow: 'hidden'
+                    }}
+                >
+                    <BlurView
+                        intensity={95}
+                        tint="dark"
+                        style={{
+                           padding: 10
+                        }}
+                    >
+                        <Text style={styles.description}>
+                            {t('find_the_best_parking_spot_description')}
+                        </Text>
+                    </BlurView>
+                </View>
                 <View style={styles.accountContainer}>
                     <Button
                         title={t("let's_get_started")}
@@ -42,7 +58,7 @@ const HomeScreen = () => {
                         <Link
                             href="/auth/signUp"
                             style={{
-                                color: "#51c12fe7",
+                                color: "#FFFFFF",
                                 textDecorationLine: "underline"
                             }}
                         >

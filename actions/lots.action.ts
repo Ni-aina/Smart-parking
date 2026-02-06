@@ -3,32 +3,18 @@ import { LotInterface } from "@/types/lot";
 import { normalizeData } from "@/utils/normalizeData";
 import { rejectTimeout } from "@/utils/rejectTimeout";
 
-export async function getParkingById(parkingId: string): Promise<LotInterface | null> {
+export async function getParkingById(
+    parkingId: string,
+    checkTime?: Date
+): Promise<LotInterface | null> {
     try {
         const request = (async () => {
-            const { data: parking, error } = await supabase.from("parking_lots")
-                .select(`
-                    id, 
-                    name, 
-                    location,
-                    location_lat, 
-                    location_lng, 
-                    created_at, 
-                    total_spots, 
-                    occupied_spots,
-                    price_per_hour, 
-                    url_images, 
-                    lotType: type_id(
-                    id, 
-                    vehicle_type, 
-                    description,
-                    max_width, 
-                    max_length, 
-                    max_height
-                    )
-                `)
-                .eq("id", parkingId)
-                .single();
+            const { data: parking, error } = await supabase
+                .rpc('get_parking_lot_by_id', {
+                    parking_id: parkingId,
+                    check_time: checkTime?.toISOString() || new Date().toISOString()
+                })
+                .single(); 
 
             if (!parking || error) throw new Error(`The parking cannot be find, ${error?.message}`);
             const normalized = normalizeData(parking);
@@ -41,7 +27,6 @@ export async function getParkingById(parkingId: string): Promise<LotInterface | 
     } catch (error) {
         throw error;
     }
-
 }
 
 export async function getParkingLots(
