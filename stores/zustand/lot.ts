@@ -1,21 +1,9 @@
 import { initialLotState } from "@/data/lot";
+import { LotStateInterface } from "@/types/lot";
 import { create } from "zustand";
 
 interface LotState {
-  lot: {
-    id: string;
-    lotArea: string;
-    lotAddress: string;
-    maxWidth: number;
-    maxHeight: number;
-    maxLength: number;
-    vehicleId: string;
-    vehicleModel: string;
-    pricePerHour: number;
-    startTime: Date;
-    endTime: Date;
-    durationHours: string;
-  }
+  lot: LotStateInterface
   setLot: (lot: LotState["lot"]) => void;
 }
 

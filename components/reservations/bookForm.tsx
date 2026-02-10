@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
-import { useLotStore } from "@/stores/zustand/lot";
+import useDebounce from "@/hooks/useDebounce";
+import { LotStateInterface } from "@/types/lot";
 import { addHours, getDateFormat, getTimeFormat } from "@/utils/dateTimeAction";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -14,16 +15,22 @@ import {
     View
 } from "react-native";
 
-const BookForm = () => {
+interface BookFormProps {
+    availableSpots: number;
+    lot: LotStateInterface;
+    setLot: (lot: LotStateInterface)=> void;
+}
+
+const BookForm = ({
+    availableSpots,
+    lot,
+    setLot
+}: BookFormProps) => {
+    
     const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
-
-    const {
-        lot,
-        setLot
-    } = useLotStore();
 
     const {
         startTime,
@@ -31,48 +38,110 @@ const BookForm = () => {
         durationHours
     } = lot;
 
-    useEffect(()=> {
+    const {
+        debouncedValue: durationDebounce
+    } = useDebounce({
+        value: durationHours,
+        delay: 500
+    })
+
+    useEffect(() => {
         setLot({
             ...lot,
-            endTime: addHours(startTime, Number(durationHours))
+            endTime: addHours(startTime, Number(durationDebounce))
         })
-    }, [startTime, durationHours])
+    }, [
+        startTime,
+        durationDebounce
+    ])
 
     return (
         <View style={styles.container}>
-            <Text
+            <View
                 style={{
-                    fontSize: 20,
-                    color: Colors[colorscheme].text
+                    flexDirection: "row",
+                    gap: 10
                 }}
             >
-                {t("start_date")}
-            </Text>
-            <Pressable
-                style={({ pressed }) => [
-                    styles.dateTimePicker,
-                    {
-                        borderColor: Colors[colorscheme].gray200,
-                        opacity: pressed ? 0.8 : 1
-                    }
-                ]}
-                onPress={() => setShowDatePicker(true)}
-            >
-                <View style={{ flex: 1 }}>
+                <View
+                    style={{
+                        width: "50%",
+                        gap: 10
+                    }}
+                >
                     <Text
                         style={{
-                            color: Colors[colorscheme].icon
+                            fontSize: 20,
+                            color: Colors[colorscheme].text
                         }}
                     >
-                        {getDateFormat(startTime)}
+                        {t("start_date")}
                     </Text>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.input,
+                            {
+                                borderColor: Colors[colorscheme].gray200,
+                                opacity: pressed ? 0.8 : 1
+                            }
+                        ]}
+                        onPress={() => setShowDatePicker(true)}
+                    >
+                        <View style={{ flex: 1 }}>
+                            <Text
+                                style={{
+                                    color: Colors[colorscheme].icon
+                                }}
+                            >
+                                {getDateFormat(startTime)}
+                            </Text>
+                        </View>
+                        <Ionicons
+                            size={16}
+                            name="calendar"
+                            color={Colors[colorscheme].icon}
+                        />
+                    </Pressable>
                 </View>
-                <Ionicons
-                    size={16}
-                    name="calendar"
-                    color={Colors[colorscheme].icon}
-                />
-            </Pressable>
+                <View
+                    style={{
+                        width: "50%",
+                        gap: 10
+                    }}
+                >
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            color: Colors[colorscheme].text
+                        }}
+                    >
+                        {t("available_spots")}
+                    </Text>
+                    <View
+                        style={[
+                            styles.input,
+                            {
+                                borderColor: Colors[colorscheme].gray200
+                            }
+                        ]}
+                    >
+                        <View style={{ flex: 1 }}>
+                            <Text
+                                style={{
+                                    color: Colors[colorscheme].icon
+                                }}
+                            >
+                                {availableSpots}
+                            </Text>
+                        </View>
+                        <Ionicons
+                            size={16}
+                            name="car"
+                            color={Colors[colorscheme].icon}
+                        />
+                    </View>
+                </View>
+            </View>
             <View
                 style={{
                     flexDirection: "row",
@@ -96,7 +165,7 @@ const BookForm = () => {
                     </Text>
                     <Pressable
                         style={({ pressed }) => [
-                            styles.dateTimePicker,
+                            styles.input,
                             {
                                 borderColor: Colors[colorscheme].gray200,
                                 opacity: pressed ? 0.8 : 1
@@ -146,7 +215,7 @@ const BookForm = () => {
                         placeholder={t("duration_hours_placeholder")}
                         keyboardType="number-pad"
                         style={[
-                            styles.dateTimePicker,
+                            styles.input,
                             {
                                 color: Colors[colorscheme].text,
                                 borderColor: Colors[colorscheme].gray200
@@ -165,7 +234,7 @@ const BookForm = () => {
             </Text>
             <View
                 style={[
-                    styles.dateTimePicker,
+                    styles.input,
                     {
                         borderColor: Colors[colorscheme].gray200
                     }
@@ -225,7 +294,7 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 10
     },
-    dateTimePicker: {
+    input: {
         flexDirection: "row",
         borderRadius: 5,
         padding: 10,

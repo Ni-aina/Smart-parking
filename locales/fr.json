@@ -73,6 +73,8 @@
     "reviews": "avis",
     "na": "N/D",
     "spots": "Places",
+    "available_spots": "Places disponible",
+    "no_available_spots": "Aucun places disponible",
     "vehicle_category": "Catégorie de véhicule",
     "width": "Largeur",
     "height": "Hauteur",

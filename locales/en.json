@@ -73,6 +73,8 @@
     "reviews": "reviews",
     "na": "N/A",
     "spots": "Spots",
+    "available_spots": "Available spots",
+    "no_available_spots": "No spots available",
     "vehicle_category": "Vehicle category",
     "width": "Width",
     "height": "Height",

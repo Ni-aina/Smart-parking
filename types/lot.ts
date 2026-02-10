@@ -24,6 +24,21 @@ export interface LotInterface {
     totalLots: number;
 }
 
+export interface LotStateInterface {
+    id: string;
+    lotArea: string;
+    lotAddress: string;
+    maxWidth: number;
+    maxHeight: number;
+    maxLength: number;
+    vehicleId: string;
+    vehicleModel: string;
+    pricePerHour: number;
+    startTime: Date;
+    endTime: Date;
+    durationHours: string;
+}
+
 export interface DistanceTimeInterface {
     distanceKm: number;
     timeHours: number;
