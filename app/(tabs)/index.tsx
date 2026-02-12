@@ -36,7 +36,7 @@ const FindParkingScreen = () => {
 
     const {
         lots,
-        isPending,
+        isLoading,
         error,
         refetch,
         hasNextPage,
@@ -140,7 +140,7 @@ const FindParkingScreen = () => {
                         message={error.message}
                     />
                     :
-                    isPending ?
+                    isLoading ?
                         <LoaderSkeleton /> :
                         <FlatList
                             data={lots}

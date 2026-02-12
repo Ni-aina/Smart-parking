@@ -2,6 +2,7 @@ import { getParkingById } from "@/actions/lots.action";
 import { useLocationStore } from "@/stores/zustand/location";
 import { getDistanceTime } from "@/utils/getDistanceTime";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const useLot = ({ id }: { id: string }) => {
     const {
@@ -14,11 +15,11 @@ const useLot = ({ id }: { id: string }) => {
 
     const {
         data: lot,
-        isPending,
+        isLoading,
         refetch,
         isRefetching
     } = useQuery({
-        queryKey: [`lot-details-${id}`, latitude, longitude],
+        queryKey: [`lot-details-${id}`],
         queryFn: () => {
             refreshLocation();
             return getParkingById(id);
@@ -35,9 +36,19 @@ const useLot = ({ id }: { id: string }) => {
         )
     }
 
+    useEffect(()=> {
+        if (isLoading) return;
+        refetch();
+    }, [
+        isLoading,
+        latitude,
+        longitude,
+        refetch
+    ])
+
     return {
         lot: lotFormated,
-        isPending,
+        isLoading,
         refetch,
         isRefetching
     }

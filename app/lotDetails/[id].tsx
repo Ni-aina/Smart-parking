@@ -35,7 +35,7 @@ const LotDetailsScreen = () => {
     const { lot: lotStore, setLot } = useLotStore();
     const {
         lot,
-        isPending,
+        isLoading,
         refetch,
         isRefetching
     } = useLot({ id })
@@ -62,7 +62,7 @@ const LotDetailsScreen = () => {
         NavigationBar.setVisibilityAsync("hidden");
     }, [])
 
-    if (isPending) return (
+    if (isLoading) return (
         <View style={styles.loading}>
             <LoaderSkeleton />
         </View>

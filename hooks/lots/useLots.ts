@@ -2,6 +2,7 @@ import { getParkingLots } from "@/actions/lots.action";
 import { useLocationStore } from "@/stores/zustand/location";
 import { getDistanceTimeFromPostGIS } from "@/utils/getDistanceTime";
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const useLots = ({
     searchTerm
@@ -18,7 +19,7 @@ const useLots = ({
 
     const {
         data: lots,
-        isPending,
+        isLoading,
         error,
         refetch,
         hasNextPage,
@@ -27,9 +28,7 @@ const useLots = ({
     } = useInfiniteQuery({
         queryKey: [
             "parking-lots",
-            searchTerm,
-            latitude,
-            longitude
+            searchTerm
         ],
         queryFn: async ({
             pageParam = 1
@@ -65,9 +64,19 @@ const useLots = ({
         }))
     ) || [];
 
+    useEffect(() => {
+        if (isLoading) return;
+        refetch();
+    }, [
+        isLoading,
+        latitude,
+        longitude,
+        refetch
+    ])
+
     return {
         lots: lotsFormated,
-        isPending,
+        isLoading,
         error,
         refetch,
         hasNextPage,
