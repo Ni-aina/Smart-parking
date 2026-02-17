@@ -1,4 +1,5 @@
 import { getParkingLots } from "@/actions/lots.action";
+import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import { getDistanceTimeFromPostGIS } from "@/utils/getDistanceTime";
 import { useInfiniteQuery } from "@tanstack/react-query";
@@ -71,6 +72,31 @@ const useLots = ({
         isLoading,
         latitude,
         longitude,
+        refetch
+    ])
+
+    useEffect(() => {
+        if (isLoading) return;
+        
+        const lotsChannel = supabase.channel("lots:occupancy")
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "reservations"
+                },
+                () => {
+                    refetch();
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(lotsChannel);
+        }
+    }, [
+        isLoading,
         refetch
     ])
 
