@@ -7,6 +7,7 @@
     "let's_get_started": "Commençons",
     "welcome_to_parking_app": "Bienvenue sur Parking App",
     "create_your_account": "Créez votre compte",
+    "no_account": "Vous n'avez pas de compte ?",
     "create_your_account_description": "Rejoignez-nous dès aujourd'hui et découvrez la commodité d'un stationnement sans effort à portée de main. Inscrivez-vous maintenant pour accéder à un monde de solutions de stationnement sans tracas, conçues spécialement pour vous.",
     "welcome_to_parking_app_description": "Votre solution de stationnement ultime. Découvrez, réservez et gérez vos places de parking sans effort grâce à notre application conviviale.",
     "find_parking_spot_around_you_easily": "Trouvez facilement une place de parking autour de vous",
@@ -162,10 +163,12 @@
     "confirm_delete": "Confirmer la suppression",
     "confirm_delete_message": "Êtes-vous sûr de vouloir supprimer cet élément ?",
     "cancel_btn": "Annuler",
-    "delete_btn": "Supprimer",
+    "confirm_btn": "Confirmer",
     "error_title": "Erreur !",
     "something_went_wrong": "Une erreur s'est produite.",
     "hr": "h",
     "request_took_too_long": "La requête a pris trop de temps",
-    "duration_required": "Le champ de durée est requis"
+    "duration_required": "Le champ de durée est requis",
+    "cancellation_failed": "Échec de l'annulation",
+    "confirm_cancellation_message": "Êtes-vous sûr de vouloir annuler cette réservation ?"
 }

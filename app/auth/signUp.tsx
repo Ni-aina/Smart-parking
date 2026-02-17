@@ -22,7 +22,7 @@ const SignUpScreen = () => {
                     {t("create_your_account")}
                 </Text>
             </View>
-            <Text style={[styles.description, { color: Colors[colorScheme].icon }]}>
+            <Text style={[styles.description, { color: Colors[colorScheme].text }]}>
                 {t("create_your_account_description")}
             </Text>
             <SignUpForm />

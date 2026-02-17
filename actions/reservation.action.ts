@@ -168,3 +168,37 @@ export async function checkLotByTime(
         throw error;
     }
 }
+
+export async function cancelReservation(reservationId: string): Promise<ReservationInterface> {
+    try {
+        if (!reservationId) throw new Error("Reservation id is required");
+
+        const request = (async () => {
+            const currentReservation = await getReservationById(reservationId);
+
+            if (!currentReservation) throw new Error("Reservation not found");
+
+            if (
+                currentReservation.status !== "pending" &&
+                currentReservation.status !== "active"
+            ) throw new Error("Only pending or active reservations can be cancelled");
+            
+            const { data, error } = await supabase.from("reservations")
+                .update({ status: "cancelled" })
+                .eq("id", reservationId)
+                .select()
+                .single();
+
+            if (error) throw new Error(`Reservation cancellation error, ${error.message}`);
+
+            return normalizeData(data) as ReservationInterface;
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}

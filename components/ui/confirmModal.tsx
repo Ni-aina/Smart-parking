@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { BlurView } from "expo-blur";
 import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -28,7 +29,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel
 }) => {
   const { t } = useTranslation()
-  const colorscheme = useColorScheme() || "light";
+  const colorScheme = useColorScheme() || "light";
 
   useEffect(() => {
     NavigationBar.setVisibilityAsync("hidden");
@@ -41,75 +42,86 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       transparent
     >
       <StatusBar
-        barStyle={colorscheme === "dark" ? "light-content" : "dark-content"}
-        backgroundColor="rgba(0,0,0,0.1)"
+        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
+        backgroundColor={
+          colorScheme === "light" ? "rgba(0,0,0,0.25)" : "rgba(255,255,255,0.25)"
+        }
       />
-      <View style={styles.overlay}>
-        <View
-          style={
-            [
-              styles.container,
-              { backgroundColor: Colors[colorscheme].background }
-            ]
-          }
-        >
-          <Text
+      <BlurView
+        intensity={25}
+        tint={colorScheme === "dark" ? "light" : "dark"}
+        style={{
+          flex: 1,
+          padding: 5
+        }}
+      >
+        <View style={styles.overlay}>
+          <View
             style={
               [
-                styles.title,
-                {
-                  color: Colors[colorscheme].text
-
-                }
+                styles.container,
+                { backgroundColor: Colors[colorScheme].background }
               ]
             }
-          >{title}</Text>
-          <Text
-            style={
-              [
-                styles.message,
-                { color: Colors[colorscheme].icon }
-              ]
-            }
-          >{message}</Text>
+          >
+            <Text
+              style={
+                [
+                  styles.title,
+                  {
+                    color: Colors[colorScheme].text
 
-          <View style={styles.buttons}>
-            <Pressable
-              onPress={onCancel}
-              style={({ pressed }) => [
-                styles.button,
-                { backgroundColor: Colors[colorscheme].gray100 },
-                pressed && styles.pressed
-              ]}
-            >
-              <Text
-                style={{
-                  color: colorscheme === "light" ? "#000" : "#fff"
-                }}
-              >
-                {t("cancel_btn")}
-              </Text>
-            </Pressable>
+                  }
+                ]
+              }
+            >{title}</Text>
+            <Text
+              style={
+                [
+                  styles.message,
+                  { color: Colors[colorScheme].icon }
+                ]
+              }
+            >{message}</Text>
 
-            <Pressable
-              onPress={onConfirm}
-              style={({ pressed }) => [
-                styles.button,
-                { backgroundColor: "#dd1919ff" },
-                pressed && styles.pressed
-              ]}
-            >
-              <Text
-                style={{
-                  color: "white"
-                }}
+            <View style={styles.buttons}>
+              <Pressable
+                onPress={onCancel}
+                style={({ pressed }) => [
+                  styles.button,
+                  { backgroundColor: Colors[colorScheme].gray100 },
+                  pressed && styles.pressed
+                ]}
               >
-                {t("delete_btn")}
-              </Text>
-            </Pressable>
+                <Text
+                  style={{
+                    color: colorScheme === "light" ? "#000" : "#fff"
+                  }}
+                >
+                  {t("cancel_btn")}
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={onConfirm}
+                style={({ pressed }) => [
+                  styles.button,
+                  { backgroundColor: "#dd1919ff" },
+                  pressed && styles.pressed
+                ]}
+              >
+                <Text
+                  style={{
+                    color: "white"
+                  }}
+                >
+                  {t("confirm_btn")}
+                </Text>
+              </Pressable>
+            </View>
           </View>
         </View>
-      </View>
+      </BlurView>
     </Modal>
   )
 }
@@ -117,7 +129,6 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "#00000014",
     justifyContent: "center",
     alignItems: "center"
   },

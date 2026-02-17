@@ -1,6 +1,7 @@
 import { login } from "@/actions/user.action";
 import { Colors } from "@/constants/Colors";
 import { LoginType } from "@/types/signIn";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -19,6 +20,9 @@ import Loading from "./ui/loading";
 const SignInForm = () => {
     const colorScheme = useColorScheme() || "light";
     const { t } = useTranslation();
+
+    const router = useRouter();
+
     const [isPending, setIsPending] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [signInError, setSignInError] = useState("");
@@ -133,7 +137,31 @@ const SignInForm = () => {
                     }
                 </View>
             </View>
-            <Button title={t("sign_in")} onPress={handleSubmit(onSubmit)} />
+            <View
+                style={{
+                    gap: 10
+                }}
+            >
+                <Button title={t("sign_in")} onPress={handleSubmit(onSubmit)} />
+                <View
+                    style={{
+                        alignItems: "flex-end"
+                    }}
+                >
+                    <Text style={{ color: Colors[colorScheme].text }}>
+                        {t("no_account")}
+                        <Text
+                            style={{
+                                color: Colors[colorScheme].text,
+                                textDecorationLine: "underline"
+                            }}
+                            onPress={() => router.push("/auth/signUp")}
+                        >
+                            {t("create_an_account")}
+                        </Text>
+                    </Text>
+                </View>
+            </View>
 
             {isPending && <Loading />}
 

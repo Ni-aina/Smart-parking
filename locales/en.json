@@ -7,6 +7,7 @@
     "let's_get_started": "Let's get started",
     "welcome_to_parking_app": "Welcome to Parking App",
     "create_your_account": "Create your account",
+    "no_account": "Don't have an account ?",
     "create_your_account_description": "Join us today and experience the convenience of effortless parking at your fingertips. Sign up now to unlock a world of hassle-free parking solutions tailored just for you.",
     "welcome_to_parking_app_description": "Your ultimate parking solution. Discover, book, and manage parking spots effortlessly with our user-friendly app.",
     "find_parking_spot_around_you_easily": "Find parking spot around you easily",
@@ -162,10 +163,12 @@
     "confirm_delete": "Confirm Delete",
     "confirm_delete_message": "Are you sure you want to delete this item?",
     "cancel_btn": "Cancel",
-    "delete_btn": "Delete",
+    "confirm_btn": "Confirm",
     "error_title": "Error!",
     "something_went_wrong": "Something went wrong.",
     "hr": "hr",
     "request_took_too_long": "Request took too long",
-    "duration_required": "Duration field is required"
+    "duration_required": "Duration field is required",
+    "cancellation_failed": "Cancellation failed",
+    "confirm_cancellation_message": "Are you sure you want to cancel this reservation ?"
 }

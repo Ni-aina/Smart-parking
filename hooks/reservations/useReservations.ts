@@ -34,7 +34,10 @@ const useReservations = () => {
         mutationFn: (reservation: ReservationPostInterface) => createReservation(reservation),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: [`fetch-reservations-${driverId}`, "parking-lots"]
+                queryKey: [`fetch-reservations-${driverId}`]
+            })
+            queryClient.invalidateQueries({
+                queryKey: [`fetch-book-history-${driverId}`]
             })
             setLot(initialLotState);
             router.push("/(tabs)/book");
