@@ -1,6 +1,9 @@
+import { ProfileInterface } from "./profile";
+
 export interface LotInterface {
     id: string;
     ownerId: string;
+    owner: ProfileInterface;
     lotType: {
         id: string;
         vehicleType: string;

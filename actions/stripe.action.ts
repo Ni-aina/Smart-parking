@@ -11,6 +11,12 @@ export async function createPaymentIntent(
     const reservation = await getReservationById(reservationId);
     if (!reservation) throw new Error("Reservation not found");
 
+    const {
+      lot: { owner: { customerId } }
+    } = reservation;
+
+    if (!customerId) throw new Error("Lot owner does not have a Stripe customer ID");
+
     const now = new Date();
     const reservationEndDate = new Date(reservation.endTime);
     const diffTime = reservationEndDate.getTime() - now.getTime();
@@ -26,6 +32,7 @@ export async function createPaymentIntent(
           amount: amount,
           userId,
           reservationId,
+          customerId,
           currency
         })
       }

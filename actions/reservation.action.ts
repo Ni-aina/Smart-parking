@@ -38,7 +38,7 @@ export async function getReservationById(id: string)
                 .select(`
                     *,
                     driver: driver_id(*),
-                    lot: lot_id(*),
+                    lot: lot_id(*, owner: owner_id(*)),
                     vehicle: vehicle_id(*)
                 `)
                 .eq("id", id)

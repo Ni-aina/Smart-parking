@@ -5,5 +5,6 @@ export interface ProfileInterface {
     emailAddress: string,
     phoneNumber: string,
     urlImage?: string,
+    customerId?: string,
     createdAt?: string
 }
