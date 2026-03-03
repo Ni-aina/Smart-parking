@@ -170,5 +170,11 @@
     "request_took_too_long": "La requête a pris trop de temps",
     "duration_required": "Le champ de durée est requis",
     "cancellation_failed": "Échec de l'annulation",
-    "confirm_cancellation_message": "Êtes-vous sûr de vouloir annuler cette réservation ?"
+    "confirm_cancellation_message": "Êtes-vous sûr de vouloir annuler cette réservation ?",
+    "scan_valid_title": "Ticket valide",
+    "scan_valid_message": "Ce ticket est valide. Le véhicule est autorisé à stationner.",
+    "scan_expired_title": "Ticket expiré",
+    "scan_expired_message": "Ce ticket a expiré. La session de stationnement est terminée.",
+    "scan_not_found_title": "Ticket introuvable",
+    "scan_not_found_message": "Aucun ticket ne correspond à ce QR code. Veuillez vérifier et réessayer."
 }

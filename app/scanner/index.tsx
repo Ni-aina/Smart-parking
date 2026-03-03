@@ -1,73 +1,56 @@
-import { getPaymentByTransactionId } from "@/actions/payment.action";
-import PaymentReview from "@/components/books/paymentReview";
+import { getPaymentByTransactionId, updateTicketToScanned } from "@/actions/payment.action";
 import NoDataFound from "@/components/noDataFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ScanResult from "@/components/scanner/scanResult";
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
+import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
+type ScanStatus = "valid" | "expired" | "not_found";
+
 const QRCodeScanner = () => {
+    const { currentProfile } = useCurrentProfile();
+    const agentCreatorId = currentProfile?.agentCreatorId;
+
     const { t } = useTranslation();
     const colorScheme = useColorScheme() || "light";
 
     const [permission, requestPermission] = useCameraPermissions();
-    const [payment, setPayment] = useState<{
-        lotName: string;
-        lotLocation: string;
-        plateNumber: string;
-        status: string;
-        startTime: Date;
-        endTime: Date;
-        amount: number;
-    } | null>();
+    const [scanStatus, setScanStatus] = useState<ScanStatus>();
     const [scanning, setScanning] = useState(false);
     const [isPending, setIsPending] = useState(false);
 
     const handleBarcodeScanned = async ({ data }: { data: string }) => {
-        if (!data) {
+        
+        if (!data || !agentCreatorId) {
             setScanning(false);
             return;
         }
+
         try {
             setIsPending(true);
             const paymentData = await getPaymentByTransactionId(data);
             if (!paymentData) throw new Error(t("payment_not_found"));
-            const {
-                reservation: {
-                    lot: {
-                        name: lotName,
-                        location: lotLocation,
-                    },
-                    vehicle: {
-                        plateNumber
-                    },
-                    startTime: startTimeStr,
-                    endTime: endTimeStr,
-                },
-                amount,
-                status
-            } = paymentData;
 
-            const startTime = new Date(startTimeStr);
-            const endTime = new Date(endTimeStr);
+            const endTime = new Date(paymentData.reservation.endTime);
+            const isExpired = endTime < new Date();
+            
+            const lotOwner = paymentData.reservation.lot.ownerId;
+            
+            if (lotOwner !== agentCreatorId) throw new Error();
 
-            setPayment({
-                lotName,
-                lotLocation,
-                plateNumber,
-                status,
-                startTime,
-                endTime,
-                amount
-            })
+            await updateTicketToScanned(paymentData.id);
+            
+            setScanStatus(isExpired ? "expired" : "valid");
         } catch (error) {
-            setPayment(null);
+            setScanStatus("not_found");
         } finally {
             setIsPending(false);
             setScanning(false);
@@ -76,7 +59,7 @@ const QRCodeScanner = () => {
 
     useEffect(() => {
         if (!scanning) return;
-        setPayment(undefined);
+        setScanStatus(undefined);
     }, [scanning])
 
     if (!permission) return (
@@ -123,36 +106,8 @@ const QRCodeScanner = () => {
                     title={t("scanner")}
                 />
                 {
-                    payment === null ?
-                        <NoDataFound
-                            message={t("payment_not_found")}
-                            iconName="card-outline"
-                        />
-                        :
-                        payment &&
-                        <View
-                            style={{
-                                backgroundColor:
-                                    colorScheme === "light" ?
-                                        "#F5F5F5" :
-                                        "#1E1E1E",
-                                borderWidth: 1,
-                                borderColor: Colors[colorScheme].gray200,
-                                borderRadius: 15,
-                                padding: 30,
-                                gap: 40
-                            }}
-                        >
-                            <PaymentReview
-                                lotName={payment.lotName}
-                                lotLocation={payment.lotLocation}
-                                startTime={payment.startTime}
-                                endTime={payment.endTime}
-                                plateNumber={payment.plateNumber}
-                                status={payment.status}
-                                amount={payment.amount}
-                            />
-                        </View>
+                    scanStatus &&
+                    <ScanResult status={scanStatus} />
                 }
                 {
                     scanning &&
@@ -188,7 +143,7 @@ const QRCodeScanner = () => {
                         :
                         <>
                             {
-                                payment === undefined &&
+                                !scanStatus &&
                                 <View
                                     style={{
                                         alignSelf: "stretch",

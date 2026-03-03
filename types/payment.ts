@@ -4,6 +4,7 @@ export interface PaymentInterface {
         id: string;
         lot: {
             id: string;
+            ownerId: string;
             name: string;
             location: string;
             pricePerHour: number;
@@ -21,5 +22,6 @@ export interface PaymentInterface {
     method: string;
     status: string;
     transactionId: string;
+    hasScanned: boolean;
     createdAt: string;
 }

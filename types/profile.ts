@@ -6,5 +6,6 @@ export interface ProfileInterface {
     phoneNumber: string,
     urlImage?: string,
     customerId?: string,
+    agentCreatorId?: string;
     createdAt?: string
 }

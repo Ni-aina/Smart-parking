@@ -170,5 +170,11 @@
     "request_took_too_long": "Request took too long",
     "duration_required": "Duration field is required",
     "cancellation_failed": "Cancellation failed",
-    "confirm_cancellation_message": "Are you sure you want to cancel this reservation ?"
+    "confirm_cancellation_message": "Are you sure you want to cancel this reservation ?",
+    "scan_valid_title": "Valid Ticket",
+    "scan_valid_message": "This ticket is valid. The vehicle is authorized to park.",
+    "scan_expired_title": "Expired Ticket",
+    "scan_expired_message": "This ticket has expired. The parking session is over.",
+    "scan_not_found_title": "Ticket Not Found",
+    "scan_not_found_message": "No ticket matches this QR code. Please verify and try again."
 }

@@ -11,7 +11,7 @@ export async function getPaymentByReservationId(reservationId: string)
                 data: paymentData,
                 error: errorPayment
             } = await supabase
-                .from('payments')
+                .from("payments")
                 .select(`
                     id,
                     reservation: reservation_id (
@@ -37,7 +37,7 @@ export async function getPaymentByReservationId(reservationId: string)
                     transaction_id,
                     created_at
                 `)
-                .eq('reservation_id', reservationId)
+                .eq("reservation_id", reservationId)
                 .maybeSingle();
 
             if (errorPayment) {
@@ -65,13 +65,14 @@ export async function getPaymentByTransactionId(transactionId: string)
                 data: paymentData,
                 error: errorPayment
             } = await supabase
-                .from('payments')
+                .from("payments")
                 .select(`
                     id,
                     reservation: reservation_id (
                         id,
                         lot: lot_id(
                             id,
+                            owner_id,
                             name,
                             location,
                             price_per_hour
@@ -89,9 +90,10 @@ export async function getPaymentByTransactionId(transactionId: string)
                     method,
                     status,
                     transaction_id,
+                    has_scanned,
                     created_at
                 `)
-                .eq('transaction_id', transactionId)
+                .eq("transaction_id", transactionId)
                 .maybeSingle();
 
             if (errorPayment) {
@@ -101,6 +103,33 @@ export async function getPaymentByTransactionId(transactionId: string)
             return normalizeData(paymentData || {}) as PaymentInterface;
         }
         )()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateTicketToScanned(paymentId: string)
+    : Promise<PaymentInterface> {
+    try {
+        if (!paymentId) throw new Error("Payment id is required");
+
+        const request = (async () => {
+            const { data: updatedPayment } = await supabase
+                .from("payments")
+                .update({ has_scanned: true })
+                .eq("id", paymentId)
+                .select()
+                .single();
+
+            if (!updatedPayment) throw new Error("Payment not found");
+
+            return normalizeData(updatedPayment || {}) as PaymentInterface;
+        })()
 
         return Promise.race([
             request,
