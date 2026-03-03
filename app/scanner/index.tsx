@@ -1,4 +1,5 @@
 import { getPaymentByTransactionId, updateTicketToScanned } from "@/actions/payment.action";
+import { updateReservationToCompleted } from "@/actions/reservation.action";
 import NoDataFound from "@/components/noDataFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ScanResult from "@/components/scanner/scanResult";
@@ -28,25 +29,37 @@ const QRCodeScanner = () => {
     const [isPending, setIsPending] = useState(false);
 
     const handleBarcodeScanned = async ({ data }: { data: string }) => {
-        
+        if (isPending) return;
+
         if (!data || !agentCreatorId) {
             setScanning(false);
             return;
         }
-
+        
         try {
             setIsPending(true);
+
             const paymentData = await getPaymentByTransactionId(data);
             if (!paymentData) throw new Error(t("payment_not_found"));
 
             const endTime = new Date(paymentData.reservation.endTime);
             const isExpired = endTime < new Date();
             
-            const lotOwner = paymentData.reservation.lot.ownerId;
+            const {
+                id: paymentId,
+                reservation: {
+                    id: reservationId,
+                    lot: {
+                        ownerId: lotOwner
+                    }
+                },
+                hasScanned
+            } = paymentData;
             
             if (lotOwner !== agentCreatorId) throw new Error();
 
-            await updateTicketToScanned(paymentData.id);
+            if (hasScanned) await updateReservationToCompleted(reservationId);
+            else await updateTicketToScanned(paymentId);
             
             setScanStatus(isExpired ? "expired" : "valid");
         } catch (error) {

@@ -202,3 +202,31 @@ export async function cancelReservation(reservationId: string): Promise<Reservat
         throw error;
     }
 }
+
+export async function updateReservationToCompleted(reservationId: string)
+    : Promise<boolean> {
+    try {
+        const request = (async  ()=> {
+            const {
+                data,
+                error
+            } = await supabase.from("reservations")
+            .update({
+                status: "completed"
+            })
+            .eq("id", reservationId)
+            .select()
+            .single()
+
+            if (!data || error) throw new Error(`Failed to complete reservation, ${error?.message}`)
+            return true;
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}
