@@ -34,7 +34,7 @@
     "register_failed": "Échec de l'inscription",
     "error_sign_in": "Erreur de connexion",
     "failed_authentication": "Échec de l'authentification",
-    "check_email_verify_account": "Veuillez vérifier votre email pour valider votre compte.",
+    "check_email_verify_account": "Consultez votre boîte de réception pour activer votre compte.",
     "invalid_number": "Numéro invalide",
     "invalid_email_address": "Adresse email invalide",
     "email_placeholder": "exemple@email.com",

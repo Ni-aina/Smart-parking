@@ -34,7 +34,7 @@
     "register_failed": "Register failed",
     "error_sign_in": "Error sign in",
     "failed_authentication": "Failed authentication",
-    "check_email_verify_account": "Please check your email to verify your account.",
+    "check_email_verify_account": "Check your inbox to activate your account.",
     "invalid_number": "Invalid number",
     "invalid_email_address": "Invalid email address",
     "email_placeholder": "example@email.com",
