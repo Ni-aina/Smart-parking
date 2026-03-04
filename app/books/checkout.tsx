@@ -162,9 +162,8 @@ const Checkout = () => {
                                 number: t("card_placeholder")
                             }}
                             cardStyle={{
-                                backgroundColor: colorScheme === "light" ?
-                                    Colors.light.background :
-                                    Colors.dark.tint,
+                                backgroundColor: Colors[colorScheme].background,
+                                placeholderColor: Colors[colorScheme].icon,
                                 textColor: Colors[colorScheme].text,
                                 borderRadius: 5
                             }}
