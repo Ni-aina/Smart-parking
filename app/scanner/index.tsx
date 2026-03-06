@@ -18,7 +18,9 @@ type ScanStatus = "valid" | "expired" | "not_found";
 
 const QRCodeScanner = () => {
     const { currentProfile } = useCurrentProfile();
-    const agentCreatorId = currentProfile?.agentCreatorId;
+    const profileId = currentProfile?.id!;
+    const agentCreatorId = currentProfile?.agentCreatorId!;
+    const roles = currentProfile?.roles || [];
 
     const { t } = useTranslation();
     const colorScheme = useColorScheme() || "light";
@@ -31,7 +33,7 @@ const QRCodeScanner = () => {
     const handleBarcodeScanned = async ({ data }: { data: string }) => {
         if (isPending) return;
 
-        if (!data || !agentCreatorId) {
+        if (!data || (!agentCreatorId && !roles.includes("owner"))) {
             setScanning(false);
             return;
         }
@@ -56,13 +58,13 @@ const QRCodeScanner = () => {
                 hasScanned
             } = paymentData;
             
-            if (lotOwner !== agentCreatorId) throw new Error();
+            if (lotOwner !== agentCreatorId && (!roles.includes("owner") || profileId !== lotOwner)) throw new Error();
 
             if (hasScanned) await updateReservationToCompleted(reservationId);
             else await updateTicketToScanned(paymentId);
             
             setScanStatus(isExpired ? "expired" : "valid");
-        } catch (error) {
+        } catch {
             setScanStatus("not_found");
         } finally {
             setIsPending(false);
