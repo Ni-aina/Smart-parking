@@ -1,9 +1,11 @@
 import { createReservation, getReservationsByDriverId } from "@/actions/reservation.action";
 import { initialLotState } from "@/data/lot";
+import { supabase } from "@/lib/supabase";
 import { useLotStore } from "@/stores/zustand/lot";
 import { ReservationPostInterface } from "@/types/reservation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import { useEffect } from "react";
 import useCurrentProfile from "../useCurrentProfile";
 
 const useReservations = () => {
@@ -43,6 +45,32 @@ const useReservations = () => {
             router.push("/(tabs)/book");
         }
     })
+
+     useEffect(() => {
+        if (isLoading) return;
+        
+        const reservationsChannel = supabase.channel(`reservations:${driverId}`)
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "reservations"
+                },
+                () => {
+                    refetch();
+                }
+            )
+            .subscribe();
+    
+            return () => {
+                supabase.removeChannel(reservationsChannel);
+            }
+        }, [
+            driverId,
+            isLoading,
+            refetch
+        ])
 
     return {
         reservations,

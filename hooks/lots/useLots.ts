@@ -4,12 +4,16 @@ import { useLocationStore } from "@/stores/zustand/location";
 import { getDistanceTimeFromPostGIS } from "@/utils/getDistanceTime";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
+import useCurrentProfile from "../useCurrentProfile";
 
 const useLots = ({
     searchTerm
 }: {
     searchTerm: string;
 }) => {
+    const { currentProfile } = useCurrentProfile();
+    const profileId = currentProfile?.id!;
+
     const {
         location,
         refreshLocation
@@ -78,7 +82,7 @@ const useLots = ({
     useEffect(() => {
         if (isLoading) return;
         
-        const lotsChannel = supabase.channel("lots:occupancy")
+        const lotsChannel = supabase.channel(`lots:occupancy:${profileId}`)
             .on(
                 "postgres_changes",
                 {
@@ -96,6 +100,7 @@ const useLots = ({
             supabase.removeChannel(lotsChannel);
         }
     }, [
+        profileId,
         isLoading,
         refetch
     ])
