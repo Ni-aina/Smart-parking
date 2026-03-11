@@ -14,7 +14,7 @@ export async function getPaymentByReservationId(reservationId: string)
                 .from("payments")
                 .select(`
                     id,
-                    reservation: reservation_id (
+                    reservation: reservation_id!inner (
                         id,
                         lot: lot_id(
                             id,
@@ -37,7 +37,7 @@ export async function getPaymentByReservationId(reservationId: string)
                     transaction_id,
                     created_at
                 `)
-                .eq("reservation_id", reservationId)
+                .eq("reservation.id", reservationId)
                 .maybeSingle();
 
             if (errorPayment) {
