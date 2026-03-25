@@ -38,6 +38,15 @@ const VehicleItem = ({
         })
     }
 
+    const handleNavigateToMaintenance = () => {
+        router.push({
+            pathname: "/vehicleControls/maintenanceList",
+            params: {
+                vehicle: JSON.stringify(vehicle)
+            }
+        })
+    }
+
     const handleToggleConfirm = () => {
         setShowConfirm(prev => !prev);
     }
@@ -115,6 +124,7 @@ const VehicleItem = ({
                     style={({ pressed }) => pressed && {
                         opacity: 0.6
                     }}
+                    onPress={handleNavigateToMaintenance}
                 >
                     <Feather
                         name="eye"

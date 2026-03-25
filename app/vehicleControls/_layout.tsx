@@ -17,6 +17,12 @@ const VehicleControlsLayout = () => {
                         presentation: "modal"
                     }}
                 />
+                <Stack.Screen
+                    name="maintenanceList"
+                    options={{
+                        presentation: "modal"
+                    }}
+                />
             </Stack>
         </ProtectedRoute>
     )
