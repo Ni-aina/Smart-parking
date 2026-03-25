@@ -2,6 +2,7 @@ import { getPaymentByTransactionId, updateTicketToScanned } from "@/actions/paym
 import { updateReservationToCompleted } from "@/actions/reservation.action";
 import NoDataFound from "@/components/noDataFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ScanOverlay from "@/components/scanner/ScanOverlay";
 import ScanResult from "@/components/scanner/scanResult";
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
@@ -58,7 +59,10 @@ const QRCodeScanner = () => {
                 hasScanned
             } = paymentData;
             
-            if (lotOwner !== agentCreatorId && (!roles.includes("owner") || profileId !== lotOwner)) throw new Error();
+            if (
+                lotOwner !== agentCreatorId && 
+                (!roles.includes("owner") || profileId !== lotOwner)
+            ) throw new Error();
 
             if (hasScanned) await updateReservationToCompleted(reservationId);
             else await updateTicketToScanned(paymentId);
@@ -138,7 +142,9 @@ const QRCodeScanner = () => {
                                 barcodeTypes: ["qr"],
                             }}
                             onBarcodeScanned={handleBarcodeScanned}
-                        />
+                        >
+                            <ScanOverlay /> 
+                        </CameraView>
                     </View>
                 }
                 {
@@ -167,7 +173,7 @@ const QRCodeScanner = () => {
                                     }}
                                 >
                                     <Ionicons
-                                        size={200}
+                                        size={145}
                                         name="scan-outline"
                                         color={Colors[colorScheme].gray200}
                                     />
@@ -196,7 +202,6 @@ const QRCodeScanner = () => {
     )
 }
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -205,8 +210,8 @@ const styles = StyleSheet.create({
         gap: 20
     },
     camera: {
-        width: "65%",
-        height: 215,
+        width: "45%",
+        height: 150,
         borderRadius: 8,
         overflow: "hidden"
     }

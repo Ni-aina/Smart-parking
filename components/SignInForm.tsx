@@ -148,8 +148,16 @@ const SignInForm = () => {
                         alignItems: "flex-end"
                     }}
                 >
-                    <Text style={{ color: Colors[colorScheme].text }}>
-                        {t("no_account")}
+                    <View 
+                        style={{ 
+                            flexDirection: "row", 
+                            alignItems: "center", 
+                            gap: 5 
+                        }}
+                    >
+                        <Text style={{ color: Colors[colorScheme].text }}>
+                            {t("no_account")}
+                        </Text>
                         <Text
                             style={{
                                 color: Colors[colorScheme].text,
@@ -159,7 +167,7 @@ const SignInForm = () => {
                         >
                             {t("create_an_account")}
                         </Text>
-                    </Text>
+                    </View>
                 </View>
             </View>
 
