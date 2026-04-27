@@ -46,10 +46,17 @@ const useReservations = () => {
         }
     })
 
-     useEffect(() => {
+    useEffect(() => {
         if (isLoading) return;
-        
-        const reservationsChannel = supabase.channel(`reservations:${driverId}`)
+
+        const channelName = `reservations:${driverId}`;
+
+        const existingChannel = supabase.getChannels().find(c => c.topic === `realtime:${channelName}`);
+        if (existingChannel) {
+            supabase.removeChannel(existingChannel);
+        }
+
+        const reservationsChannel = supabase.channel(channelName)
             .on(
                 "postgres_changes",
                 {
@@ -62,15 +69,15 @@ const useReservations = () => {
                 }
             )
             .subscribe();
-    
-            return () => {
-                supabase.removeChannel(reservationsChannel);
-            }
-        }, [
-            driverId,
-            isLoading,
-            refetch
-        ])
+
+        return () => {
+            supabase.removeChannel(reservationsChannel);
+        }
+    }, [
+        driverId,
+        isLoading,
+        refetch
+    ])
 
     return {
         reservations,

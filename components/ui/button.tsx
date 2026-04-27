@@ -4,14 +4,20 @@ import { Dimensions, Pressable, StyleSheet, Text, useColorScheme } from "react-n
 interface ButtonProps {
     title: string;
     onPress: ([...agrs]: any) => void;
+    disabled?: boolean;
 }
 
-const Button = ({ title, onPress }: ButtonProps) => {
+const Button = ({ 
+    title, 
+    onPress,
+    disabled
+}: ButtonProps) => {
     const colorScheme = useColorScheme() || "light";
 
     return (
         <Pressable
             onPress={onPress}
+            disabled={disabled}
             android_ripple={{
                 color: '#00000020'
             }}
@@ -20,7 +26,8 @@ const Button = ({ title, onPress }: ButtonProps) => {
                 {
                     backgroundColor: Colors[colorScheme].tint
                 },
-                pressed ? styles.pressed : null
+                pressed ? styles.pressed : null,
+                disabled ? styles.pressed : null
             ]}
         >
             <Text style={

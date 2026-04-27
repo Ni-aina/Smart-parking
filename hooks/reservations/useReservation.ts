@@ -18,8 +18,7 @@ const useReservation = (id: string) => {
 
     const {
         mutate: handleCancel,
-        error: cancellationError,
-        isPending: isCancelling
+        error: cancellationError
     } = useMutation({
         mutationKey: [`cancel-reservation-${id}`],
         mutationFn: () => cancelReservation(id),
@@ -37,8 +36,7 @@ const useReservation = (id: string) => {
         reservation,
         isLoading,
         handleCancel,
-        cancellationError,
-        isCancelling
+        cancellationError
     }
 }
 

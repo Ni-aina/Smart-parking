@@ -49,8 +49,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
 
     const {
         handleCancel,
-        cancellationError,
-        isCancelling
+        cancellationError
     } = useReservation(id);
 
     useEffect(() => {
@@ -158,7 +157,6 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                         fontWeight: "bold"
                                     }}
                                 >
-
                                     {(Math.random() * (5 - 3.8) + 3.8).toFixed(1)}
                                 </Text>
                             </View>

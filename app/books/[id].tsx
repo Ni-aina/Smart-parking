@@ -8,6 +8,7 @@ import usePaymentReservation from "@/hooks/payments/usePaymentReservation";
 import { ticketHmtl } from "@/lib/ticketHtml";
 import * as Print from 'expo-print';
 import { useLocalSearchParams } from "expo-router";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     StyleSheet,
@@ -20,6 +21,7 @@ const ETicket = () => {
     const { t } = useTranslation();
     const { id } = useLocalSearchParams<{ id: string }>();
     const colorscheme = useColorScheme() || "light";
+    const [isPrinting, setIsPrinting] = useState(false);
 
     const {
         paymentReservation,
@@ -64,33 +66,41 @@ const ETicket = () => {
     } = paymentReservation;
 
     const handlePrint = async () => {
-        const htmlToPrint = ticketHmtl({
-            transactionId,
-            lotName,
-            lotLocation,
-            plateNumber,
-            amount,
-            status,
-            startTime,
-            endTime,
-            labels: {
-                name: t("name"),
-                location: t("location"),
-                arrivalDate: t("arrival_date"),
-                arrivalTime: t("arrival_time"),
-                vehicleNumber: t("vehicle_number"),
-                paymentStatus: t("payment_status"),
-                exitDate: t("exit_date"),
-                exitTime: t("exit_time"),
-                totalPayment: t("total_payment")
-            }
-        })
+        try {
+            setIsPrinting(true);
 
-        if (!htmlToPrint) return;
+            const htmlToPrint = ticketHmtl({
+                transactionId,
+                lotName,
+                lotLocation,
+                plateNumber,
+                amount,
+                status,
+                startTime,
+                endTime,
+                labels: {
+                    name: t("name"),
+                    location: t("location"),
+                    arrivalDate: t("arrival_date"),
+                    arrivalTime: t("arrival_time"),
+                    vehicleNumber: t("vehicle_number"),
+                    paymentStatus: t("payment_status"),
+                    exitDate: t("exit_date"),
+                    exitTime: t("exit_time"),
+                    totalPayment: t("total_payment")
+                }
+            })
 
-        await Print.printAsync({
-            html: htmlToPrint
-        })
+            if (!htmlToPrint) return;
+
+            await Print.printAsync({
+                html: htmlToPrint
+            })
+        } catch {
+
+        } finally {
+            setIsPrinting(false);
+        }
     }
 
     return (
@@ -182,6 +192,7 @@ const ETicket = () => {
                 <Button
                     title={t("print")}
                     onPress={handlePrint}
+                    disabled={isPrinting}
                 />
             </View>
         </View>
