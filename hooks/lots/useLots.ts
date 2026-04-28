@@ -81,8 +81,15 @@ const useLots = ({
 
     useEffect(() => {
         if (isLoading) return;
-        
-        const lotsChannel = supabase.channel(`lots:occupancy:${profileId}`)
+
+        const channelName = `lots:occupancy:${profileId}`;
+
+        const existingChannel = supabase.getChannels().find(c => c.topic === `realtime:${channelName}`);
+        if (existingChannel) {
+            supabase.removeChannel(existingChannel);
+        }
+
+        const lotsChannel = supabase.channel(channelName)
             .on(
                 "postgres_changes",
                 {

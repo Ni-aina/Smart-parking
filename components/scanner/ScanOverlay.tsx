@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import Animated, {
-    Easing,
-    useAnimatedStyle,
-    useSharedValue,
-    withRepeat,
-    withTiming
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming
 } from "react-native-reanimated";
 
 const ScanOverlay = () => {
@@ -14,7 +14,7 @@ const ScanOverlay = () => {
 
   useEffect(() => {
     translateY.value = withRepeat(
-      withTiming(199, { duration: 1800, easing: Easing.inOut(Easing.ease) }),
+      withTiming(128, { duration: 1800, easing: Easing.inOut(Easing.ease) }),
       -1,
       true
     )

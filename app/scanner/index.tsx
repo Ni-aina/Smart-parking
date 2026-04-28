@@ -136,15 +136,16 @@ const QRCodeScanner = () => {
                             justifyContent: "center"
                         }}
                     >
-                        <CameraView
-                            style={styles.camera}
-                            barcodeScannerSettings={{
-                                barcodeTypes: ["qr"],
-                            }}
-                            onBarcodeScanned={handleBarcodeScanned}
-                        >
+                        <View style={styles.cameraContainer}>
+                            <CameraView
+                                style={styles.camera}
+                                barcodeScannerSettings={{
+                                    barcodeTypes: ["qr"],
+                                }}
+                                onBarcodeScanned={handleBarcodeScanned}
+                            />
                             <ScanOverlay /> 
-                        </CameraView>
+                        </View>
                     </View>
                 }
                 {
@@ -209,9 +210,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         gap: 20
     },
-    camera: {
+    cameraContainer: {
+        position: "relative",
         width: "45%",
-        height: 150,
+        height: 150
+    },
+    camera: {
+        width: "100%",
+        height: "100%",
         borderRadius: 8,
         overflow: "hidden"
     }
