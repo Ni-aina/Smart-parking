@@ -3,6 +3,7 @@ import { TabList, Tabs, TabSlot, TabTrigger } from 'expo-router/ui';
 import React, { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
+import ChatFAB from '@/components/chatFabs/chatFab';
 import { activeTab, Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme.web';
 import { useTabsHistoryContext } from '@/stores/context/tabsHistoryContext';
@@ -68,6 +69,7 @@ const TabLayout = () => {
           <Text style={[styles.tabText, { color: pathname === "/account" ? activeTab : tabTriggerColor }]}>{t("profile")}</Text>
         </TabTrigger>
       </TabList>
+      <ChatFAB />
       <StatusBar style="auto" />
     </Tabs>
 

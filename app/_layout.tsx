@@ -1,18 +1,19 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, usePathname } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import { Stack, usePathname } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
 
-import Loading from '@/components/ui/loading';
-import { stripePublicKey } from '@/config';
-import { initI18n } from '@/i18n';
-import { AuthContextProvider } from '@/stores/context/AuthContext';
-import { TabsHistoryContextProvider } from '@/stores/context/tabsHistoryContext';
+import Loading from "@/components/ui/loading";
+import { stripePublicKey } from "@/config";
+import { initI18n } from "@/i18n";
+import { AuthContextProvider } from "@/stores/context/AuthContext";
+import { TabsHistoryContextProvider } from "@/stores/context/tabsHistoryContext";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import * as NavigationBar from 'expo-navigation-bar';
-import { useEffect, useState } from 'react';
-import { useColorScheme } from 'react-native';
+import * as NavigationBar from "expo-navigation-bar";
+import { useEffect, useState } from "react";
+import { useColorScheme } from "react-native";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,6 @@ const RootLayout = () => {
       NavigationBar.setVisibilityAsync("hidden");
   }, [pathname])
 
-
   useEffect(() => {
     const initLang = async () => {
       await initI18n();
@@ -38,24 +38,26 @@ const RootLayout = () => {
   if (!ready) return <Loading />;
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <StripeProvider publishableKey={stripePublicKey}>
-        <TabsHistoryContextProvider>
-          <AuthContextProvider>
-            <QueryClientProvider client={queryClient}>
-              <Stack
-                screenOptions={{
-                  headerShown: false
-                }}
-              >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="+not-found" />
-              </Stack>
-            </QueryClientProvider>
-          </AuthContextProvider>
-        </TabsHistoryContextProvider>
-      </StripeProvider>
-      <StatusBar style="auto" />
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <KeyboardProvider statusBarTranslucent>
+        <StripeProvider publishableKey={stripePublicKey}>
+          <TabsHistoryContextProvider>
+            <AuthContextProvider>
+              <QueryClientProvider client={queryClient}>
+                <Stack
+                  screenOptions={{
+                    headerShown: false
+                  }}
+                >
+                  <Stack.Screen name="index" />
+                  <Stack.Screen name="+not-found" />
+                </Stack>
+              </QueryClientProvider>
+            </AuthContextProvider>
+          </TabsHistoryContextProvider>
+        </StripeProvider>
+        <StatusBar style="auto" />
+      </KeyboardProvider>
     </ThemeProvider>
   )
 }
