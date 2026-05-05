@@ -1,12 +1,15 @@
+import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import { useLocationStore } from "@/stores/zustand/location";
 import React, { useCallback, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
 import ChatHeader from "./chatHeader";
 import ChatSendButton from "./chatSendButton";
 
+const BOT_USER = { _id: Math.random().toString(), name: "Parking Assistant" }
 type Props = {
     scaleAnim: Animated.Value;
     onClose: () => void;
@@ -19,7 +22,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
             _id: currentProfile.id,
             name: currentProfile.fullName
         } : undefined;
-    const BOT_USER = { _id: Math.random().toString(), name: "Parking Assistant" }
+    const { location } = useLocationStore();
 
     const colorscheme = useColorScheme() || "light";
     const colors = Colors[colorscheme];
@@ -32,21 +35,62 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
             user: BOT_USER
         }
     ])
+    const [pending, setIsPending] = useState(false);
 
     const onSend = useCallback((newMessages: IMessage[] = []) => {
         setMessages(prev => GiftedChat.append(prev, newMessages));
-        setTimeout(() => {
-            setMessages(prev =>
-                GiftedChat.append(prev, [
-                    {
-                        _id: Math.random().toString(),
-                        text: "I'll look into that for you!",
-                        createdAt: new Date(),
-                        user: BOT_USER
-                    }
-                ])
-            )
-        }, 800)
+        (async () => {
+            const formattedMessages = [...messages, ...newMessages].map(message => ({
+                role: message.user._id === ME?._id ? "user" : "system",
+                content: message.text
+            }))
+
+            try {
+                setIsPending(true);
+                const response = await fetch(`${webBaseUrl}/api/ai/chat`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        messages: formattedMessages,
+                        driverId: ME?._id,
+                        latitude: location?.latitude,
+                        longitude: location?.longitude
+                    })
+                })
+                const data = await response.json();
+
+                if (data.error) throw new Error(`${data.error}`);
+
+                if (data.message) {
+                    setMessages(prev =>
+                        GiftedChat.append(prev, [
+                            {
+                                _id: Math.random().toString(),
+                                text: data.message,
+                                createdAt: new Date(),
+                                user: BOT_USER
+                            }
+                        ])
+                    )
+                }
+            } catch (error) {
+                console.error(error);
+                setMessages(prev =>
+                    GiftedChat.append(prev, [
+                        {
+                            _id: Math.random().toString(),
+                            text: "Something went wrong, please try again.",
+                            createdAt: new Date(),
+                            user: BOT_USER
+                        }
+                    ])
+                )
+            } finally {
+                setIsPending(false);
+            }
+        })()
     }, [])
 
     return (
@@ -66,6 +110,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                 <GiftedChat
                     messages={messages}
                     onSend={onSend}
+                    isTyping={pending}
                     user={ME}
                     isSendButtonAlwaysVisible
                     keyboardAvoidingViewProps={{ keyboardVerticalOffset: 160 }}

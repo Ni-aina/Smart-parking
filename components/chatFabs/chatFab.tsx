@@ -1,15 +1,31 @@
-import useChatFABAnimation from "@/hooks/fabs/useChatFabAnimation";
+import useChatFABAnimation from "@/hooks/fab/useChatFabAnimation";
+import { useAuthContext } from "@/stores/context/AuthContext";
 import { usePathname } from "expo-router";
 import React, { useEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import Loading from "../ui/loading";
 import ChatWindow from "./chatWindow";
 import FabButton from "./fabButton";
 
 const ChatFAB = () => {
-    const { isOpen, scaleAnim, toggle, close } = useChatFABAnimation();
+    const {
+        session,
+        loading
+    } = useAuthContext();
+
+    if (loading) return <Loading />;
+
+    if (!session) return null;
+
+    const {
+        isOpen,
+        scaleAnim,
+        toggle,
+        close
+    } = useChatFABAnimation();
     const pathname = usePathname();
 
-    useEffect(()=> {
+    useEffect(() => {
         close()
     }, [pathname])
 

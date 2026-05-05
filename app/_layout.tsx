@@ -39,7 +39,7 @@ const RootLayout = () => {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <KeyboardProvider statusBarTranslucent>
+      <KeyboardProvider>
         <StripeProvider publishableKey={stripePublicKey}>
           <TabsHistoryContextProvider>
             <AuthContextProvider>
