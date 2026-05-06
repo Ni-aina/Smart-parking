@@ -3,7 +3,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { useLocationStore } from "@/stores/zustand/location";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
 import ChatHeader from "./chatHeader";
@@ -17,11 +17,14 @@ type Props = {
 
 const ChatWindow = ({ scaleAnim, onClose }: Props) => {
     const { currentProfile } = useCurrentProfile();
-    const ME = currentProfile ?
-        {
-            _id: currentProfile.id,
-            name: currentProfile.fullName
-        } : undefined;
+    const ME = useMemo(() => currentProfile ? {
+        _id: currentProfile.id,
+        name: currentProfile.fullName
+    } : undefined, [
+        currentProfile?.id,
+        currentProfile?.fullName
+    ])
+
     const { location } = useLocationStore();
 
     const colorscheme = useColorScheme() || "light";
@@ -35,16 +38,26 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
             user: BOT_USER
         }
     ])
+    const [history, setHistory] = useState<{
+        role: string;
+        content: string;
+    }[]>([])
+
     const [pending, setIsPending] = useState(false);
 
     const onSend = useCallback((newMessages: IMessage[] = []) => {
         setMessages(prev => GiftedChat.append(prev, newMessages));
-        (async () => {
-            const formattedMessages = [...messages, ...newMessages].map(message => ({
-                role: message.user._id === ME?._id ? "user" : "system",
-                content: message.text
-            }))
 
+        setHistory(prev => [...prev, ...newMessages.map(message => ({
+            role: message.user._id === ME?._id ? "user" : "system",
+            content: message.text
+        }))])
+    }, [ME])
+
+    useEffect(() => {
+        if (!history.length) return;
+
+        (async () => {
             try {
                 setIsPending(true);
                 const response = await fetch(`${webBaseUrl}/api/ai/chat`, {
@@ -53,7 +66,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        messages: formattedMessages,
+                        messages: history,
                         driverId: ME?._id,
                         latitude: location?.latitude,
                         longitude: location?.longitude
@@ -91,7 +104,11 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                 setIsPending(false);
             }
         })()
-    }, [])
+    }, [
+        ME,
+        location,
+        history
+    ])
 
     return (
         <Animated.View
