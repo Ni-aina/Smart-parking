@@ -49,7 +49,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
         setMessages(prev => GiftedChat.append(prev, newMessages));
 
         setHistory(prev => [...prev, ...newMessages.map(message => ({
-            role: message.user._id === ME?._id ? "user" : "system",
+            role: message.user._id === ME?._id ? "user" : "assistant",
             content: message.text
         }))])
     }, [ME])
@@ -94,7 +94,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                     GiftedChat.append(prev, [
                         {
                             _id: Math.random().toString(),
-                            text: "Something went wrong, please try again.",
+                            text: "Something went wrong, please try again later.",
                             createdAt: new Date(),
                             user: BOT_USER
                         }
