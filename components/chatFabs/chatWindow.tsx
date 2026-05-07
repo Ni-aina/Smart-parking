@@ -3,7 +3,7 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { useLocationStore } from "@/stores/zustand/location";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
 import ChatHeader from "./chatHeader";
@@ -39,7 +39,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
         }
     ])
     const [history, setHistory] = useState<{
-        role: string;
+        role: "user" | "assistant";
         content: string;
     }[]>([])
 
@@ -47,16 +47,6 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
 
     const onSend = useCallback((newMessages: IMessage[] = []) => {
         setMessages(prev => GiftedChat.append(prev, newMessages));
-
-        setHistory(prev => [...prev, ...newMessages.map(message => ({
-            role: message.user._id === ME?._id ? "user" : "assistant",
-            content: message.text
-        }))])
-    }, [ME])
-
-    useEffect(() => {
-        if (!history.length) return;
-
         (async () => {
             try {
                 setIsPending(true);
@@ -66,7 +56,10 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        messages: history,
+                        messages: [...history, ...newMessages.map(message => ({
+                            role: message.user._id === ME?._id ? "user" : "assistant" as "user" | "assistant",
+                            content: message.text
+                        }))],
                         driverId: ME?._id,
                         latitude: location?.latitude,
                         longitude: location?.longitude
@@ -87,9 +80,19 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                             }
                         ])
                     )
+                    setHistory(prev => [
+                        ...prev,
+                        ...newMessages.map(message => ({
+                            role: message.user._id === ME?._id ? "user" : "assistant" as "user" | "assistant",
+                            content: message.text
+                        })), {
+                            role: "assistant" as const,
+                            content: data.message
+                        }
+                    ])
                 }
-            } catch (error) {
-                console.error(error);
+            } catch (error: unknown) {
+                const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
                 setMessages(prev =>
                     GiftedChat.append(prev, [
                         {
@@ -100,14 +103,23 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                         }
                     ])
                 )
+                setHistory(prev => [
+                    ...prev,
+                    ...newMessages.map(message => ({
+                        role: message.user._id === ME?._id ? "user" : "assistant" as "user" | "assistant",
+                        content: message.text
+                    })), {
+                        role: "assistant" as const,
+                        content: errorMessage
+                    }
+                ])
             } finally {
                 setIsPending(false);
             }
         })()
     }, [
         ME,
-        location,
-        history
+        location
     ])
 
     return (
@@ -134,7 +146,11 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                     messagesContainerStyle={{ backgroundColor: colors.background }}
                     textInputProps={{
                         placeholderTextColor: colors.icon,
-                        style: { color: colors.text, backgroundColor: colors.background }
+                        style: { 
+                            color: colors.text, 
+                            backgroundColor: colors.background,
+                            paddingRight: 40
+                        }
                     }}
                     renderDay={() => null}
                     renderBubble={props => (

@@ -8,7 +8,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-    Image,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -48,21 +47,26 @@ const AccountScreen = () => {
         <ProtectedRoute>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Image
-                        source={require("@/assets/images/accounts/default-user.png")}
-                        alt={t("default_user")}
-                        style={styles.iconProfile}
-                        borderRadius={50}
-                    />
+                    <View
+                        style={[styles.profilePicture, { backgroundColor: Colors[colorscheme].text }]}
+                    >
+                        <Text
+                            style={{
+                                color: Colors[colorscheme].background,
+                                fontSize: 36
+                            }}
+                        >
+                            {currentProfile?.fullName.at(0)?.toString().toUpperCase()}
+                        </Text>
+                    </View>
                     <View>
                         <Text
                             style={[
-
                                 styles.textProfile, {
                                     color: Colors[colorscheme].text
                                 }]
                             }>
-                            {error?.message || currentProfile?.fullName || ""}
+                            {error?.message || currentProfile!.fullName}
                         </Text>
                         <Text
                             style={[
@@ -71,7 +75,7 @@ const AccountScreen = () => {
                                     color: Colors[colorscheme].icon
                                 }]
                             }>
-                            {currentProfile?.emailAddress || ""}
+                            {currentProfile!.emailAddress}
                         </Text>
                     </View>
                 </View>
@@ -452,13 +456,17 @@ const styles = StyleSheet.create({
         columnGap: 16,
         rowGap: 5
     },
-    iconProfile: {
-        width: 70,
-        height: 70
+    profilePicture: {
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 50,
+        width: 80,
+        height: 80
     },
     textProfile: {
         fontSize: 24,
-        fontWeight: "semibold"
+        fontWeight: "semibold",
+        paddingRight: 70
     },
     emailProfile: {
         fontSize: 16
