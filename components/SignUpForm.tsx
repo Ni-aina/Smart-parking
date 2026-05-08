@@ -4,6 +4,7 @@ import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
 import { RegisterType } from "@/types/signUp";
 import * as Linking from "expo-linking";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -28,6 +29,9 @@ import Loading from "./ui/loading";
 const SignUpForm = () => {
     const colorScheme = useColorScheme() || "light";
     const { t } = useTranslation();
+
+    const router = useRouter();
+
     const [isPending, setIsPending] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [savingError, setSavingError] = useState("");
@@ -298,24 +302,51 @@ const SignUpForm = () => {
                 }}
             >
                 <Button title={t("sign_up")} onPress={handleSubmit(onSubmit)} />
-                <Pressable
-                    style={({ pressed }) => pressed ? {
-                        opacity: 0.7
-                    } : {}
-                    }
-                    onPress={() => Linking.openURL(`${webBaseUrl}`)}
+                <View
+                    style={{
+                        justifyContent: "flex-end",
+                        gap: 8
+                    }}
                 >
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            textDecorationLine: "underline",
-                            color: Colors[colorScheme].tint,
-                            textAlign: "right"
-                        }}
+                    <Pressable
+                        style={({ pressed }) => pressed ? {
+                            opacity: 0.7
+                        } :
+                            {}
+                        }
+                        onPress={() => Linking.openURL(`${webBaseUrl}`)}
                     >
-                        {t("want_to_become_parking_owner")}
-                    </Text>
-                </Pressable>
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                textDecorationLine: "underline",
+                                color: Colors[colorScheme].tint,
+                                textAlign: "right"
+                            }}
+                        >
+                            {t("want_to_become_parking_owner")}
+                        </Text>
+                    </Pressable>
+                    <Pressable
+                        style={({ pressed }) => pressed ? {
+                            opacity: 0.7
+                        } :
+                            {}
+                        }
+                        onPress={() => router.push("/auth/signIn")}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 16,
+                                textDecorationLine: "underline",
+                                color: Colors[colorScheme].tint,
+                                textAlign: "right"
+                            }}
+                        >
+                            {t("sign_in")}
+                        </Text>
+                    </Pressable>
+                </View>
             </View>
 
             {isPending && <Loading />}
@@ -325,7 +356,7 @@ const SignUpForm = () => {
                 title={t("error_sign_up")}
                 message={savingError}
                 onClose={
-                    ()=> setSavingError("")
+                    () => setSavingError("")
                 }
             />
         </>

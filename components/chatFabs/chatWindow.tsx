@@ -2,6 +2,7 @@ import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import React, { useCallback, useMemo, useState } from "react";
 import { Animated, StyleSheet, View } from "react-native";
@@ -50,10 +51,15 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
         (async () => {
             try {
                 setIsPending(true);
-                const response = await fetch(`${webBaseUrl}/api/ai/chat`, {
+                const { data: session } = await supabase.auth.getSession();
+                const accessToken = session?.session?.access_token;
+                if (!accessToken) throw new Error("User is not authenticated");
+
+                const response = await fetch(`${webBaseUrl}/api/protected/ai/chat`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "Authorization": `Bearer ${accessToken}`
                     },
                     body: JSON.stringify({
                         messages: [...history, ...newMessages.map(message => ({
@@ -146,8 +152,8 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                     messagesContainerStyle={{ backgroundColor: colors.background }}
                     textInputProps={{
                         placeholderTextColor: colors.icon,
-                        style: { 
-                            color: colors.text, 
+                        style: {
+                            color: colors.text,
                             backgroundColor: colors.background,
                             paddingRight: 40
                         }

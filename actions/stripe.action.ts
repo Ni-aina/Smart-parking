@@ -1,4 +1,5 @@
 import { webBaseUrl } from "@/config";
+import { supabase } from "@/lib/supabase";
 import { getReservationById } from "./reservation.action";
 
 export async function createPaymentIntent(
@@ -23,11 +24,18 @@ export async function createPaymentIntent(
 
     if (diffTime < 0) throw new Error("Reservation has already ended");
 
+    const { data: session } = await supabase.auth.getSession();
+    const accessToken = session?.session?.access_token;
+    if (!accessToken) throw new Error("User is not authenticated");
+
     const res = await fetch(
-      `${webBaseUrl}/api/payments/create-intent`,
+      `${webBaseUrl}/api/protected/payments/create-intent`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`
+        },
         body: JSON.stringify({
           amount: amount,
           userId,
@@ -38,7 +46,7 @@ export async function createPaymentIntent(
       }
     )
 
-    return res.json()
+    return res.json();
   } catch (error) {
     throw error;
   }

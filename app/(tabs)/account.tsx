@@ -66,7 +66,7 @@ const AccountScreen = () => {
                                     color: Colors[colorscheme].text
                                 }]
                             }>
-                            {error?.message || currentProfile!.fullName}
+                            {error?.message || currentProfile?.fullName!}
                         </Text>
                         <Text
                             style={[
@@ -75,7 +75,7 @@ const AccountScreen = () => {
                                     color: Colors[colorscheme].icon
                                 }]
                             }>
-                            {currentProfile!.emailAddress}
+                            {currentProfile?.emailAddress!}
                         </Text>
                     </View>
                 </View>
