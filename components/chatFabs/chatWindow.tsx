@@ -39,93 +39,93 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
             user: BOT_USER
         }
     ])
-    const [history, setHistory] = useState<{
-        role: "user" | "assistant";
-        content: string;
-    }[]>([])
 
     const [pending, setIsPending] = useState(false);
 
-    const onSend = useCallback((newMessages: IMessage[] = []) => {
-        setMessages(prev => GiftedChat.append(prev, newMessages));
-        (async () => {
-            try {
-                setIsPending(true);
-                const { data: session } = await supabase.auth.getSession();
-                const accessToken = session?.session?.access_token;
-                if (!accessToken) throw new Error("User is not authenticated");
+    const buildHistory = (messages: IMessage[]) =>
+        messages
+            .map(message => ({
+                role: message.user._id === ME?._id
+                    ? "user"
+                    : "assistant" as const,
+                content: message.text
+            }))
+            .reverse()
 
-                const response = await fetch(`${webBaseUrl}/api/protected/ai/chat`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${accessToken}`
-                    },
-                    body: JSON.stringify({
-                        messages: [...history, ...newMessages.map(message => ({
-                            role: message.user._id === ME?._id ? "user" : "assistant" as "user" | "assistant",
-                            content: message.text
-                        }))],
-                        driverId: ME?._id,
-                        latitude: location?.latitude,
-                        longitude: location?.longitude
-                    })
-                })
-                const data = await response.json();
+    const onSend = useCallback(async (newMessages: IMessage[] = []) => {
+        try {
+            setIsPending(true);
 
-                if (data.error) throw new Error(`${data.error}`);
+            setMessages(prev => {
+                const updatedMessages = GiftedChat.append(prev, newMessages);
 
-                if (data.message) {
-                    setMessages(prev =>
-                        GiftedChat.append(prev, [
-                            {
-                                _id: Math.random().toString(),
-                                text: data.message,
-                                createdAt: new Date(),
-                                user: BOT_USER
-                            }
-                        ])
-                    )
-                    setHistory(prev => [
-                        ...prev,
-                        ...newMessages.map(message => ({
-                            role: message.user._id === ME?._id ? "user" : "assistant" as "user" | "assistant",
-                            content: message.text
-                        })), {
-                            role: "assistant" as const,
-                            content: data.message
+                (async () => {
+                    try {
+                        const { data: session } = await supabase.auth.getSession();
+
+                        const accessToken = session?.session?.access_token;
+
+                        if (!accessToken) {
+                            throw new Error("User is not authenticated");
                         }
-                    ])
-                }
-            } catch (error: unknown) {
-                const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
-                setMessages(prev =>
-                    GiftedChat.append(prev, [
-                        {
-                            _id: Math.random().toString(),
-                            text: "Something went wrong, please try again later.",
-                            createdAt: new Date(),
-                            user: BOT_USER
+
+                        const response = await fetch(`${webBaseUrl}/api/protected/ai/chat`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${accessToken}`
+                            },
+                            body: JSON.stringify({
+                                messages: buildHistory(updatedMessages),
+                                driverId: ME?._id,
+                                latitude: location?.latitude,
+                                longitude: location?.longitude
+                            })
+                        })
+
+                        const data = await response.json();
+
+                        if (data.error) {
+                            throw new Error(data.error);
                         }
-                    ])
-                )
-                setHistory(prev => [
-                    ...prev,
-                    ...newMessages.map(message => ({
-                        role: message.user._id === ME?._id ? "user" : "assistant" as "user" | "assistant",
-                        content: message.text
-                    })), {
-                        role: "assistant" as const,
-                        content: errorMessage
+
+                        if (data.message) {
+                            setMessages(prev =>
+                                GiftedChat.append(prev, [
+                                    {
+                                        _id: Math.random().toString(),
+                                        text: data.message,
+                                        createdAt: new Date(),
+                                        user: BOT_USER
+                                    }
+                                ])
+                            )
+                        }
+                    } catch {
+                        setMessages(prev =>
+                            GiftedChat.append(prev, [
+                                {
+                                    _id: Math.random().toString(),
+                                    text: "Something went wrong, please try again later.",
+                                    createdAt: new Date(),
+                                    user: BOT_USER
+                                }
+                            ])
+                        )
+                    } finally {
+                        setIsPending(false);
                     }
-                ])
-            } finally {
-                setIsPending(false);
-            }
-        })()
+                })()
+
+                return updatedMessages;
+            })
+        } catch {
+            setIsPending(false);
+        }
     }, [
-        ME,
-        location
+        ME?._id,
+        location?.latitude,
+        location?.longitude
     ])
 
     return (
