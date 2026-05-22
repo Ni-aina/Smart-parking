@@ -6,7 +6,7 @@ export const initialLotState = {
     maxHeight: 0,
     maxLength: 0,
     vehicleId: "",
-    vehicleModel: "",
+    vehicleNumber: "",
     pricePerHour: 0,
     startTime: new Date(),
     endTime: new Date(),

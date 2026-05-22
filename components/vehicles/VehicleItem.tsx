@@ -16,7 +16,7 @@ import ConfirmModal from "../ui/confirmModal";
 
 interface VehicleItemInterface {
     vehicle: VehicleInterface;
-    handleDelete: (id: string)=> void;
+    handleDelete: (id: string) => void;
 }
 
 const VehicleItem = ({
@@ -61,6 +61,7 @@ const VehicleItem = ({
     }
 
     const {
+        make,
         model,
         plateNumber
     } = vehicle;
@@ -101,7 +102,7 @@ const VehicleItem = ({
                             fontWeight: "700"
                         }}
                     >
-                        {model}
+                        {make} {model}
                     </Text>
                     <Text
                         style={{

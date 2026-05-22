@@ -6,7 +6,7 @@ import { StyleSheet, Text, useColorScheme, View } from "react-native";
 interface ReviewReservationInterface {
     lotArea: string;
     lotAddress: string;
-    vehicleModel: string;
+    vehicleNumber: string;
     pricePerHour: number;
     durationHours: number;
     startTime: Date;
@@ -15,7 +15,7 @@ interface ReviewReservationInterface {
 const ReviewReservation = ({
     lotArea,
     lotAddress,
-    vehicleModel,
+    vehicleNumber,
     pricePerHour,
     durationHours,
     startTime
@@ -102,7 +102,7 @@ const ReviewReservation = ({
                             color: Colors[colorscheme].text
                         }}
                     >
-                        {vehicleModel}
+                        {vehicleNumber}
                     </Text>
                 </View>
                 <View

@@ -35,7 +35,7 @@ export interface LotStateInterface {
     maxHeight: number;
     maxLength: number;
     vehicleId: string;
-    vehicleModel: string;
+    vehicleNumber: string;
     pricePerHour: number;
     startTime: Date;
     endTime: Date;

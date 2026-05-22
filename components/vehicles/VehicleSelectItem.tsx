@@ -26,6 +26,7 @@ const VehicleSelectItem = ({
 
     const {
         id,
+        make,
         model,
         plateNumber,
         width,
@@ -66,7 +67,7 @@ const VehicleSelectItem = ({
         setLot({
             ...lot,
             vehicleId: id,
-            vehicleModel: model
+            vehicleNumber: plateNumber
         })
     }
 
@@ -123,7 +124,7 @@ const VehicleSelectItem = ({
                                 fontWeight: "700"
                             }}
                         >
-                            {model}
+                            {make} {model}
                         </Text>
                         <Text
                             style={{
@@ -163,7 +164,7 @@ const VehicleSelectItem = ({
                 visible={!!error}
                 title={t("failed_to_select_vehicle")}
                 message={error}
-                onClose={()=> setError("")}
+                onClose={() => setError("")}
             />
         </>
     )

@@ -19,7 +19,7 @@ const ReviewScreen = () => {
             lotArea,
             lotAddress,
             vehicleId,
-            vehicleModel,
+            vehicleNumber,
             startTime,
             endTime,
             durationHours,
@@ -62,7 +62,7 @@ const ReviewScreen = () => {
                     <ReviewReservation
                         lotArea={lotArea}
                         lotAddress={lotAddress}
-                        vehicleModel={vehicleModel}
+                        vehicleNumber={vehicleNumber}
                         pricePerHour={pricePerHour}
                         durationHours={+durationHours}
                         startTime={startTime}

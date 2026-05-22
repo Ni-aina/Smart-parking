@@ -125,7 +125,7 @@ const Checkout = () => {
             pricePerHour
         },
         vehicle: {
-            model: vehicleModel
+            plateNumber
         },
         startTime: startTimeStr,
         endTime: endTimeStr
@@ -151,7 +151,7 @@ const Checkout = () => {
                         <ReviewReservation
                             lotArea={lotArea}
                             lotAddress={lotAddress}
-                            vehicleModel={vehicleModel}
+                            vehicleNumber={plateNumber}
                             pricePerHour={pricePerHour}
                             durationHours={durationHours}
                             startTime={startTime}
