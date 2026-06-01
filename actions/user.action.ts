@@ -57,3 +57,31 @@ export async function logout() {
         throw error;
     }
 }
+
+export async function updatePassword(email: string, password: string, newPassword: string): Promise<boolean> {
+    try {
+        const request = (async () => {
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            })
+
+            if (signInError) throw new Error(signInError.message);
+
+            const { error: updateError } = await supabase.auth.updateUser({
+                password: newPassword
+            })
+
+            if (updateError) throw new Error(updateError.message);
+
+            return true;
+        })()
+
+        return await Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}

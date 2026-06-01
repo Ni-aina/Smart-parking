@@ -23,8 +23,8 @@ import { isValidPhoneNumber } from "react-phone-number-input";
 import PhoneInput from "react-phone-number-input/react-native-input";
 import Button from "./ui/button";
 import ErrorModal from "./ui/errorModal";
-import Icons from "./ui/icons";
 import Loading from "./ui/loading";
+import PasswordInput from "./ui/passwordInput";
 
 const SignUpForm = () => {
     const colorScheme = useColorScheme() || "light";
@@ -35,7 +35,6 @@ const SignUpForm = () => {
     const [isPending, setIsPending] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [savingError, setSavingError] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
 
     const {
         control,
@@ -45,7 +44,7 @@ const SignUpForm = () => {
         reset
     } = useForm<RegisterType>();
 
-    const handleShowPassword = () => setShowPassword(prev => !prev);
+
 
     const onSubmit = async (data: RegisterType) => {
         try {
@@ -206,33 +205,17 @@ const SignUpForm = () => {
                             {t("password")} *
                         </Text>
                         <View style={styles.inputContent}>
-                            <View style={[styles.inputPassword, { borderColor: Colors[colorScheme].tint }]}>
-                                <Controller
-                                    control={control}
-                                    name="password"
-                                    rules={{ required: t("this_field_is_required") as string }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            value={value}
-                                            onChangeText={onChange}
-                                            placeholder={t("input_your_password")}
-                                            style={{
-                                                color: Colors[colorScheme].text,
-                                                borderColor: Colors[colorScheme].tint,
-                                                flex: 1
-                                            }}
-                                            placeholderTextColor={Colors[colorScheme].text}
-                                            secureTextEntry={!showPassword}
-                                        />
-                                    )}
-                                />
-                                <Icons
-                                    name={showPassword ? "eye" : "eye-off"}
-                                    onPress={handleShowPassword}
-                                    size={20}
-                                    color="grey"
-                                />
-                            </View>
+                            <Controller
+                                control={control}
+                                name="password"
+                                rules={{ required: t("this_field_is_required") as string }}
+                                render={({ field: { onChange, value } }) => (
+                                    <PasswordInput
+                                        value={value}
+                                        onChangeText={onChange}
+                                    />
+                                )}
+                            />
                             {
                                 errors.password &&
                                 <Text style={styles.inputError}>{errors.password.message}</Text>
@@ -243,37 +226,21 @@ const SignUpForm = () => {
                             {t("confirm_password")} *
                         </Text>
                         <View style={styles.inputContent}>
-                            <View style={[styles.inputPassword, { borderColor: Colors[colorScheme].tint }]}>
-                                <Controller
-                                    control={control}
-                                    name="confirmPassword"
-                                    rules={{
-                                        required: t("this_field_is_required") as string,
-                                        validate: curr =>
-                                            watch("password") === curr || t("passwords_do_not_match")
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            value={value}
-                                            onChangeText={onChange}
-                                            placeholder={t("confirm_your_password_here")}
-                                            style={{
-                                                color: Colors[colorScheme].text,
-                                                borderColor: Colors[colorScheme].tint,
-                                                flex: 1
-                                            }}
-                                            placeholderTextColor={Colors[colorScheme].text}
-                                            secureTextEntry={!showPassword}
-                                        />
-                                    )}
-                                />
-                                <Icons
-                                    name={showPassword ? "eye" : "eye-off"}
-                                    onPress={handleShowPassword}
-                                    size={20}
-                                    color="grey"
-                                />
-                            </View>
+                            <Controller
+                                control={control}
+                                name="confirmPassword"
+                                rules={{
+                                    required: t("this_field_is_required") as string,
+                                    validate: curr =>
+                                        watch("password") === curr || t("passwords_do_not_match")
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <PasswordInput
+                                        value={value}
+                                        onChangeText={onChange}
+                                    />
+                                )}
+                            />
                             {
                                 errors.confirmPassword &&
                                 <Text style={styles.inputError}>{errors.confirmPassword.message}</Text>
