@@ -4,7 +4,9 @@ import Pending from "@/components/ui/pending";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +23,21 @@ const AccountScreen = () => {
     const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
+
+    const queryClient = useQueryClient();
+
+    const getCacheSize = (): string => {
+        const cache = queryClient.getQueryCache().getAll();
+        const json = JSON.stringify(cache.map((q) => q.state.data));
+        return formatCacheSize(new Blob([json]).size);
+    }
+
+    const [cacheSize, setCacheSize] = useState<string>(getCacheSize())
+
+    const clearCache = () => {
+        queryClient.clear();
+        setCacheSize(getCacheSize());
+    }
 
     const {
         currentProfile,
@@ -191,7 +208,7 @@ const AccountScreen = () => {
                             styles.infoContent, pressed && styles.pressed
                         ]}
                         android_ripple={{ color: "#777" }}
-                        onPress={()=> router.push("/settings/language")}
+                        onPress={() => router.push("/settings/language")}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -273,6 +290,7 @@ const AccountScreen = () => {
                             styles.infoContent, pressed && styles.pressed
                         ]}
                         android_ripple={{ color: "#777" }}
+                        onPress={clearCache}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -295,7 +313,7 @@ const AccountScreen = () => {
                                     color: Colors[colorscheme].icon
                                 }]
                             }>
-                            88 MB
+                            {cacheSize}
                         </Text>
                     </Pressable>
                     <Text
