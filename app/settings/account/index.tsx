@@ -11,8 +11,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
-    KeyboardAvoidingView,
-    Platform,
+    Keyboard,
     ScrollView,
     StyleSheet,
     Text,
@@ -76,6 +75,21 @@ const Account = () => {
         }
     }
 
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+    useEffect(() => {
+        const show = Keyboard.addListener("keyboardDidShow", (e) => {
+            setKeyboardHeight(e.endCoordinates.height)
+        })
+        const hide = Keyboard.addListener("keyboardDidHide", () => {
+            setKeyboardHeight(0)
+        })
+        return () => {
+            show.remove()
+            hide.remove()
+        }
+    }, [])
+
     useEffect(() => {
         if (!savingError) return;
 
@@ -107,11 +121,11 @@ const Account = () => {
                     </Text>
                 </View>
             </View>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-            >
-                <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ flex: 1 }}>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingBottom: 20 }}
+                >
                     <View style={styles.contentInfo}>
                         <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
                             {t("email_address")}
@@ -217,8 +231,16 @@ const Account = () => {
                         </View>
                     </View>
                 </ScrollView>
-                <Button title={t("update_profile")} onPress={handleSubmit(onSubmit)} />
-            </KeyboardAvoidingView>
+
+                <View
+                    style={{
+                        paddingBottom: keyboardHeight > 0 ? keyboardHeight + 12 : 40,
+                        paddingTop: 12
+                    }}
+                >
+                    <Button title={t("update_profile")} onPress={handleSubmit(onSubmit)} />
+                </View>
+            </View>
 
             {isPending && <Loading />}
 
@@ -238,7 +260,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingVertical: 60,
+        paddingTop: 40,
         gap: 15
     },
     profileContainer: {
