@@ -41,6 +41,8 @@
     "passwords_do_not_match": "Vos mots de passe ne correspondent pas",
     "sign_up": "S'inscrire",
     "sign_in": "Se connecter",
+    "update_profile": "Mettre à jour le profil",
+    "error_update_profile": "Une erreur est survenue lors de la mise à jour du profil",
     "tracking_car": "Suivi de véhicule",
     "find_parking": "Trouver un parking",
     "book_parking": "Réserver un parking",

@@ -41,6 +41,8 @@
     "passwords_do_not_match": "Your password does not match",
     "sign_up": "Sign Up",
     "sign_in": "Sign In",
+    "update_profile": "Update Profile",
+    "error_update_profile": "An error occurred during profile update",
     "tracking_car": "Tracking Car",
     "find_parking": "Find Parking",
     "book_parking": "Book Parking",

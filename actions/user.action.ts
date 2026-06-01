@@ -30,11 +30,11 @@ export async function login(email: string, password: string): Promise<Authentica
             const { data: user, error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
-            });
+            })
 
             if (error) throw new Error(`Login failed: ${error.message}`);
             return user;
-        })();
+        })()
 
         return await Promise.race([
             request,

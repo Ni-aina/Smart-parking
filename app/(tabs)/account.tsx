@@ -5,6 +5,7 @@ import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,6 +20,8 @@ import {
 const AccountScreen = () => {
     const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
+    const router = useRouter();
+
     const {
         currentProfile,
         isPending,
@@ -97,6 +100,7 @@ const AccountScreen = () => {
                             styles.infoContent, pressed && styles.pressed
                         ]}
                         android_ripple={{ color: "#777" }}
+                        onPress={() => router.push("/settings/account")}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons

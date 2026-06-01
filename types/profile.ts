@@ -9,3 +9,11 @@ export interface ProfileInterface {
     agentCreatorId?: string;
     createdAt?: string
 }
+
+export interface ProfileUpdateInterface {
+    id: string,
+    fullName: string,
+    emailAddress: string,
+    phoneNumber: string,
+    urlImage?: string
+}
