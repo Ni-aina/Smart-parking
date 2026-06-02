@@ -7,6 +7,8 @@ import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { ProfileUpdateInterface } from "@/types/profile";
 import { useQueryClient } from "@tanstack/react-query";
+import { Image } from "moti";
+import { Skeleton } from "moti/skeleton";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -31,6 +33,7 @@ const Account = () => {
 
     const [isPending, setIsPending] = useState(false);
     const [savingError, setSavingError] = useState("");
+    const [loadingImage, setLoadingImage] = useState(!!currentProfile?.urlImage);
 
     const {
         control,
@@ -108,18 +111,45 @@ const Account = () => {
                 title={t("personal_data")}
             />
             <View style={styles.profileContainer}>
-                <View
-                    style={[styles.profilePicture, { backgroundColor: Colors[colorScheme].text }]}
-                >
-                    <Text
-                        style={{
-                            color: Colors[colorScheme].background,
-                            fontSize: 36
-                        }}
-                    >
-                        {currentProfile?.fullName.at(0)?.toString().toUpperCase()}
-                    </Text>
-                </View>
+                {
+                    loadingImage &&
+                    <Skeleton
+                        colorMode={colorScheme}
+                        width={85}
+                        height={85}
+                        radius={100}
+                    />
+                }
+                {
+                    currentProfile?.urlImage ?
+                        <Image
+                            source={{ uri: currentProfile?.urlImage }}
+                            style={
+                                loadingImage ?
+                                    styles.loadingPicture :
+                                    styles.profilePicture
+                            }
+                            onLoadStart={
+                                () => setLoadingImage(true)
+                            }
+                            onLoadEnd={
+                                () => setLoadingImage(false)
+                            }
+                        />
+                        :
+                        <View
+                            style={[styles.profilePicture, { backgroundColor: Colors[colorScheme].text }]}
+                        >
+                            <Text
+                                style={{
+                                    color: Colors[colorScheme].background,
+                                    fontSize: 36
+                                }}
+                            >
+                                {currentProfile?.fullName.at(0)?.toString().toUpperCase()}
+                            </Text>
+                        </View>
+                }
             </View>
             <View style={{ flex: 1 }}>
                 <ScrollView
@@ -274,6 +304,10 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         width: 110,
         height: 110
+    },
+    loadingPicture: {
+        width: 0,
+        height: 0
     },
     contentInfo: {
         flex: 1,

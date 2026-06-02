@@ -8,9 +8,11 @@ import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
+import { Skeleton } from "moti/skeleton";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+    Image,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -32,7 +34,7 @@ const AccountScreen = () => {
         return formatCacheSize(new Blob([json]).size);
     }
 
-    const [cacheSize, setCacheSize] = useState<string>(getCacheSize())
+    const [cacheSize, setCacheSize] = useState<string>(getCacheSize());
 
     const clearCache = () => {
         queryClient.clear();
@@ -44,6 +46,9 @@ const AccountScreen = () => {
         isPending,
         error
     } = useCurrentProfile();
+
+    const [loadingImage, setLoadingImage] = useState(!!currentProfile?.urlImage);
+
     const [isSignOut, setIsSignOut] = useState(false);
 
     const handleSingout = async () => {
@@ -67,18 +72,45 @@ const AccountScreen = () => {
         <ProtectedRoute>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <View
-                        style={[styles.profilePicture, { backgroundColor: Colors[colorscheme].text }]}
-                    >
-                        <Text
-                            style={{
-                                color: Colors[colorscheme].background,
-                                fontSize: 36
-                            }}
-                        >
-                            {currentProfile?.fullName.at(0)?.toString().toUpperCase()}
-                        </Text>
-                    </View>
+                    {
+                        loadingImage &&
+                        <Skeleton
+                            colorMode={colorscheme}
+                            width={85}
+                            height={85}
+                            radius={100}
+                        />
+                    }
+                    {
+                        currentProfile?.urlImage ?
+                            <Image
+                                source={{ uri: currentProfile?.urlImage }}
+                                style={
+                                    loadingImage ?
+                                        styles.loadingPicture :
+                                        styles.profilePicture
+                                }
+                                onLoadStart={
+                                    () => setLoadingImage(true)
+                                }
+                                onLoadEnd={
+                                    () => setLoadingImage(false)
+                                }
+                            />
+                            :
+                            <View
+                                style={[styles.profilePicture, { backgroundColor: Colors[colorscheme].text }]}
+                            >
+                                <Text
+                                    style={{
+                                        color: Colors[colorscheme].background,
+                                        fontSize: 36
+                                    }}
+                                >
+                                    {currentProfile?.fullName.at(0)?.toString().toUpperCase()}
+                                </Text>
+                            </View>
+                    }
                     <View>
                         <Text
                             style={[
@@ -486,6 +518,10 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         width: 80,
         height: 80
+    },
+    loadingPicture: {
+        width: 0,
+        height: 0
     },
     textProfile: {
         fontSize: 24,
