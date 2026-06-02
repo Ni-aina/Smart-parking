@@ -121,8 +121,11 @@ const VehicleSelectItem = ({
                             style={{
                                 color: Colors[colorscheme].text,
                                 fontSize: 20,
-                                fontWeight: "700"
+                                fontWeight: "700",
+                                width: 180
                             }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                         >
                             {make} {model}
                         </Text>

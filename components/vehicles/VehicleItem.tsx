@@ -99,8 +99,11 @@ const VehicleItem = ({
                         style={{
                             color: Colors[colorscheme].text,
                             fontSize: 16,
-                            fontWeight: "700"
+                            fontWeight: "700",
+                            width: 135
                         }}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
                     >
                         {make} {model}
                     </Text>
