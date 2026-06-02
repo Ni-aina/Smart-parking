@@ -2,6 +2,7 @@ import { updateProfile, updateProfilePicture } from "@/actions/profile.action";
 import Button from "@/components/ui/button";
 import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
+import Icons from "@/components/ui/icons";
 import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
@@ -194,6 +195,13 @@ const Account = () => {
                             </Text>
                         </View>
                 }
+                <Icons
+                    name="camera"
+                    style={styles.editIcon}
+                    onPress={handleProfilePicture}
+                    color={Colors[colorScheme].tint}
+                    size={20}
+                />
             </Pressable>
             <View style={{ flex: 1 }}>
                 <ScrollView
@@ -338,6 +346,7 @@ const styles = StyleSheet.create({
         gap: 15
     },
     profileContainer: {
+        position: "relative",
         marginVertical: 25,
         justifyContent: "center",
         alignItems: "center"
@@ -352,6 +361,11 @@ const styles = StyleSheet.create({
     loadingPicture: {
         width: 0,
         height: 0
+    },
+    editIcon: {
+        position: "absolute",
+        left: 40,
+        bottom: 90
     },
     contentInfo: {
         flex: 1,
