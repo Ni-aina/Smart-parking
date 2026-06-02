@@ -1,4 +1,4 @@
-import { updateProfile } from "@/actions/profile.action";
+import { updateProfile, updateProfilePicture } from "@/actions/profile.action";
 import Button from "@/components/ui/button";
 import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
@@ -7,6 +7,7 @@ import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { ProfileUpdateInterface } from "@/types/profile";
 import { useQueryClient } from "@tanstack/react-query";
+import * as ImagePicker from "expo-image-picker";
 import { Image } from "moti";
 import { Skeleton } from "moti/skeleton";
 import { useEffect, useState } from "react";
@@ -14,6 +15,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
     Keyboard,
+    Pressable,
     ScrollView,
     StyleSheet,
     Text,
@@ -47,6 +49,45 @@ const Account = () => {
             phoneNumber: currentProfile?.phoneNumber || ""
         }
     })
+
+    const [uploadingImage, setUploadingImage] = useState(false);
+
+    const handleProfilePicture = async () => {
+        try {
+            const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+            if (!permission.granted) return;
+
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ["images"],
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.8
+            })
+
+            if (result.canceled) return;
+
+            setUploadingImage(true);
+
+            const image = result.assets[0];
+
+            const profile = await updateProfilePicture({
+                profileId: currentProfile!.id,
+                imageUri: image.uri,
+                oldUrl: currentProfile?.urlImage
+            })
+
+            if (!profile) throw new Error();
+
+            queryClient.invalidateQueries({
+                queryKey: ["current-profile"]
+            })
+        } catch {
+            setSavingError(t("error_update_profile"));
+        } finally {
+            setUploadingImage(false);
+        }
+    }
 
     const onSubmit = async (data: ProfileUpdateInterface) => {
         try {
@@ -110,13 +151,16 @@ const Account = () => {
             <Header
                 title={t("personal_data")}
             />
-            <View style={styles.profileContainer}>
+            <Pressable
+                style={styles.profileContainer}
+                onPress={handleProfilePicture}
+            >
                 {
                     loadingImage &&
                     <Skeleton
                         colorMode={colorScheme}
-                        width={85}
-                        height={85}
+                        width={110}
+                        height={110}
                         radius={100}
                     />
                 }
@@ -150,7 +194,7 @@ const Account = () => {
                             </Text>
                         </View>
                 }
-            </View>
+            </Pressable>
             <View style={{ flex: 1 }}>
                 <ScrollView
                     showsVerticalScrollIndicator={false}
@@ -272,7 +316,7 @@ const Account = () => {
                 </View>
             </View>
 
-            {isPending && <Loading />}
+            {(isPending || uploadingImage) && <Loading />}
 
             <ErrorModal
                 visible={!!savingError}
