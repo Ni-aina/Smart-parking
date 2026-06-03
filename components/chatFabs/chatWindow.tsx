@@ -1,11 +1,10 @@
 import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme.web";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import React, { useCallback, useMemo, useState } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import { Animated, StyleSheet, useColorScheme, View } from "react-native";
 import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
 import ChatHeader from "./chatHeader";
 import ChatSendButton from "./chatSendButton";

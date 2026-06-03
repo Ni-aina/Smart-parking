@@ -1,5 +1,6 @@
 import { logout } from "@/actions/user.action";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Pending from "@/components/ui/pending";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
@@ -130,6 +131,7 @@ const AccountScreen = () => {
                             {currentProfile?.emailAddress!}
                         </Text>
                     </View>
+                    <ThemeSwitcher />
                 </View>
                 <ScrollView
                     contentContainerStyle={styles.scrollContainer}
@@ -177,7 +179,7 @@ const AccountScreen = () => {
                             styles.infoContent, pressed && styles.pressed
                         ]}
                         android_ripple={{ color: "#777" }}
-                        onPress={()=> router.push("/settings/payment")}
+                        onPress={() => router.push("/settings/payment")}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons

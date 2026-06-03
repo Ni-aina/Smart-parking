@@ -1,5 +1,5 @@
 import PaymentReview from "@/components/books/paymentReview";
-import NoDataFound from "@/components/noDataFound";
+import NoDataFound from "@/components/NoDataFound";
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
 import LoaderSkeleton from "@/components/ui/Skeleton";

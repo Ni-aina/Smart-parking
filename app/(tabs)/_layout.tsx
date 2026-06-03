@@ -5,12 +5,11 @@ import { StyleSheet } from 'react-native';
 
 import ChatFAB from '@/components/chatFabs/chatFab';
 import { activeTab, Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme.web';
 import { useTabsHistoryContext } from '@/stores/context/tabsHistoryContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StatusBar } from 'expo-status-bar';
 import { useTranslation } from 'react-i18next';
-import { Text } from 'react-native';
+import { Text, useColorScheme } from 'react-native';
 
 const TabLayout = () => {
 

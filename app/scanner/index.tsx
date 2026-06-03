@@ -1,6 +1,6 @@
 import { getPaymentByTransactionId, updateTicketToScanned } from "@/actions/payment.action";
 import { updateReservationToCompleted } from "@/actions/reservation.action";
-import NoDataFound from "@/components/noDataFound";
+import NoDataFound from "@/components/NoDataFound";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ScanOverlay from "@/components/scanner/ScanOverlay";
 import ScanResult from "@/components/scanner/scanResult";
