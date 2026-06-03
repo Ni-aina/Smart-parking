@@ -79,7 +79,8 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                                 messages: buildHistory(updatedMessages),
                                 driverId: ME?._id,
                                 latitude: location?.latitude,
-                                longitude: location?.longitude
+                                longitude: location?.longitude,
+                                timezoneOffset: new Date().getTimezoneOffset() * -1
                             })
                         })
 
