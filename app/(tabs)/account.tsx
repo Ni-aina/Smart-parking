@@ -177,6 +177,7 @@ const AccountScreen = () => {
                             styles.infoContent, pressed && styles.pressed
                         ]}
                         android_ripple={{ color: "#777" }}
+                        onPress={()=> router.push("/settings/payment")}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons

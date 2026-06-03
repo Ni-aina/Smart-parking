@@ -209,5 +209,8 @@
     "performed": "Exécuté",
     "due": "Échéance",
     "no_maintenance_records": "Aucun enregistrement d'entretien",
-    "add_first_maintenance": "Ajoutez votre premier enregistrement d'entretien"
+    "add_first_maintenance": "Ajoutez votre premier enregistrement d'entretien",
+    "payment": "Paiement",
+    "coming_soon": "Bientôt disponible",
+    "payment_coming_soon_description": "Nous travaillons dur pour vous offrir une expérience de paiement fluide. Restez connecté !"
 }

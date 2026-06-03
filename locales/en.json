@@ -209,5 +209,8 @@
     "performed": "Performed",
     "due": "Due",
     "no_maintenance_records": "No maintenance records",
-    "add_first_maintenance": "Add your first maintenance record"
+    "add_first_maintenance": "Add your first maintenance record",
+    "payment": "Payment",
+    "coming_soon": "Coming Soon",
+    "payment_coming_soon_description": "We're working hard to bring you a seamless payment experience. Stay tuned!"
 }
