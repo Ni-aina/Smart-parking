@@ -27,7 +27,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         AsyncStorage.getItem("app_theme").then((saved) => {
-            if (saved) setThemeState(saved as Theme);
+            if (saved) {
+                setThemeState(saved as Theme);
+                if (saved !== "system") Appearance.setColorScheme(saved as "light" | "dark");
+                else Appearance.setColorScheme(null);
+            }
         })
     }, [])
 
