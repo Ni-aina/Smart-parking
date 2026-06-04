@@ -5,7 +5,7 @@ import {
     ThemeProvider as NativeThemeProvider
 } from "@react-navigation/native";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useColorScheme } from "react-native";
+import { Appearance, useColorScheme } from "react-native";
 
 type Theme = "light" | "dark" | "system";
 
@@ -34,6 +34,8 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const setTheme = (t: Theme) => {
         setThemeState(t);
         AsyncStorage.setItem("app_theme", t);
+        if (t !== "system") Appearance.setColorScheme(t);
+        else Appearance.setColorScheme(null);
     }
 
     const colorscheme: "light" | "dark" =
