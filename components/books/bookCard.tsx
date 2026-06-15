@@ -136,7 +136,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                         fontSize: 10
                                     }}
                                 >
-                                    {reservation.status.toUpperCase()}
+                                    {t(`status_${reservation.status.toLowerCase()}`, { defaultValue: reservation.status }).toUpperCase()}
                                 </Text>
                             </View>
                             <View
@@ -230,7 +230,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                 color: Colors[colorScheme].text
                             }}
                         >
-                            Cancel
+                            {t("cancel")}
                         </Text>
                     </Pressable>
                     <Pressable

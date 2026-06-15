@@ -75,7 +75,7 @@ const ETicket = () => {
                 lotLocation,
                 plateNumber,
                 amount,
-                status,
+                status: t(`status_${status.toLowerCase()}`, { defaultValue: status }),
                 startTime,
                 endTime,
                 labels: {

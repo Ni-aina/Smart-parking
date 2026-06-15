@@ -4,6 +4,8 @@
     "next": "Next",
     "previous": "Previous",
     "skip": "Skip",
+    "edit": "Edit",
+    "delete": "Delete",
     "let's_get_started": "Let's get started",
     "welcome_to_parking_app": "Welcome to Parking App",
     "create_your_account": "Create your account",
@@ -212,5 +214,16 @@
     "add_first_maintenance": "Add your first maintenance record",
     "payment": "Payment",
     "coming_soon": "Coming Soon",
-    "payment_coming_soon_description": "We're working hard to bring you a seamless payment experience. Stay tuned!"
+    "payment_coming_soon_description": "We're working hard to bring you a seamless payment experience. Stay tuned!",
+    "status_pending": "Pending",
+    "status_confirmed": "Confirmed",
+    "status_cancelled": "Cancelled",
+    "status_completed": "Completed",
+    "status_failed": "Failed",
+    "status_succeeded": "Succeeded",
+    "status_active": "Active",
+    "view_details": "View Details",
+    "payment_secure_payments": "🔒 Secure payments",
+    "payment_fast_checkout": "⚡ Fast checkout",
+    "payment_multiple_currencies": "🌍 Multiple currencies"
 }

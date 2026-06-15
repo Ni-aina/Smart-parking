@@ -144,7 +144,7 @@ const PaymentReview = ({
                     >
                         {t("payment_status")}
                     </Text>
-                    <TextWeight text={status} />
+                    <TextWeight text={t(`status_${status.toLowerCase()}`, { defaultValue: status })} />
                 </View>
                 <View
                     style={{

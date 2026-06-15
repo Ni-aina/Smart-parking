@@ -2,14 +2,14 @@ import Header from "@/components/ui/header";
 import { Colors } from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
 import {
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View
 } from "react-native";
 import Animated, {
-    FadeInDown,
-    FadeInUp
+  FadeInDown,
+  FadeInUp
 } from "react-native-reanimated";
 
 const Payment = () => {
@@ -42,22 +42,21 @@ const Payment = () => {
             entering={FadeInDown.delay(200).springify()}
             style={[styles.badge, { color: Colors[colorScheme].tint }]}
           >
-            {t("coming_soon") || "Coming Soon"}
+            {t("coming_soon")}
           </Animated.Text>
 
           <Animated.Text
             entering={FadeInDown.delay(300).springify()}
             style={[styles.title, { color: Colors[colorScheme].text }]}
           >
-            {t("payment") || "Payment"}
+            {t("payment")}
           </Animated.Text>
 
           <Animated.Text
             entering={FadeInDown.delay(400).springify()}
             style={[styles.description, { color: Colors[colorScheme].text }]}
           >
-            {t("payment_coming_soon_description") ||
-              "We're working hard to bring you a seamless payment experience. Stay tuned!"}
+            {t("payment_coming_soon_description")}
           </Animated.Text>
 
           <View style={[styles.divider, { backgroundColor: Colors[colorScheme].tint }]} />
@@ -66,7 +65,11 @@ const Payment = () => {
             entering={FadeInDown.delay(500).springify()}
             style={styles.features}
           >
-            {["🔒 Secure payments", "⚡ Fast checkout", "🌍 Multiple currencies"].map(
+            {[
+              t("payment_secure_payments"),
+              t("payment_fast_checkout"),
+              t("payment_multiple_currencies")
+            ].map(
               (feature, i) => (
                 <View
                   key={i}
