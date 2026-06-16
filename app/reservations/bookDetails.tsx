@@ -51,7 +51,7 @@ const BookDetailsScreen = () => {
             return;
         }
 
-        router.push("/reservation/review");
+        router.push("/reservations/review");
     }
 
     useEffect(() => {

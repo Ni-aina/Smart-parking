@@ -44,7 +44,6 @@ const ReviewScreen = () => {
         })
     }
 
-
     return (
         <>
             <View

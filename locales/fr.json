@@ -88,7 +88,7 @@
     "my_vehicles": "Mes véhicules",
     "request_too_long": "Requête trop longue",
     "car_parking": "Parking voiture",
-    "reviews": "avis",
+    "reviews": "Avis",
     "na": "N/D",
     "spots": "Places",
     "available_spots": "Places disponible",
@@ -232,5 +232,18 @@
     "chat_assistant": "Assistant de stationnement",
     "chat_greeting": "Bonjour ! Je suis votre assistant de stationnement. Je peux vous aider à trouver et réserver une place de parking. Souhaitez-vous commencer une nouvelle recherche ?",
     "chat_error": "Une erreur s'est produite, veuillez réessayer plus tard.",
-    "chat_placeholder": "Écrivez un message..."
+    "chat_placeholder": "Écrivez un message...",
+    "write_a_review": "Écrire un avis",
+    "your_rating": "Votre note",
+    "your_feedback": "Votre avis",
+    "review_tap_to_rate": "Appuyez sur une étoile pour noter",
+    "review_rating_1": "Mauvais",
+    "review_rating_2": "Passable",
+    "review_rating_3": "Bien",
+    "review_rating_4": "Très bien",
+    "review_rating_5": "Excellent",
+    "review_feedback_placeholder": "Partagez votre expérience avec ce parking...",
+    "submit_review": "Soumettre l'avis",
+    "submitting": "Envoi en cours...",
+    "no_reviews_yet": "Aucun avis pour le moment"
 }

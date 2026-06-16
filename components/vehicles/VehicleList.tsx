@@ -34,7 +34,7 @@ const VehicleList = () => {
             setError("Please select a vehicle");
             return;
         }
-        router.push("/reservation/bookDetails");
+        router.push("/reservations/bookDetails");
     }
 
     useEffect(() => {

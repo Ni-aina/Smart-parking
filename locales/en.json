@@ -232,5 +232,18 @@
     "chat_assistant": "Parking Assistant",
     "chat_greeting": "Hello! I'm your parking assistant. I can help you find and reserve a parking space. Would you like to start a new search?",
     "chat_error": "Something went wrong, please try again later.",
-    "chat_placeholder": "Type a message..."
+    "chat_placeholder": "Type a message...",
+    "write_a_review": "Write a Review",
+    "your_rating": "Your Rating",
+    "your_feedback": "Your Feedback",
+    "review_tap_to_rate": "Tap a star to rate",
+    "review_rating_1": "Poor",
+    "review_rating_2": "Fair",
+    "review_rating_3": "Good",
+    "review_rating_4": "Very Good",
+    "review_rating_5": "Excellent",
+    "review_feedback_placeholder": "Share your experience with this parking lot...",
+    "submit_review": "Submit Review",
+    "submitting": "Submitting...",
+    "no_reviews_yet": "No reviews yet"
 }

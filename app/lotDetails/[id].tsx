@@ -1,8 +1,10 @@
+import ReviewList from "@/components/reviews/review-list";
 import Icons from "@/components/ui/icons";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useLot from "@/hooks/lots/useLot";
+import useReviews from "@/hooks/reviews/useReviews";
 import { defaultParking } from "@/lib/defaultImages";
 import { useLotStore } from "@/stores/zustand/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -33,6 +35,8 @@ const LotDetailsScreen = () => {
     const [indexImage, setIndexImage] = useState(0);
     const router = useRouter();
     const { lot: lotStore, setLot } = useLotStore();
+    const { reviews, isLoading: reviewLoading } = useReviews({ lotId: +id });
+
     const {
         lot,
         isLoading,
@@ -55,7 +59,7 @@ const LotDetailsScreen = () => {
             vehicleId: "",
             vehicleNumber: ""
         })
-        router.push("/reservation/selectVehicle");
+        router.push("/reservations/selectVehicle");
     }
 
     useEffect(() => {
@@ -71,7 +75,7 @@ const LotDetailsScreen = () => {
     const lotImage = lot?.urlImages?.at(indexImage) || null;
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { backgroundColor: Colors[colorScheme].background }]}>
             {
                 !lot ?
                     <RequestTooLong
@@ -177,9 +181,7 @@ const LotDetailsScreen = () => {
                             contentContainerStyle={{
                                 flexGrow: 1,
                                 justifyContent: "space-between",
-                                paddingBottom: 30,
-                                backgroundColor: !lotImage && colorScheme === "light" ? "white" :
-                                    Colors[colorScheme].background
+                                paddingBottom: 30
                             }}
                             showsVerticalScrollIndicator={false}
                         >
@@ -227,13 +229,14 @@ const LotDetailsScreen = () => {
                                             name="star"
                                             color="#ffbf00"
                                             size={24}
+                                            onPress={() => router.push(`/books/review/${lot.id}`)}
                                         />
                                         <Text
                                             style={{
                                                 color: Colors[colorScheme].icon
                                             }}
                                         >
-                                            {(Math.random() * 100).toFixed(0)} {t("reviews")}
+                                            {reviews.length} {t("reviews")}
                                         </Text>
                                     </View>
                                 </View>
@@ -444,63 +447,75 @@ const LotDetailsScreen = () => {
                                         {lot.lotType?.description || t("no_description_available")}
                                     </Text>
                                 </View>
-                            </View>
-                            <View
-                                style={{
-                                    flexDirection: "row",
-                                    justifyContent: "space-between",
-                                    alignItems: "center",
-                                    paddingHorizontal: 15,
-                                    paddingBottom: 30
-                                }}
-                            >
-                                <View>
-                                    <Text
-                                        style={{
-                                            fontSize: 20,
-                                            fontWeight: "semibold",
-                                            color: Colors[colorScheme].icon,
-                                            opacity: 0.7
-                                        }}
-                                    >
-                                        {t("price")}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 16,
-                                            fontWeight: "600",
-                                            color: Colors[colorScheme].tint
-                                        }}
-                                    >
-                                        ${lot.pricePerHour?.toFixed(2) || "0.00"} {t("per_hr")}
-                                    </Text>
-                                </View>
-                                <Pressable
-                                    android_ripple={{
-                                        color: '#00000020'
+                                <View
+                                    style={{
+                                        paddingHorizontal: 15,
+                                        paddingVertical: 10
                                     }}
-                                    style={({ pressed }) => [
-                                        styles.button,
-                                        {
-                                            backgroundColor: Colors[colorScheme].tint
-                                        },
-                                        pressed ? styles.pressed : null
-                                    ]}
-                                    onPress={handleBook}
                                 >
-                                    <Text
-                                        style={[
-                                            styles.buttonText,
-                                            {
-                                                color: Colors[colorScheme].background
-                                            }
-                                        ]}
-                                    >
-                                        {t("book_now")}
-                                    </Text>
-                                </Pressable>
+                                    <ReviewList
+                                        lotId={lot.id}
+                                        reviews={reviews}
+                                        isLoading={reviewLoading}
+                                    />
+                                </View>
                             </View>
                         </ScrollView>
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                paddingHorizontal: 15,
+                                paddingTop: 20
+                            }}
+                        >
+                            <View>
+                                <Text
+                                    style={{
+                                        fontSize: 20,
+                                        fontWeight: "semibold",
+                                        color: Colors[colorScheme].icon,
+                                        opacity: 0.7
+                                    }}
+                                >
+                                    {t("price")}
+                                </Text>
+                                <Text
+                                    style={{
+                                        fontSize: 16,
+                                        fontWeight: "600",
+                                        color: Colors[colorScheme].tint
+                                    }}
+                                >
+                                    ${lot.pricePerHour?.toFixed(2) || "0.00"} {t("per_hr")}
+                                </Text>
+                            </View>
+                            <Pressable
+                                android_ripple={{
+                                    color: '#00000020'
+                                }}
+                                style={({ pressed }) => [
+                                    styles.button,
+                                    {
+                                        backgroundColor: Colors[colorScheme].tint
+                                    },
+                                    pressed ? styles.pressed : null
+                                ]}
+                                onPress={handleBook}
+                            >
+                                <Text
+                                    style={[
+                                        styles.buttonText,
+                                        {
+                                            color: Colors[colorScheme].background
+                                        }
+                                    ]}
+                                >
+                                    {t("book_now")}
+                                </Text>
+                            </Pressable>
+                        </View>
                     </>
             }
             <StatusBar style="auto" />
@@ -513,7 +528,8 @@ const screenHeight = Dimensions.get("screen").height;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        paddingBottom: 30
     },
     imageBackground: {
         alignSelf: "stretch",
