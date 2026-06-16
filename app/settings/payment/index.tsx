@@ -38,26 +38,35 @@ const Payment = () => {
             <Text style={styles.icon}>💳</Text>
           </View>
 
-          <Animated.Text
+          <Animated.View
             entering={FadeInDown.delay(200).springify()}
-            style={[styles.badge, { color: Colors[colorScheme].tint }]}
           >
-            {t("coming_soon")}
-          </Animated.Text>
+            <Text
+              style={[styles.badge, { color: Colors[colorScheme].tint }]}
+            >
+              {t("coming_soon")}
+            </Text>
+          </Animated.View>
 
-          <Animated.Text
+          <Animated.View
             entering={FadeInDown.delay(300).springify()}
-            style={[styles.title, { color: Colors[colorScheme].text }]}
           >
-            {t("payment")}
-          </Animated.Text>
+            <Text
+              style={[styles.title, { color: Colors[colorScheme].text }]}
+            >
+              {t("payment")}
+            </Text>
+          </Animated.View>
 
-          <Animated.Text
+          <Animated.View
             entering={FadeInDown.delay(400).springify()}
-            style={[styles.description, { color: Colors[colorScheme].text }]}
           >
-            {t("payment_coming_soon_description")}
-          </Animated.Text>
+            <Text
+              style={[styles.description, { color: Colors[colorScheme].text }]}
+            >
+              {t("payment_coming_soon_description")}
+            </Text>
+          </Animated.View>
 
           <View style={[styles.divider, { backgroundColor: Colors[colorScheme].tint }]} />
 
