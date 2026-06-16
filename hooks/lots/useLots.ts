@@ -62,12 +62,9 @@ const useLots = ({
     const lotsFormated = lots?.pages.flatMap(({ data }) =>
         data.map(item => ({
             ...item,
-            distance: getDistanceTimeFromPostGIS(
-                item.distanceM,
-                70
-            )
+            distance: getDistanceTimeFromPostGIS(item.distanceM)
         }))
-    ) || [];
+    ) || []
 
     useEffect(() => {
         if (isLoading) return;

@@ -177,344 +177,355 @@ const LotDetailsScreen = () => {
                                 }
                             </ImageBackground>
                         </ScrollView>
-                        <ScrollView
-                            contentContainerStyle={{
-                                flexGrow: 1,
-                                justifyContent: "space-between",
-                                paddingBottom: 30
+                        <View
+                            style={{
+                                maxHeight: screenHeight / 2
                             }}
-                            showsVerticalScrollIndicator={false}
                         >
-                            <View>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    paddingTop: 15,
+                                    paddingHorizontal: 10
+                                }}
+                            >
+                                <View
+                                    style={{
+                                        overflow: "hidden",
+                                        borderRadius: 50
+                                    }}
+                                >
+                                    <BlurView
+                                        intensity={colorScheme === "dark" ? 15 : 5}
+                                        tint={colorScheme === "dark" ? "light" : "dark"}
+                                        style={{
+                                            paddingHorizontal: 10,
+                                            paddingVertical: 8
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                fontSize: 16,
+                                                fontWeight: "600",
+                                                color: Colors[colorScheme].tint
+                                            }}
+                                        >
+                                            {t("car_parking")}
+                                        </Text>
+                                    </BlurView>
+                                </View>
                                 <View
                                     style={{
                                         flexDirection: "row",
-                                        justifyContent: "space-between",
-                                        padding: 10
+                                        alignItems: "center",
+                                        gap: 5
                                     }}
                                 >
-                                    <View
-                                        style={{
-                                            overflow: "hidden",
-                                            borderRadius: 50
-                                        }}
-                                    >
-                                        <BlurView
-                                            intensity={colorScheme === "dark" ? 15 : 5}
-                                            tint={colorScheme === "dark" ? "light" : "dark"}
-                                            style={{
-                                                paddingHorizontal: 10,
-                                                paddingVertical: 8
-                                            }}
-                                        >
-                                            <Text
-                                                style={{
-                                                    fontSize: 16,
-                                                    fontWeight: "600",
-                                                    color: Colors[colorScheme].tint
-                                                }}
-                                            >
-                                                {t("car_parking")}
-                                            </Text>
-                                        </BlurView>
-                                    </View>
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            gap: 5
-                                        }}
+                                    <Pressable
+                                        onPress={() => router.push(`/books/review/${lot.id}`)}
+                                        style={({ pressed }) => pressed && { opacity: 0.5 }}
                                     >
                                         <Ionicons
                                             name="star"
                                             color="#ffbf00"
                                             size={24}
-                                            onPress={() => router.push(`/books/review/${lot.id}`)}
                                         />
-                                        <Text
-                                            style={{
-                                                color: Colors[colorScheme].icon
-                                            }}
-                                        >
-                                            {reviews.length} {t("reviews")}
-                                        </Text>
-                                    </View>
+                                    </Pressable>
+                                    <Text
+                                        style={{
+                                            color: Colors[colorScheme].icon
+                                        }}
+                                    >
+                                        {reviews.length} {t("reviews")}
+                                    </Text>
                                 </View>
-                                <View
-                                    style={{
-                                        marginTop: 10,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        paddingHorizontal: 15,
-                                        gap: 5
-                                    }}
-                                >
-                                    <View>
-                                        <Text
+                            </View>
+                            <ScrollView
+                                contentContainerStyle={{
+                                    flexGrow: 1,
+                                    justifyContent: "space-between",
+                                    paddingBottom: 30
+                                }}
+                                showsVerticalScrollIndicator={false}
+                            >
+                                <>
+                                    <View
+                                        style={{
+                                            marginTop: 10,
+                                            flexDirection: "row",
+                                            justifyContent: "space-between",
+                                            alignItems: "center",
+                                            paddingHorizontal: 15,
+                                            gap: 5
+                                        }}
+                                    >
+                                        <View>
+                                            <Text
+                                                style={{
+                                                    fontSize: 24,
+                                                    fontWeight: "bold",
+                                                    color: Colors[colorScheme].text
+                                                }}
+                                            >
+                                                {lot.name || ""}
+                                            </Text>
+                                            <Text
+                                                style={{
+                                                    fontSize: 20,
+                                                    color: Colors[colorScheme].icon,
+                                                    opacity: 0.7
+                                                }}
+                                            >
+                                                {lot.location || ""}
+                                            </Text>
+                                        </View>
+                                        <View
                                             style={{
-                                                fontSize: 24,
-                                                fontWeight: "bold",
-                                                color: Colors[colorScheme].text
+                                                overflow: "hidden",
+                                                borderRadius: 50
                                             }}
                                         >
-                                            {lot.name || ""}
-                                        </Text>
-                                        <Text
-                                            style={{
-                                                fontSize: 20,
-                                                color: Colors[colorScheme].icon,
-                                                opacity: 0.7
-                                            }}
-                                        >
-                                            {lot.location || ""}
-                                        </Text>
+                                            <BlurView
+                                                intensity={colorScheme === "dark" ? 15 : 5}
+                                                tint={colorScheme === "dark" ? "light" : "dark"}
+                                                style={{
+                                                    padding: 5,
+                                                    transform: "rotate(-45deg)"
+                                                }}
+                                            >
+                                                <Icons
+                                                    name="send-sharp"
+                                                    size={20}
+                                                    color={Colors[colorScheme].tint}
+                                                />
+                                            </BlurView>
+                                        </View>
                                     </View>
                                     <View
                                         style={{
-                                            overflow: "hidden",
-                                            borderRadius: 50
+                                            padding: 15,
+                                            flexDirection: "row",
+                                            justifyContent: "space-between",
+                                            gap: 5
                                         }}
                                     >
-                                        <BlurView
-                                            intensity={colorScheme === "dark" ? 15 : 5}
-                                            tint={colorScheme === "dark" ? "light" : "dark"}
+                                        <View
                                             style={{
-                                                padding: 5,
-                                                transform: "rotate(-45deg)"
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                gap: 5
                                             }}
                                         >
-                                            <Icons
-                                                name="send-sharp"
+                                            <Ionicons
+                                                name="location-outline"
                                                 size={20}
                                                 color={Colors[colorScheme].tint}
                                             />
-                                        </BlurView>
+                                            <Text
+                                                style={{
+                                                    fontSize: 16,
+                                                    color: Colors[colorScheme].tabIconDefault
+                                                }}
+                                            >
+                                                {lot.distance ? lot.distance.distanceKm.toFixed(2) + " km" : t("na")}
+                                            </Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                gap: 5
+                                            }}
+                                        >
+                                            <Ionicons
+                                                name="time-outline"
+                                                size={20}
+                                                color={Colors[colorScheme].tint}
+                                            />
+                                            <Text
+                                                style={{
+                                                    fontSize: 16,
+                                                    color: Colors[colorScheme].tabIconDefault
+                                                }}
+                                            >
+                                                {lot.distance?.formatted || t("na")}
+                                            </Text>
+                                        </View>
+                                        <View
+                                            style={{
+                                                flexDirection: "row",
+                                                alignItems: "center",
+                                                gap: 5
+                                            }}
+                                        >
+                                            <Ionicons
+                                                name="car-outline"
+                                                size={20}
+                                                color={Colors[colorScheme].tint}
+                                            />
+                                            <Text
+                                                style={{
+                                                    fontSize: 16,
+                                                    color: Colors[colorScheme].tabIconDefault
+                                                }}
+                                            >
+                                                {(lot?.totalSpots || 0) - (lot?.occupiedSpots || 0)} {t("spots")}
+                                            </Text>
+                                        </View>
                                     </View>
-                                </View>
-                                <View
-                                    style={{
-                                        padding: 15,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                        gap: 5
-                                    }}
-                                >
                                     <View
                                         style={{
                                             flexDirection: "row",
+                                            justifyContent: "space-between",
                                             alignItems: "center",
+                                            paddingHorizontal: 15,
                                             gap: 5
                                         }}
                                     >
-                                        <Ionicons
-                                            name="location-outline"
-                                            size={20}
-                                            color={Colors[colorScheme].tint}
-                                        />
+                                        <View>
+                                            <Text
+                                                style={{
+                                                    fontSize: 24,
+                                                    fontWeight: "bold",
+                                                    color: Colors[colorScheme].text
+                                                }}
+                                            >
+                                                {t("vehicle_category")}
+                                            </Text>
+                                        </View>
+                                    </View>
+                                    <View
+                                        style={{
+                                            padding: 15,
+                                            paddingTop: 8,
+                                            flexDirection: "row",
+                                            justifyContent: "space-between",
+                                            gap: 5
+                                        }}
+                                    >
                                         <Text
                                             style={{
                                                 fontSize: 16,
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {lot.distance ? lot.distance.distanceKm.toFixed(2) + " km" : t("na")}
+                                            {t("width")} {"< " + lot.lotType?.maxWidth || t("na")} m
                                         </Text>
-                                    </View>
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            gap: 5
-                                        }}
-                                    >
-                                        <Ionicons
-                                            name="time-outline"
-                                            size={20}
-                                            color={Colors[colorScheme].tint}
-                                        />
                                         <Text
                                             style={{
                                                 fontSize: 16,
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {lot.distance?.formatted || t("na")}
+                                            {t("height")} {"< " + lot.lotType?.maxHeight || t("na")} m
                                         </Text>
-                                    </View>
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            gap: 5
-                                        }}
-                                    >
-                                        <Ionicons
-                                            name="car-outline"
-                                            size={20}
-                                            color={Colors[colorScheme].tint}
-                                        />
                                         <Text
                                             style={{
                                                 fontSize: 16,
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {(lot?.totalSpots || 0) - (lot?.occupiedSpots || 0)} {t("spots")}
+                                            {t("length")} {"< " + lot.lotType?.maxLength || t("na")} m
                                         </Text>
                                     </View>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        paddingHorizontal: 15,
-                                        gap: 5
-                                    }}
-                                >
-                                    <View>
+                                    <View
+                                        style={{
+                                            marginTop: 10,
+                                            paddingBottom: 30
+                                        }}
+                                    >
                                         <Text
                                             style={{
-                                                fontSize: 24,
-                                                fontWeight: "bold",
+                                                fontSize: 20,
+                                                fontWeight: "600",
+                                                paddingHorizontal: 15,
+                                                marginBottom: 10,
                                                 color: Colors[colorScheme].text
                                             }}
                                         >
-                                            {t("vehicle_category")}
+                                            {t("description")}
+                                        </Text>
+                                        <Text
+                                            style={{
+                                                fontSize: 16,
+                                                paddingHorizontal: 15,
+                                                color: Colors[colorScheme].icon,
+                                                lineHeight: 22
+                                            }}
+                                        >
+                                            {lot.lotType?.description || t("no_description_available")}
                                         </Text>
                                     </View>
-                                </View>
-                                <View
-                                    style={{
-                                        padding: 15,
-                                        paddingTop: 8,
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                        gap: 5
-                                    }}
-                                >
-                                    <Text
+                                    <View
                                         style={{
-                                            fontSize: 16,
-                                            color: Colors[colorScheme].tabIconDefault
+                                            paddingHorizontal: 15,
+                                            paddingVertical: 10
                                         }}
                                     >
-                                        {t("width")} {"< " + lot.lotType?.maxWidth || t("na")} m
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 16,
-                                            color: Colors[colorScheme].tabIconDefault
-                                        }}
-                                    >
-                                        {t("height")} {"< " + lot.lotType?.maxHeight || t("na")} m
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            fontSize: 16,
-                                            color: Colors[colorScheme].tabIconDefault
-                                        }}
-                                    >
-                                        {t("length")} {"< " + lot.lotType?.maxLength || t("na")} m
-                                    </Text>
-                                </View>
-                                <View
-                                    style={{
-                                        marginTop: 10,
-                                        paddingBottom: 30
-                                    }}
-                                >
+                                        <ReviewList
+                                            lotId={lot.id}
+                                            reviews={reviews}
+                                            isLoading={reviewLoading}
+                                        />
+                                    </View>
+                                </>
+                            </ScrollView>
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                    paddingHorizontal: 15,
+                                    paddingTop: 20
+                                }}
+                            >
+                                <View>
                                     <Text
                                         style={{
                                             fontSize: 20,
-                                            fontWeight: "600",
-                                            paddingHorizontal: 15,
-                                            marginBottom: 10,
-                                            color: Colors[colorScheme].text
+                                            fontWeight: "semibold",
+                                            color: Colors[colorScheme].icon,
+                                            opacity: 0.7
                                         }}
                                     >
-                                        {t("description")}
+                                        {t("price")}
                                     </Text>
                                     <Text
                                         style={{
                                             fontSize: 16,
-                                            paddingHorizontal: 15,
-                                            color: Colors[colorScheme].icon,
-                                            lineHeight: 22
+                                            fontWeight: "600",
+                                            color: Colors[colorScheme].tint
                                         }}
                                     >
-                                        {lot.lotType?.description || t("no_description_available")}
+                                        ${lot.pricePerHour?.toFixed(2) || "0.00"} {t("per_hr")}
                                     </Text>
                                 </View>
-                                <View
-                                    style={{
-                                        paddingHorizontal: 15,
-                                        paddingVertical: 10
+                                <Pressable
+                                    android_ripple={{
+                                        color: '#00000020'
                                     }}
-                                >
-                                    <ReviewList
-                                        lotId={lot.id}
-                                        reviews={reviews}
-                                        isLoading={reviewLoading}
-                                    />
-                                </View>
-                            </View>
-                        </ScrollView>
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                paddingHorizontal: 15,
-                                paddingTop: 20
-                            }}
-                        >
-                            <View>
-                                <Text
-                                    style={{
-                                        fontSize: 20,
-                                        fontWeight: "semibold",
-                                        color: Colors[colorScheme].icon,
-                                        opacity: 0.7
-                                    }}
-                                >
-                                    {t("price")}
-                                </Text>
-                                <Text
-                                    style={{
-                                        fontSize: 16,
-                                        fontWeight: "600",
-                                        color: Colors[colorScheme].tint
-                                    }}
-                                >
-                                    ${lot.pricePerHour?.toFixed(2) || "0.00"} {t("per_hr")}
-                                </Text>
-                            </View>
-                            <Pressable
-                                android_ripple={{
-                                    color: '#00000020'
-                                }}
-                                style={({ pressed }) => [
-                                    styles.button,
-                                    {
-                                        backgroundColor: Colors[colorScheme].tint
-                                    },
-                                    pressed ? styles.pressed : null
-                                ]}
-                                onPress={handleBook}
-                            >
-                                <Text
-                                    style={[
-                                        styles.buttonText,
+                                    style={({ pressed }) => [
+                                        styles.button,
                                         {
-                                            color: Colors[colorScheme].background
-                                        }
+                                            backgroundColor: Colors[colorScheme].tint
+                                        },
+                                        pressed ? styles.pressed : null
                                     ]}
+                                    onPress={handleBook}
                                 >
-                                    {t("book_now")}
-                                </Text>
-                            </Pressable>
+                                    <Text
+                                        style={[
+                                            styles.buttonText,
+                                            {
+                                                color: Colors[colorScheme].background
+                                            }
+                                        ]}
+                                    >
+                                        {t("book_now")}
+                                    </Text>
+                                </Pressable>
+                            </View>
                         </View>
                     </>
             }

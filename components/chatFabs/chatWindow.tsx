@@ -16,7 +16,7 @@ type Props = {
 }
 
 const ChatWindow = ({ scaleAnim, onClose }: Props) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { currentProfile } = useCurrentProfile();
 
     const BOT_USER = useMemo(() => ({
@@ -86,7 +86,8 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                                 driverId: ME?._id,
                                 latitude: location?.latitude,
                                 longitude: location?.longitude,
-                                timezoneOffset: new Date().getTimezoneOffset() * -1
+                                timezoneOffset: new Date().getTimezoneOffset() * -1,
+                                i18nLanguage: i18n.language || "en"
                             })
                         })
 
@@ -134,7 +135,8 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
         location?.latitude,
         location?.longitude,
         BOT_USER,
-        t
+        t,
+        i18n.language
     ])
 
     return (

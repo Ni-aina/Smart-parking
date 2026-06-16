@@ -1,17 +1,19 @@
 import { ProfileInterface } from "./profile";
 
+interface lotTypeInterface {
+    id: string;
+    vehicleType: string;
+    description: string;
+    maxWidth: number;
+    maxLength: number;
+    maxHeight: number;
+}
+
 export interface LotInterface {
     id: string;
     ownerId: string;
     owner: ProfileInterface;
-    lotType: {
-        id: string;
-        vehicleType: string;
-        description: string;
-        maxWidth: number;
-        maxLength: number;
-        maxHeight: number;
-    }
+    lotType:lotTypeInterface;
     name: string;
     location: string;
     locationLat: number;
@@ -25,6 +27,7 @@ export interface LotInterface {
     distance?: DistanceTimeInterface;
     distanceM?: number;
     totalLots: number;
+    rating?: number;
 }
 
 export interface LotStateInterface {

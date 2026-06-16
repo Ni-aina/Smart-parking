@@ -3,7 +3,7 @@ export function getDistanceTime(
   lon1: number | undefined,
   lat2: number | undefined,
   lon2: number | undefined,
-  speedKmh: number = 70
+  speedKmh: number = 60
 ) {
   if (!lat1 || !lon1 || !lat2 || !lon2) return;
 
@@ -40,7 +40,7 @@ export function getDistanceTime(
 
 export function getDistanceTimeFromPostGIS(
   distanceMeters: number | null | undefined,
-  speedKmh: number = 70
+  speedKmh: number = 60
 ) {
   if (distanceMeters == null) return
 

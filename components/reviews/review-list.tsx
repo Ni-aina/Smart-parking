@@ -95,7 +95,12 @@ const ReviewList = ({
                                 <Pressable
                                     onPress={() => handleDelete(item.id)}
                                     disabled={deletingId === item.id}
-                                    style={styles.deleteButton}
+                                    style={({ pressed }) => pressed ? [
+                                        styles.deleteButton,
+                                        { opacity: 0.5 }
+                                    ] :
+                                        styles.deleteButton
+                                    }
                                 >
                                     <Ionicons
                                         name="trash-outline"

@@ -70,7 +70,7 @@ export async function getReservationsByDriverId(driverId: string)
                 .select(`
                     *,
                     driver: driver_id(*),
-                    lot: lot_id(*),
+                    lot: lot_id(*, reviews("rating")),
                     vehicle: vehicle_id(*)
                 `)
                 .eq("driver_id", driverId)
@@ -80,7 +80,22 @@ export async function getReservationsByDriverId(driverId: string)
                 })
 
             if (!reservations || error) throw new Error(`Reservations fetching error, ${error.message}`);
-            const normalizedData = reservations.map(item => normalizeData(item));
+
+            const normalizedData = reservations.map(item => {
+                const reviews = item.lot?.reviews ?? []
+                const rating = reviews.length > 0
+                    ? reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
+                    : null
+                const normalized = normalizeData(item)
+                return {
+                    ...normalized,
+                    lot: {
+                        ...normalized.lot,
+                        rating
+                    }
+                }
+            })
+
             return normalizedData as ReservationInterface[];
         })()
 
@@ -103,7 +118,7 @@ export async function getBooksHistoryByDriverId(driverId: string)
                 .select(`
                     *,
                     driver: driver_id(*),
-                    lot: lot_id(*),
+                    lot: lot_id(*, reviews("rating")),
                     vehicle: vehicle_id(*)
                 `)
                 .eq("driver_id", driverId)
@@ -112,7 +127,22 @@ export async function getBooksHistoryByDriverId(driverId: string)
                 })
 
             if (!reservations) throw new Error(`Reservation fetching error, ${error.message}`);
-            const normalizedData = reservations.map(item => normalizeData(item));
+
+            const normalizedData = reservations.map(item => {
+                const reviews = item.lot?.reviews ?? []
+                const rating = reviews.length > 0
+                    ? reviews.reduce((sum: number, r: { rating: number }) => sum + r.rating, 0) / reviews.length
+                    : null
+                const normalized = normalizeData(item)
+                return {
+                    ...normalized,
+                    lot: {
+                        ...normalized.lot,
+                        rating
+                    }
+                }
+            })
+
             return normalizedData as ReservationInterface[];
         })()
 
@@ -182,7 +212,7 @@ export async function cancelReservation(reservationId: string): Promise<Reservat
                 currentReservation.status !== "pending" &&
                 currentReservation.status !== "active"
             ) throw new Error("cancel_rs_status_error");
-            
+
             const { data, error } = await supabase.from("reservations")
                 .update({ status: "cancelled" })
                 .eq("id", reservationId)
@@ -206,17 +236,17 @@ export async function cancelReservation(reservationId: string): Promise<Reservat
 export async function updateReservationToCompleted(reservationId: string)
     : Promise<boolean> {
     try {
-        const request = (async  ()=> {
+        const request = (async () => {
             const {
                 data,
                 error
             } = await supabase.from("reservations")
-            .update({
-                status: "completed"
-            })
-            .eq("id", reservationId)
-            .select()
-            .single()
+                .update({
+                    status: "completed"
+                })
+                .eq("id", reservationId)
+                .select()
+                .single()
 
             if (!data || error) throw new Error(`Failed to complete reservation, ${error?.message}`)
             return true;

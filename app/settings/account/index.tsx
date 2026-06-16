@@ -183,11 +183,12 @@ const Account = () => {
                         />
                         :
                         <View
-                            style={[styles.profilePicture, { backgroundColor: Colors[colorScheme].text }]}
+                            style={[styles.profilePicture, { backgroundColor: Colors[colorScheme].background }]}
                         >
                             <Text
                                 style={{
-                                    color: Colors[colorScheme].background,
+                                    color: Colors[colorScheme].icon,
+                                    fontWeight: "bold",
                                     fontSize: 36
                                 }}
                             >

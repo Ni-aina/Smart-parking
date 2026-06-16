@@ -151,7 +151,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                 }}
                             >
                                 <Ionicons
-                                    name="star"
+                                    name={reservation.lot.rating ? "star" : "star-outline"}
                                     color="#ffbf00"
                                     size={18}
                                 />
@@ -161,7 +161,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                         fontWeight: "bold"
                                     }}
                                 >
-                                    {(Math.random() * (5 - 3.8) + 3.8).toFixed(1)}
+                                    {reservation.lot.rating?.toFixed(1) || "0.0"}
                                 </Text>
                             </View>
                         </View>
