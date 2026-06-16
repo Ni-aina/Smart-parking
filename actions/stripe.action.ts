@@ -22,7 +22,7 @@ export async function createPaymentIntent(
     const reservationEndDate = new Date(reservation.endTime);
     const diffTime = reservationEndDate.getTime() - now.getTime();
 
-    if (diffTime < 0) throw new Error("Reservation has already ended");
+    if (diffTime < 0) throw new Error("ended_reservation_error");
 
     const { data: session } = await supabase.auth.getSession();
     const accessToken = session?.session?.access_token;

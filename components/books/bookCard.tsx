@@ -54,7 +54,11 @@ const BookCard = ({ reservation }: BookCardProps) => {
 
     useEffect(() => {
         if (cancellationError) {
-            setErrorCancelling(cancellationError.message);
+            if (cancellationError.message === "cancel_rs_status_error") {
+                setErrorCancelling(t("cancel_rs_status_error"));
+            } else {
+                setErrorCancelling(cancellationError.message);
+            }
         }
 
         const timeout = setTimeout(() => {

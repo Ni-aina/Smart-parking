@@ -222,6 +222,8 @@
     "status_failed": "Failed",
     "status_succeeded": "Succeeded",
     "status_active": "Active",
+    "cancel_rs_status_error": "Only pending or active reservations can be cancelled",
+    "ended_reservation_error": "Reservation has already ended",
     "view_details": "View Details",
     "payment_secure_payments": "🔒 Secure payments",
     "payment_fast_checkout": "⚡ Fast checkout",

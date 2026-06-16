@@ -99,9 +99,11 @@ const Checkout = () => {
                 router.push("/(tabs)/book");
             }
         } catch (error) {
-            setErrorMessage((error instanceof Error ? error.message :
-                t("unexpected_error"))
-            )
+            const errorMessage = error instanceof Error ?
+                error.message === "ended_reservation_error" ?
+                    t("ended_reservation_error") : error.message
+                : t("unexpected_error");
+            setErrorMessage(errorMessage);
         }
         finally {
             setPendingPayment(false);

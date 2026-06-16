@@ -181,7 +181,7 @@ export async function cancelReservation(reservationId: string): Promise<Reservat
             if (
                 currentReservation.status !== "pending" &&
                 currentReservation.status !== "active"
-            ) throw new Error("Only pending or active reservations can be cancelled");
+            ) throw new Error("cancel_rs_status_error");
             
             const { data, error } = await supabase.from("reservations")
                 .update({ status: "cancelled" })
