@@ -225,5 +225,10 @@
     "view_details": "View Details",
     "payment_secure_payments": "🔒 Secure payments",
     "payment_fast_checkout": "⚡ Fast checkout",
-    "payment_multiple_currencies": "🌍 Multiple currencies"
+    "payment_multiple_currencies": "🌍 Multiple currencies",
+    "chat_support": "Support",
+    "chat_assistant": "Parking Assistant",
+    "chat_greeting": "Hello! I'm your parking assistant. I can help you find and reserve a parking space. Would you like to start a new search?",
+    "chat_error": "Something went wrong, please try again later.",
+    "chat_placeholder": "Type a message..."
 }

@@ -1,6 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 
 type Props = {
@@ -8,6 +9,7 @@ type Props = {
 }
 
 const ChatHeader = ({ onClose }: Props) => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const colors = Colors[colorscheme];
 
@@ -15,7 +17,7 @@ const ChatHeader = ({ onClose }: Props) => {
         <View style={[styles.header, { backgroundColor: colors.tint }]}>
             <View style={styles.left}>
                 <View style={[styles.dot, { backgroundColor: colors.background }]} />
-                <Text style={[styles.title, { color: colors.background }]}>Support</Text>
+                <Text style={[styles.title, { color: colors.background }]}>{t("chat_support")}</Text>
             </View>
             <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
                 <Ionicons name="close" size={20} color={colors.background} />

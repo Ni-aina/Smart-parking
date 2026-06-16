@@ -4,19 +4,26 @@ import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import React, { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Animated, StyleSheet, useColorScheme, View } from "react-native";
 import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
 import ChatHeader from "./chatHeader";
 import ChatSendButton from "./chatSendButton";
 
-const BOT_USER = { _id: Math.random().toString(), name: "Parking Assistant" }
 type Props = {
     scaleAnim: Animated.Value;
     onClose: () => void;
 }
 
 const ChatWindow = ({ scaleAnim, onClose }: Props) => {
+    const { t } = useTranslation();
     const { currentProfile } = useCurrentProfile();
+
+    const BOT_USER = useMemo(() => ({
+        _id: "bot",
+        name: t("chat_assistant")
+    }), [t]);
+
     const ME = useMemo(() => currentProfile ? {
         _id: currentProfile.id,
         name: currentProfile.fullName
@@ -30,10 +37,10 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
     const colorscheme = useColorScheme() || "light";
     const colors = Colors[colorscheme];
 
-    const [messages, setMessages] = useState<IMessage[]>([
+    const [messages, setMessages] = useState<IMessage[]>(() => [
         {
             _id: 1,
-            text: "Hello! I'm your parking assistant. I can help you find and reserve a parking space. Would you like to start a new search?",
+            text: t("chat_greeting"),
             createdAt: new Date(),
             user: BOT_USER
         }
@@ -106,7 +113,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                             GiftedChat.append(prev, [
                                 {
                                     _id: Math.random().toString(),
-                                    text: "Something went wrong, please try again later.",
+                                    text: t("chat_error"),
                                     createdAt: new Date(),
                                     user: BOT_USER
                                 }
@@ -125,7 +132,9 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
     }, [
         ME?._id,
         location?.latitude,
-        location?.longitude
+        location?.longitude,
+        BOT_USER,
+        t
     ])
 
     return (
@@ -151,6 +160,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                     keyboardAvoidingViewProps={{ keyboardVerticalOffset: 160 }}
                     messagesContainerStyle={{ backgroundColor: colors.background }}
                     textInputProps={{
+                        placeholder: t("chat_placeholder"),
                         placeholderTextColor: colors.icon,
                         style: {
                             color: colors.text,

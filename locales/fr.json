@@ -225,5 +225,10 @@
     "view_details": "Voir les détails",
     "payment_secure_payments": "🔒 Paiements sécurisés",
     "payment_fast_checkout": "⚡ Paiement rapide",
-    "payment_multiple_currencies": "🌍 Devises multiples"
+    "payment_multiple_currencies": "🌍 Devises multiples",
+    "chat_support": "Support",
+    "chat_assistant": "Assistant de stationnement",
+    "chat_greeting": "Bonjour ! Je suis votre assistant de stationnement. Je peux vous aider à trouver et réserver une place de parking. Souhaitez-vous commencer une nouvelle recherche ?",
+    "chat_error": "Une erreur s'est produite, veuillez réessayer plus tard.",
+    "chat_placeholder": "Écrivez un message..."
 }
