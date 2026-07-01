@@ -1,50 +1,64 @@
-# Welcome to your Expo app 👋
+# Smart Parking
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Complete parking management system — mobile app for drivers/agents, web dashboard for owners.
 
-## Get started
+🔗 Web Admin: https://smart-parking-admin-green.vercel.app/
+📱 Mobile app available for download on the web admin page
 
-1. Install dependencies
+## Stack
 
-   ```bash
-   npm install
-   ```
+- React Native + Expo (mobile)
+- Expo Router
+- Supabase (PostgreSQL + Auth + Storage)
+- TanStack Query
+- Zustand
+- Stripe (payments)
+- i18n / react-i18next
+- Expo Location, Camera, QRCode
 
-2. Start the app
+## Features
 
-   ```bash
-   npx expo start
-   ```
+- Real-time vehicle and parking lot tracking
+- Multiple parking lot types with size limits (width, height, length)
+- Reservations with status tracking and QR-based check-in
+- Payments via Stripe with transaction and payment status
+- Subscription plans for owners with billing cycle
+- Multi-agent support per parking lot
+- Vehicle maintenance history
+- In-app messaging between users
+- Push notifications
+- Reviews and ratings per parking lot
+- Bank account management for owners
 
-In the output, you'll find options to open the app in a
+## Data Model
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- **profiles** — base user, linked to Supabase auth, has roles (driver, owner, agent)
+- **vehicles** — owned by a driver, with dimensions for lot matching
+- **vehicle_maintenances** — maintenance history per vehicle
+- **lot_types** — vehicle type categories with max dimensions
+- **parking_lots** — owned by a profile, has type, spots, price, location and agents
+- **reservations** — links driver, vehicle and lot with start/end time and status
+- **payments** — linked to a reservation, tracks amount, method and status
+- **bank_accounts** — payout account per owner
+- **subscription_plans** — available plans with features
+- **subscriptions** — active plan per owner
+- **notifications** — targeted per profile
+- **conversations** / **messages** — direct messaging between profiles
+- **reviews** — rating and feedback per lot, by a user
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Getting Started
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Set the following config variables
 
-## Learn more
+```
+supabaseUrl=
+supabaseAnonKey=
+stripePublicKey=
+webBaseUrl=
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
