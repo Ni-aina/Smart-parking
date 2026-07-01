@@ -13,6 +13,7 @@ Complete parking management system — mobile app for drivers/agents, web dashbo
 - TanStack Query
 - Zustand
 - Stripe (payments)
+- Groq (AI chatbot support)
 - i18n / react-i18next
 - Expo Location, Camera, QRCode
 
@@ -25,6 +26,7 @@ Complete parking management system — mobile app for drivers/agents, web dashbo
 - Subscription plans for owners with billing cycle
 - Multi-agent support per parking lot
 - Vehicle maintenance history
+- AI chatbot support powered by Groq for booking assistance
 - In-app messaging between users
 - Push notifications
 - Reviews and ratings per parking lot
