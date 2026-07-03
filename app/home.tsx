@@ -1,19 +1,23 @@
 import Button from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { BlurView } from "expo-blur";
+import { Colors } from "@/constants/Colors";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const HomeScreen = () => {
     const { t } = useTranslation();
+    const colorscheme = useColorScheme() || "light";
 
     return (
-        <ImageBackground
-            source={require('@/assets/images/parking.jpg')}
-            style={styles.background}
-            resizeMode="cover"
+        <View
+            style={[
+                styles.background,
+                {
+                    backgroundColor: Colors[colorscheme].background
+                }
+            ]}
         >
             <View style={styles.container}>
                 <View style={{
@@ -23,10 +27,17 @@ const HomeScreen = () => {
                     <Icons
                         name="arrow-back"
                         size={28}
-                        color="white"
+                        color={Colors[colorscheme].text}
                         onPress={() => router.replace("/")}
                     />
-                    <Text style={styles.text}>
+                    <Text
+                        style={[
+                            styles.text,
+                            {
+                                color: Colors[colorscheme].text
+                            }
+                        ]}
+                    >
                         {t('find_the_best_parking_spot')}
                     </Text>
                 </View>
@@ -36,29 +47,35 @@ const HomeScreen = () => {
                         overflow: 'hidden'
                     }}
                 >
-                    <BlurView
-                        intensity={95}
-                        tint="dark"
-                        style={{
-                           padding: 10
-                        }}
+                    <Text
+                        style={[
+                            styles.description,
+                            {
+                                color: Colors[colorscheme].text
+                            }
+                        ]}
                     >
-                        <Text style={styles.description}>
-                            {t('find_the_best_parking_spot_description')}
-                        </Text>
-                    </BlurView>
+                        {t('find_the_best_parking_spot_description')}
+                    </Text>
                 </View>
                 <View style={styles.accountContainer}>
                     <Button
                         title={t("let's_get_started")}
                         onPress={() => router.navigate("/(tabs)")}
                     />
-                    <Text style={styles.description}>
+                    <Text
+                        style={[
+                            styles.description,
+                            {
+                                color: Colors[colorscheme].text
+                            }
+                        ]}
+                    >
                         {t("dont_have_an_account")} {" "}
                         <Link
                             href="/auth/signUp"
                             style={{
-                                color: "#FFFFFF",
+                                color: Colors[colorscheme].text,
                                 textDecorationLine: "underline"
                             }}
                         >
@@ -67,8 +84,8 @@ const HomeScreen = () => {
                     </Text>
                 </View>
             </View>
-            <StatusBar style="light" />
-        </ImageBackground>
+            <StatusBar style="auto" />
+        </View>
     )
 }
 
@@ -85,7 +102,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 28,
-        maxWidth: '70%',
+        maxWidth: '85%',
         textAlign: 'center',
         color: 'white',
         fontWeight: 'bold'
@@ -94,7 +111,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         maxWidth: '90%',
         textAlign: 'justify',
-        color: 'white'
     },
     accountContainer: {
         gap: 15,
