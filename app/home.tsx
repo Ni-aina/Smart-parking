@@ -4,7 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, Text, useColorScheme, View } from "react-native";
+import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const HomeScreen = () => {
     const { t } = useTranslation();
@@ -20,6 +20,13 @@ const HomeScreen = () => {
             ]}
         >
             <View style={styles.container}>
+                <Image
+                    source={require("../assets/images/parking-lot.png")}
+                    style={{
+                        width: 240,
+                        height: 180
+                    }}
+                />
                 <View style={{
                     flexDirection: "row",
                     alignItems: "flex-start"
