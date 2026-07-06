@@ -18,7 +18,7 @@ import {
 interface BookFormProps {
     availableSpots: number;
     lot: LotStateInterface;
-    setLot: (lot: LotStateInterface)=> void;
+    setLot: (lot: LotStateInterface) => void;
 }
 
 const BookForm = ({
@@ -26,7 +26,7 @@ const BookForm = ({
     lot,
     setLot
 }: BookFormProps) => {
-    
+
     const { t } = useTranslation()
     const colorscheme = useColorScheme() || "light";
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -206,6 +206,7 @@ const BookForm = ({
                     <TextInput
                         onChangeText={(text) => {
                             const duration = Math.round(Number(text)) || "";
+                            if (+duration < 0 || +duration > 10000) return;
                             setLot({
                                 ...lot,
                                 durationHours: duration.toString()
