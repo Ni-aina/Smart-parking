@@ -17,7 +17,7 @@ import {
 } from "react-native";
 
 interface Props {
-    lotId: number;
+    lotId: string;
     reviews: ReviewInterface[];
     isLoading: boolean;
 }

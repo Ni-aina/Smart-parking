@@ -1,6 +1,6 @@
 import { ProfileInterface } from "./profile";
 
-interface lotTypeInterface {
+export interface lotTypeInterface {
     id: string;
     vehicleType: string;
     description: string;
@@ -26,7 +26,6 @@ export interface LotInterface {
     createdAt: string;
     distance?: DistanceTimeInterface;
     distanceM?: number;
-    totalLots: number;
     rating?: number;
 }
 
