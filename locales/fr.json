@@ -245,5 +245,18 @@
     "review_feedback_placeholder": "Partagez votre expérience avec ce parking...",
     "submit_review": "Soumettre l'avis",
     "submitting": "Envoi en cours...",
-    "no_reviews_yet": "Aucun avis pour le moment"
+    "no_reviews_yet": "Aucun avis pour le moment",
+    "message_no_conversations": "Aucune conversation pour le moment",
+    "message_no_messages_yet": "Aucun message pour le moment",
+    "message_select_conversation": "Sélectionnez une conversation",
+    "message_start_chat": "Commencez la conversation",
+    "message_type_placeholder": "Écrivez un message...",
+    "message_you_prefix": "Vous",
+    "time_now": "Maintenant",
+    "time_minute_ago": "Il y a 1 minute",
+    "time_minutes_ago": "Il y a {{count}} minutes",
+    "time_hour_ago": "Il y a 1 heure",
+    "time_hours_ago": "Il y a {{count}} heures",
+    "time_day_ago": "Il y a 1 jour",
+    "time_days_ago": "Il y a {{count}} jours"
 }

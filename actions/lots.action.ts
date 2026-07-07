@@ -17,6 +17,7 @@ export async function getParkingById(
                 .single(); 
 
             if (!parking || error) throw new Error(`The parking cannot be find, ${error?.message}`);
+            
             const normalized = normalizeData(parking);
             return normalized as LotInterface;
         })()

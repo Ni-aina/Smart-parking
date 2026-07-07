@@ -30,7 +30,6 @@ const useLot = ({ id }: { id: string }) => {
 
     const lotFormated: LotInterface = {
         id: lot?.id || "",
-        ownerId: lot?.ownerId || "",
         owner: lot?.owner as ProfileInterface,
         lotType: lot?.lotType as lotTypeInterface,
         name: lot?.name || "",

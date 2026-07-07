@@ -11,7 +11,6 @@ export interface lotTypeInterface {
 
 export interface LotInterface {
     id: string;
-    ownerId: string;
     owner: ProfileInterface;
     lotType:lotTypeInterface;
     name: string;

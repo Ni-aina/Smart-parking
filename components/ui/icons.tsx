@@ -6,14 +6,24 @@ interface IconsProps {
     size?: number,
     color?: string,
     style?: object,
-    onPress?: ([...args]: any) => void
+    onPress?: ([...args]: any) => void,
+    disable?: boolean
 }
 
-const Icons = ({ name, size, color, style, onPress }: IconsProps) => {
+const Icons = ({
+    name,
+    size,
+    color,
+    style,
+    onPress,
+    disable
+}: IconsProps) => {
+
     return (
         <Pressable
             style={({ pressed }) => [styles.icon, pressed && styles.pressed]}
             onPress={onPress}
+            disabled={disable}
         >
             <Ionicons name={name} size={size || 24} color={color} style={style} />
         </Pressable>
@@ -28,5 +38,5 @@ const styles = StyleSheet.create({
         padding: 5
     }
 })
- 
+
 export default Icons;

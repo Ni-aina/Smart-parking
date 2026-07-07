@@ -1,21 +1,25 @@
+import { createConversation } from "@/actions/message.action";
 import ReviewList from "@/components/reviews/review-list";
+import ErrorModal from "@/components/ui/errorModal";
 import Icons from "@/components/ui/icons";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useLot from "@/hooks/lots/useLot";
 import useReviews from "@/hooks/reviews/useReviews";
+import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { defaultParking } from "@/lib/defaultImages";
 import { useLotStore } from "@/stores/zustand/lot";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BlurView } from 'expo-blur';
 import * as NavigationBar from 'expo-navigation-bar';
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { Href, useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Skeleton } from "moti/skeleton";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+    ActivityIndicator,
     Dimensions,
     Image,
     ImageBackground,
@@ -45,6 +49,33 @@ const LotDetailsScreen = () => {
     } = useLot({ id })
 
     const [loadingImage, setLoadingImage] = useState(true);
+
+    const { currentProfile } = useCurrentProfile();
+    const [onNewConversation, setOnNewConversation] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("")
+
+    const handleMessageOwner = async () => {
+        if (!currentProfile?.id || !lot.owner.id) return;
+
+        try {
+            setOnNewConversation(true)
+            const conversation = await createConversation({
+                senderId: currentProfile.id,
+                receiverId: lot.owner.id
+            })
+            router.push({
+                pathname: "/messages/[id]",
+                params: { id: String(conversation.id) }
+            } as Href)
+        } catch {
+            setErrorMessage(t("chat_error"))
+        } finally {
+            setOnNewConversation(false)
+            setTimeout(() => {
+                setErrorMessage("")
+            }, 3000)
+        }
+    }
 
     const handleBook = () => {
         setLot({
@@ -294,11 +325,20 @@ const LotDetailsScreen = () => {
                                                     transform: "rotate(-45deg)"
                                                 }}
                                             >
-                                                <Icons
-                                                    name="send-sharp"
-                                                    size={20}
-                                                    color={Colors[colorScheme].tint}
-                                                />
+                                                {
+                                                    onNewConversation ?
+                                                        <ActivityIndicator
+                                                            size={28}
+                                                            color={Colors[colorScheme].tint}
+                                                        />
+                                                        :
+                                                        <Icons
+                                                            onPress={handleMessageOwner}
+                                                            name="send-sharp"
+                                                            size={20}
+                                                            color={Colors[colorScheme].tint}
+                                                        />
+                                                }
                                             </BlurView>
                                         </View>
                                     </View>
@@ -530,6 +570,12 @@ const LotDetailsScreen = () => {
                     </>
             }
             <StatusBar style="auto" />
+
+            <ErrorModal
+                visible={!!errorMessage}
+                message={errorMessage}
+                onClose={() => setErrorMessage("")}
+            />
         </View>
     )
 }
