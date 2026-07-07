@@ -124,7 +124,7 @@ const ConversationItem = ({
                     style={[styles.lastMessage, { color: colors.icon }]}
                 >
                     {lastMessage?.content
-                        ? `${isMine ? t("message_you_prefix") : otherUser?.fullName?.split(" ")[0] || ""}${isMine ? ": " : ""}${lastMessage.content}`
+                        ? `${isMine ? t("message_you_prefix") : ""}${isMine ? ": " : ""}${lastMessage.content}`
                         : t("message_no_messages_yet")
                     }
                 </Text>
@@ -157,42 +157,45 @@ const MessageScreen = () => {
         } as Href);
     }
 
-    if (isLoading) return <LoaderSkeleton />
-
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
             <Header title={t("messages")} />
-            <View style={[styles.inboxShell, isWide && styles.inboxShellWide]}>
-                <View style={[styles.listPane, isWide && { maxWidth: 460 }]}>
-                    <FlatList
-                        data={sortedConversations}
-                        keyExtractor={item => item.id.toString()}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={styles.conversationList}
-                        ListEmptyComponent={
-                            <NoDataFound
-                                iconName="chatbubbles-outline"
-                                message={t("message_no_conversations")}
+            {
+                isLoading ?
+                    <LoaderSkeleton />
+                    :
+                    <View style={[styles.inboxShell, isWide && styles.inboxShellWide]}>
+                        <View style={[styles.listPane, isWide && { maxWidth: 460 }]}>
+                            <FlatList
+                                data={sortedConversations}
+                                keyExtractor={item => item.id.toString()}
+                                showsVerticalScrollIndicator={false}
+                                contentContainerStyle={styles.conversationList}
+                                ListEmptyComponent={
+                                    <NoDataFound
+                                        iconName="chatbubbles-outline"
+                                        message={t("message_no_conversations")}
+                                    />
+                                }
+                                renderItem={({ item }) => (
+                                    <ConversationItem
+                                        conversation={item}
+                                        currentUserId={currentProfile?.id || ""}
+                                        onPress={() => openConversation(item.id)}
+                                    />
+                                )}
                             />
-                        }
-                        renderItem={({ item }) => (
-                            <ConversationItem
-                                conversation={item}
-                                currentUserId={currentProfile?.id || ""}
-                                onPress={() => openConversation(item.id)}
-                            />
+                        </View>
+                        {isWide && (
+                            <View style={[styles.emptyThreadPane, { backgroundColor: colors.gray200 }]}>
+                                <Ionicons name="chatbubble-ellipses-outline" size={56} color={colors.icon} />
+                                <Text style={[styles.emptyThreadTitle, { color: colors.text }]}>
+                                    {t("message_select_conversation")}
+                                </Text>
+                            </View>
                         )}
-                    />
-                </View>
-                {isWide && (
-                    <View style={[styles.emptyThreadPane, { backgroundColor: colors.gray200 }]}>
-                        <Ionicons name="chatbubble-ellipses-outline" size={56} color={colors.icon} />
-                        <Text style={[styles.emptyThreadTitle, { color: colors.text }]}>
-                            {t("message_select_conversation")}
-                        </Text>
                     </View>
-                )}
-            </View>
+            }
         </View>
     )
 }

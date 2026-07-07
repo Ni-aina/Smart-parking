@@ -1,7 +1,9 @@
+import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useMessages from "@/hooks/messages/useMessages";
+import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import { MessageInterface } from "@/types/message";
 import { ProfileInterface } from "@/types/profile";
 import {
@@ -14,9 +16,9 @@ import { useLocalSearchParams } from "expo-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+    ActivityIndicator,
     FlatList,
     KeyboardAvoidingView,
-    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -114,6 +116,9 @@ const ConversationThreadScreen = () => {
     const { id } = useLocalSearchParams<{ id: string }>();
     const listRef = useRef<FlatList<MessageInterface>>(null);
     const [message, setMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const isKeyboardVisible = useKeyboardVisible();
 
     const {
         conversation,
@@ -146,7 +151,11 @@ const ConversationThreadScreen = () => {
             })
             setMessage("");
         } catch {
-            alert(t("chat_error"));
+            setErrorMessage(t("chat_error"));
+        } finally {
+            setTimeout(() => {
+                setErrorMessage("")
+            }, 3000)
         }
     }
 
@@ -157,73 +166,99 @@ const ConversationThreadScreen = () => {
         }, 80);
     }, [messages.length])
 
-    if (isLoading) return <LoaderSkeleton />
-
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : undefined}
-            style={[styles.container, { backgroundColor: colors.background }]}
+        <View
+            style={styles.container}
         >
-            <Header
-                title={otherUser?.fullName || t("messages")}
-                rightIcon={<Avatar profile={otherUser} />}
-            />
-            <View style={styles.thread}>
-                <FlatList
-                    ref={listRef}
-                    data={messages}
-                    keyExtractor={item => item.id.toString()}
-                    contentContainerStyle={styles.messagesList}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({ item, index }) => (
-                        <MessageBubble
-                            message={item}
-                            previousMessage={messages[index - 1]}
-                            isMine={item.senderId === currentProfile?.id}
-                            locale={i18n.language}
-                        />
-                    )}
-                    ListEmptyComponent={
-                        <View style={styles.emptyMessages}>
-                            <Ionicons name="chatbubble-outline" size={54} color={colors.icon} />
-                            <Text style={[styles.emptyText, { color: colors.text }]}>
-                                {t("message_start_chat")}
-                            </Text>
-                        </View>
-                    }
+            <View style={{ paddingHorizontal: 20 }}>
+                <Header
+                    title={otherUser?.fullName || t("messages")}
+                    rightIcon={<Avatar profile={otherUser} />}
                 />
-                <View style={[styles.composer, { backgroundColor: colors.gray200 }]}>
-                    <TextInput
-                        value={message}
-                        onChangeText={setMessage}
-                        placeholder={t("message_type_placeholder")}
-                        placeholderTextColor={colors.icon}
-                        multiline
-                        style={[styles.input, { color: colors.text }]}
-                    />
-                    <Pressable
-                        disabled={!message.trim() || isSending}
-                        onPress={submitMessage}
-                        style={({ pressed }) => [
-                            styles.sendButton,
-                            { backgroundColor: colors.tint },
-                            (pressed || !message.trim() || isSending) && styles.pressed
-                        ]}
-                    >
-                        <Ionicons name="send" size={20} color={colors.background} />
-                    </Pressable>
-                </View>
             </View>
-        </KeyboardAvoidingView>
+            <KeyboardAvoidingView
+                style={{
+                    flex: 1,
+                    paddingHorizontal: 20,
+                    backgroundColor: colors.background
+                }}
+                behavior={isKeyboardVisible ? "padding" : undefined}
+            >
+                {
+                    isLoading ?
+                        <LoaderSkeleton />
+                        :
+                        <View style={styles.thread}>
+                            <FlatList
+                                ref={listRef}
+                                data={messages}
+                                keyExtractor={item => item.id.toString()}
+                                contentContainerStyle={styles.messagesList}
+                                showsVerticalScrollIndicator={false}
+                                renderItem={({ item, index }) => (
+                                    <MessageBubble
+                                        message={item}
+                                        previousMessage={messages[index - 1]}
+                                        isMine={item.senderId === currentProfile?.id}
+                                        locale={i18n.language}
+                                    />
+                                )}
+                                ListEmptyComponent={
+                                    <View style={styles.emptyMessages}>
+                                        <Ionicons name="chatbubble-outline" size={54} color={colors.icon} />
+                                        <Text style={[styles.emptyText, { color: colors.text }]}>
+                                            {t("message_start_chat")}
+                                        </Text>
+                                    </View>
+                                }
+                            />
+                            <View style={[styles.composer, { backgroundColor: colors.gray100 }]}>
+                                <TextInput
+                                    value={message}
+                                    onChangeText={setMessage}
+                                    placeholder={t("message_type_placeholder")}
+                                    placeholderTextColor={colors.icon}
+                                    style={[styles.input, { color: colors.text }]}
+                                    multiline
+                                />
+                                <Pressable
+                                    disabled={!message.trim() || isSending}
+                                    onPress={submitMessage}
+                                    style={({ pressed }) => [
+                                        styles.sendButton,
+                                        { backgroundColor: colors.background },
+                                        (pressed || !message.trim() || isSending) && styles.pressed
+                                    ]}
+                                >
+                                    {
+                                        isSending ?
+                                            <ActivityIndicator
+                                                size={28}
+                                                color={Colors[colorscheme].text}
+                                            />
+                                            :
+                                            <Ionicons name="send" size={20} color={colors.text} />
+                                    }
+                                </Pressable>
+                            </View>
+                        </View>
+                }
+            </KeyboardAvoidingView>
+
+            <ErrorModal
+                visible={!!errorMessage}
+                message={errorMessage}
+                onClose={() => setErrorMessage("")}
+            />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 20,
         paddingTop: 48,
-        gap: 14
+        gap: 10
     },
     thread: {
         flex: 1,
@@ -246,7 +281,7 @@ const styles = StyleSheet.create({
         justifyContent: "flex-end"
     },
     messageBubble: {
-        borderRadius: 8,
+        borderRadius: 21,
         paddingHorizontal: 14,
         paddingVertical: 10,
         maxWidth: "100%"
@@ -279,7 +314,7 @@ const styles = StyleSheet.create({
     },
     composer: {
         minHeight: 54,
-        borderRadius: 8,
+        borderRadius: 21,
         flexDirection: "row",
         alignItems: "flex-end",
         gap: 10,
@@ -298,6 +333,7 @@ const styles = StyleSheet.create({
         width: 42,
         height: 42,
         borderRadius: 21,
+        transform: [{ rotate: "-45deg" }],
         alignItems: "center",
         justifyContent: "center"
     },

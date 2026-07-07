@@ -54,8 +54,11 @@ const Header = ({
                 style={{
                     fontSize: 20,
                     fontWeight: "600",
-                    color: Colors[colorscheme].text
+                    color: Colors[colorscheme].text,
+                    maxWidth: "75%"
                 }}
+                numberOfLines={1}
+                ellipsizeMode="tail"
             >
                 {title}
             </Text>
