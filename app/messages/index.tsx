@@ -9,7 +9,6 @@ import { formatRelativeMessageTime } from "@/utils/messageTime";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { Href, useRouter } from "expo-router";
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
     FlatList,
@@ -148,8 +147,6 @@ const MessageScreen = () => {
         currentProfile
     } = useConversations();
 
-    const sortedConversations = useMemo(() => conversations, [conversations]);
-
     const openConversation = (conversationId: number) => {
         router.push({
             pathname: "/messages/[id]",
@@ -167,7 +164,7 @@ const MessageScreen = () => {
                     <View style={[styles.inboxShell, isWide && styles.inboxShellWide]}>
                         <View style={[styles.listPane, isWide && { maxWidth: 460 }]}>
                             <FlatList
-                                data={sortedConversations}
+                                data={conversations}
                                 keyExtractor={item => item.id.toString()}
                                 showsVerticalScrollIndicator={false}
                                 contentContainerStyle={styles.conversationList}
