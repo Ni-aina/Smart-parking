@@ -159,7 +159,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
                     isTyping={pending}
                     user={ME}
                     isSendButtonAlwaysVisible
-                    keyboardAvoidingViewProps={{ keyboardVerticalOffset: 160 }}
+                    keyboardAvoidingViewProps={{ keyboardVerticalOffset: 165 }}
                     messagesContainerStyle={{ backgroundColor: colors.background }}
                     textInputProps={{
                         placeholder: t("chat_placeholder"),

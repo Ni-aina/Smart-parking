@@ -21,7 +21,14 @@ const ChatSendButton = (props: SendProps<IMessage>) => {
                 style={[styles.button, { backgroundColor: colors.gray200 }]}
                 onPress={() => props.onSend?.({ text: props.text?.trim() ?? "" }, true)}
             >
-                <Ionicons name="send" size={16} color={colors.tint} />
+                <Ionicons
+                    name="send"
+                    size={16}
+                    color={colors.tint}
+                    style={{
+                        transform: [{ rotate: "-45deg" }]
+                    }}
+                />
             </TouchableOpacity>
         </View>
     )
