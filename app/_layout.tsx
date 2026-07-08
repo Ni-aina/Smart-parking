@@ -3,8 +3,8 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import Loading from "@/components/ui/loading";
-import { stripePublicKey } from "@/config";
 import { initI18n } from "@/i18n";
+import { stripePublicKey } from "@/lib/config";
 import { AuthContextProvider } from "@/stores/context/AuthContext";
 import { TabsHistoryContextProvider } from "@/stores/context/tabsHistoryContext";
 import { ThemeProvider } from "@/stores/context/ThemeContext";

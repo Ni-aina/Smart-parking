@@ -1,6 +1,6 @@
-import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import { webBaseUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import React, { useCallback, useMemo, useState } from "react";

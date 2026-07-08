@@ -1,7 +1,7 @@
 import { createProfile } from "@/actions/profile.action";
 import { createUser } from "@/actions/user.action";
-import { webBaseUrl } from "@/config";
 import { Colors } from "@/constants/Colors";
+import { webBaseUrl } from "@/lib/config";
 import { RegisterType } from "@/types/signUp";
 import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";

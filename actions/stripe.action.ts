@@ -1,4 +1,4 @@
-import { webBaseUrl } from "@/config";
+import { webBaseUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 import { getReservationById } from "./reservation.action";
 
