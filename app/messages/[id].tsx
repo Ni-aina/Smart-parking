@@ -1,6 +1,5 @@
 import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
-import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useMessages from "@/hooks/messages/useMessages";
 import useKeyboardVisible from "@/hooks/useKeyboardVisible";
@@ -186,7 +185,17 @@ const ConversationThreadScreen = () => {
             >
                 {
                     isLoading ?
-                        <LoaderSkeleton />
+                        <View
+                            style={{
+                                flex: 1,
+                                justifyContent: "center"
+                            }}
+                        >
+                            <ActivityIndicator
+                                size="large"
+                                color={Colors[colorscheme].tint}
+                            />
+                        </View>
                         :
                         <View style={styles.thread}>
                             <FlatList

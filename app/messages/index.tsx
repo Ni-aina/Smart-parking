@@ -1,6 +1,5 @@
 import NoDataFound from "@/components/NoDataFound";
 import Header from "@/components/ui/header";
-import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useConversations from "@/hooks/messages/useConversations";
 import { ConversationInterface } from "@/types/message";
@@ -11,6 +10,7 @@ import { Image } from "expo-image";
 import { Href, useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import {
+    ActivityIndicator,
     FlatList,
     Pressable,
     StyleSheet,
@@ -159,7 +159,17 @@ const MessageScreen = () => {
             <Header title={t("messages")} />
             {
                 isLoading ?
-                    <LoaderSkeleton />
+                    <View
+                        style={{
+                            flex: 1,
+                            justifyContent: "center"
+                        }}
+                    >
+                        <ActivityIndicator
+                            size="large"
+                            color={Colors[colorscheme].tint}
+                        />
+                    </View>
                     :
                     <View style={[styles.inboxShell, isWide && styles.inboxShellWide]}>
                         <View style={[styles.listPane, isWide && { maxWidth: 460 }]}>
