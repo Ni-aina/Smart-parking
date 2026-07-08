@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import useVehicles from "@/hooks/vehicles/useVehicles";
 import { VehicleInterface } from "@/types/vehicle";
 import { Controller, useForm } from "react-hook-form";
@@ -27,6 +28,8 @@ const VehicleForm = ({
     const { t } = useTranslation()
     const colorScheme = useColorScheme() || "light";
     const { currentProfile } = useCurrentProfile();
+
+    const isKeyboardVisible = useKeyboardVisible();
 
     const {
         handleCreate,
@@ -71,8 +74,11 @@ const VehicleForm = ({
         <>
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                keyboardVerticalOffset={80}
+                behavior={
+                    Platform.OS === "ios" ? "padding" :
+                        isKeyboardVisible ? "height" : undefined
+                }
+                keyboardVerticalOffset={90}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.contentForm}>
