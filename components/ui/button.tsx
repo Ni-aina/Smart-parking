@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { useEffect, useState } from "react";
 import { Dimensions, Pressable, StyleSheet, Text, useColorScheme } from "react-native";
 
 interface ButtonProps {
@@ -7,20 +8,22 @@ interface ButtonProps {
     disabled?: boolean;
 }
 
-const Button = ({ 
-    title, 
+const Button = ({
+    title,
     onPress,
     disabled
 }: ButtonProps) => {
-    const colorScheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() || "light";
+    const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
+
+    useEffect(() => {
+        setColorScheme(colorscheme);
+    }, [colorscheme])
 
     return (
         <Pressable
             onPress={onPress}
             disabled={disabled}
-            android_ripple={{
-                color: '#00000020'
-            }}
             style={({ pressed }) => [
                 styles.button,
                 {

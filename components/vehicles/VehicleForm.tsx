@@ -7,7 +7,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
     KeyboardAvoidingView,
-    Platform,
     ScrollView,
     StyleSheet,
     Text,
@@ -74,11 +73,7 @@ const VehicleForm = ({
         <>
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={
-                    Platform.OS === "ios" ? "padding" :
-                        isKeyboardVisible ? "height" : undefined
-                }
-                keyboardVerticalOffset={90}
+                behavior={isKeyboardVisible ? "padding" : undefined}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.contentForm}>
@@ -343,16 +338,10 @@ const VehicleForm = ({
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-            <View
-                style={{
-                    paddingBottom: 10
-                }}
-            >
-                <Button
-                    title={watch("id") ? t("update_vehicle_btn") : t("add_vehicle_btn")}
-                    onPress={handleSubmit(onSubmit)}
-                />
-            </View>
+            <Button
+                title={watch("id") ? t("update_vehicle_btn") : t("add_vehicle_btn")}
+                onPress={handleSubmit(onSubmit)}
+            />
             {
                 (isCreating || isUpdating) &&
                 <Loading />
@@ -364,7 +353,7 @@ const VehicleForm = ({
 const styles = StyleSheet.create({
     contentForm: {
         gap: 10,
-        paddingBottom: 15
+        paddingBottom: 40
     },
     inputForm: {
         borderWidth: 0.5,

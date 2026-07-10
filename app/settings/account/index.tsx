@@ -6,6 +6,7 @@ import Icons from "@/components/ui/icons";
 import Loading from "@/components/ui/loading";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import { ProfileUpdateInterface } from "@/types/profile";
 import { useQueryClient } from "@tanstack/react-query";
 import * as ImagePicker from "expo-image-picker";
@@ -15,7 +16,7 @@ import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
-    Keyboard,
+    KeyboardAvoidingView,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -37,6 +38,8 @@ const Account = () => {
     const [isPending, setIsPending] = useState(false);
     const [savingError, setSavingError] = useState("");
     const [loadingImage, setLoadingImage] = useState(!!currentProfile?.urlImage);
+
+    const isKeyboardVisible = useKeyboardVisible();
 
     const {
         control,
@@ -120,21 +123,6 @@ const Account = () => {
         }
     }
 
-    const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-    useEffect(() => {
-        const show = Keyboard.addListener("keyboardDidShow", (e) => {
-            setKeyboardHeight(e.endCoordinates.height)
-        })
-        const hide = Keyboard.addListener("keyboardDidHide", () => {
-            setKeyboardHeight(0)
-        })
-        return () => {
-            show.remove()
-            hide.remove()
-        }
-    }, [])
-
     useEffect(() => {
         if (!savingError) return;
 
@@ -204,7 +192,10 @@ const Account = () => {
                     size={20}
                 />
             </Pressable>
-            <View style={{ flex: 1 }}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={isKeyboardVisible ? "padding" : undefined}
+            >
                 <ScrollView
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingBottom: 20 }}
@@ -317,13 +308,15 @@ const Account = () => {
 
                 <View
                     style={{
-                        paddingBottom: keyboardHeight > 0 ? keyboardHeight + 12 : 40,
-                        paddingTop: 12
+                        paddingBottom: isKeyboardVisible ? 12 : 0
                     }}
                 >
-                    <Button title={t("update_profile")} onPress={handleSubmit(onSubmit)} />
+                    <Button
+                        title={t("update_profile")}
+                        onPress={handleSubmit(onSubmit)}
+                    />
                 </View>
-            </View>
+            </KeyboardAvoidingView>
 
             {(isPending || uploadingImage) && <Loading />}
 
@@ -344,11 +337,12 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         paddingTop: 40,
+        paddingBottom: 50,
         gap: 15
     },
     profileContainer: {
         position: "relative",
-        marginVertical: 25,
+        marginVertical: 10,
         justifyContent: "center",
         alignItems: "center"
     },

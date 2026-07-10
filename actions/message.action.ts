@@ -5,7 +5,6 @@ import {
     MessageCreateInterface,
     MessageInterface
 } from "@/types/message";
-import { ProfileInterface } from "@/types/profile";
 import { isUUID } from "@/utils/isUUID";
 import { denormalizeData, normalizeData } from "@/utils/normalizeData";
 import { rejectTimeout } from "@/utils/rejectTimeout";
@@ -40,7 +39,7 @@ export async function getConversationsByUserId(userId: string): Promise<Conversa
                     .select("*")
                     .in("conversation_id", conversationIds)
                     .order("created_at", { ascending: false })
-                : { data: [], error: null };
+                : { data: [], error: null }
 
             if (messageError) throw new Error(`Messages fetching error, ${messageError.message}`);
 
@@ -50,7 +49,7 @@ export async function getConversationsByUserId(userId: string): Promise<Conversa
                     acc[normalized.conversationId] = normalized;
                 }
                 return acc;
-            }, {});
+            }, {})
 
             return conversations
                 .map(item => {
@@ -58,13 +57,13 @@ export async function getConversationsByUserId(userId: string): Promise<Conversa
                     return {
                         ...normalized,
                         lastMessage: lastMessagesByConversation[normalized.id]
-                    };
+                    }
                 })
                 .sort((a, b) => {
                     const aTime = a.lastMessage?.createdAt ?? a.createdAt;
                     const bTime = b.lastMessage?.createdAt ?? b.createdAt;
                     return new Date(bTime).getTime() - new Date(aTime).getTime();
-                });
+                })
         })()
 
         return Promise.race([
@@ -182,7 +181,7 @@ export async function sendMessage(message: MessageCreateInterface): Promise<Mess
         const payload = denormalizeData({
             ...message,
             contentType: message.contentType ?? "text"
-        });
+        })
 
         const request = (async () => {
             const { data: newMessage, error } = await supabase
@@ -223,41 +222,6 @@ export async function markConversationMessagesAsRead(
 
             if (error) throw new Error(`Mark messages as read error, ${error.message}`);
             return true;
-        })()
-
-        return Promise.race([
-            request,
-            rejectTimeout()
-        ])
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function getProfilesForConversation(
-    currentUserId: string,
-    searchTerm = ""
-): Promise<ProfileInterface[]> {
-    try {
-        if (!isUUID(currentUserId)) throw new Error("You have to be authenticated");
-
-        const request = (async () => {
-            let query = supabase
-                .from("profiles")
-                .select("*")
-                .neq("id", currentUserId)
-                .order("full_name", { ascending: true })
-                .limit(30);
-
-            if (searchTerm.trim()) {
-                const term = searchTerm.trim();
-                query = query.or(`full_name.ilike.%${term}%,email_address.ilike.%${term}%`);
-            }
-
-            const { data: profiles, error } = await query;
-
-            if (!profiles || error) throw new Error(`Profiles fetching error, ${error?.message}`);
-            return profiles.map(item => normalizeData(item) as ProfileInterface);
         })()
 
         return Promise.race([

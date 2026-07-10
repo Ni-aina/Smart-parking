@@ -31,7 +31,7 @@ const VehicleList = () => {
 
     const handleContinue = () => {
         if (!vehicleId) {
-            setError("Please select a vehicle");
+            setError(t("please_select_vehicle"));
             return;
         }
         router.push("/reservations/bookDetails");

@@ -1,8 +1,10 @@
 import { createProfile } from "@/actions/profile.action";
 import { createUser } from "@/actions/user.action";
 import { Colors } from "@/constants/Colors";
+import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import { webBaseUrl } from "@/lib/config";
 import { RegisterType } from "@/types/signUp";
+import { Ionicons } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -10,7 +12,6 @@ import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import {
     KeyboardAvoidingView,
-    Platform,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -35,6 +36,8 @@ const SignUpForm = () => {
     const [isPending, setIsPending] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [savingError, setSavingError] = useState("");
+
+    const isKeyboardVisible = useKeyboardVisible();
 
     const {
         control,
@@ -96,8 +99,7 @@ const SignUpForm = () => {
         <>
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                keyboardVerticalOffset={80}
+                behavior={isKeyboardVisible ? "padding" : undefined}
             >
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.contentInfo}>
@@ -268,52 +270,66 @@ const SignUpForm = () => {
                     gap: 10
                 }}
             >
-                <Button title={t("sign_up")} onPress={handleSubmit(onSubmit)} />
-                <View
-                    style={{
-                        justifyContent: "flex-end",
-                        gap: 8
-                    }}
+                <Pressable
+                    style={({ pressed }) =>
+                        [
+                            {
+                                flexDirection: "row",
+                                justifyContent: "flex-end",
+                                alignItems: "center",
+                                gap: 5
+                            },
+                            pressed && {
+                                opacity: 0.7
+                            }
+                        ]
+                    }
+                    onPress={() => Linking.openURL(`${webBaseUrl}`)}
                 >
-                    <Pressable
-                        style={({ pressed }) => pressed ? {
-                            opacity: 0.7
-                        } :
-                            {}
-                        }
-                        onPress={() => Linking.openURL(`${webBaseUrl}`)}
+                    <Ionicons
+                        size={14}
+                        name="arrow-forward"
+                        color={Colors[colorScheme].tint}
+                        style={{
+                            transform: [{
+                                rotate: "-45deg"
+                            }]
+                        }}
+                    />
+                    <Text
+                        style={{
+                            fontSize: 14,
+                            color: Colors[colorScheme].tint,
+                            textAlign: "right"
+                        }}
                     >
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                textDecorationLine: "underline",
-                                color: Colors[colorScheme].tint,
-                                textAlign: "right"
-                            }}
-                        >
-                            {t("want_to_become_parking_owner")}
-                        </Text>
-                    </Pressable>
-                    <Pressable
-                        style={({ pressed }) => pressed ? {
-                            opacity: 0.7
-                        } :
-                            {}
-                        }
-                        onPress={() => router.push("/auth/signIn")}
+                        {t("manage_your_own_parking")}
+                    </Text>
+                </Pressable>
+                <Button title={t("sign_up")} onPress={handleSubmit(onSubmit)} />
+                <Pressable
+                    style={({ pressed }) =>
+                        [
+                            {
+                                justifyContent: "flex-end"
+                            },
+                            pressed && {
+                                opacity: 0.7
+                            }
+                        ]
+                    }
+                    onPress={() => router.push("/auth/signIn")}
+                >
+                    <Text
+                        style={{
+                            textDecorationLine: "underline",
+                            color: Colors[colorScheme].tint,
+                            textAlign: "right"
+                        }}
                     >
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                textDecorationLine: "underline",
-                                color: Colors[colorScheme].tint,
-                                textAlign: "right"
-                            }}
-                        >
-                            {t("sign_in")}
-                        </Text>
-                    </Pressable>
-                </View>
+                        {t("sign_in")}
+                    </Text>
+                </Pressable>
             </View>
 
             {isPending && <Loading />}

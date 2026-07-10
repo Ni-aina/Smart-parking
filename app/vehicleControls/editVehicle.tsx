@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingVertical: 40,
+        paddingTop: 40,
+        paddingBottom: 50,
         gap: 20
     },
     headerContent: {

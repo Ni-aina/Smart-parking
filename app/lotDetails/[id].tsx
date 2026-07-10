@@ -208,11 +208,7 @@ const LotDetailsScreen = () => {
                                 }
                             </ImageBackground>
                         </ScrollView>
-                        <View
-                            style={{
-                                maxHeight: screenHeight / 2
-                            }}
-                        >
+                        <View style={{ maxHeight: Math.floor(screenHeight / 2) }}>
                             <View
                                 style={{
                                     flexDirection: "row",
@@ -517,7 +513,7 @@ const LotDetailsScreen = () => {
                                     justifyContent: "space-between",
                                     alignItems: "center",
                                     paddingHorizontal: 15,
-                                    paddingTop: 20
+                                    paddingTop: 30
                                 }}
                             >
                                 <View>
@@ -586,12 +582,12 @@ const screenHeight = Dimensions.get("screen").height;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingBottom: 30
+        paddingBottom: 50
     },
     imageBackground: {
-        alignSelf: "stretch",
-        height: screenHeight / 2,
-        paddingVertical: 35,
+        height: Math.floor(screenHeight / 2) - 50,
+        paddingTop: 35,
+        paddingBottom: 20,
         paddingHorizontal: 10,
         justifyContent: "space-between"
     },

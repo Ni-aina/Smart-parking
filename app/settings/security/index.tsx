@@ -5,12 +5,13 @@ import Loading from "@/components/ui/loading";
 import PasswordInput from "@/components/ui/passwordInput";
 import { Colors } from "@/constants/Colors";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import usePassword from "@/hooks/usePassword";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Keyboard, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, useColorScheme, View } from "react-native";
 
 interface SecurityInterface {
     currentPassword: string;
@@ -42,20 +43,7 @@ const Security = () => {
         mutate({ email, currentPassword, newPassword });
     }
 
-    const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-    useEffect(() => {
-        const show = Keyboard.addListener("keyboardDidShow", (e) => {
-            setKeyboardHeight(e.endCoordinates.height)
-        })
-        const hide = Keyboard.addListener("keyboardDidHide", () => {
-            setKeyboardHeight(0)
-        })
-        return () => {
-            show.remove()
-            hide.remove()
-        }
-    }, [])
+    const isKeyboardVisible = useKeyboardVisible();
 
     useEffect(() => {
         if (!savingError) return;
@@ -82,7 +70,10 @@ const Security = () => {
     ])
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={isKeyboardVisible ? "padding" : undefined}
+        >
             <View
                 style={{
                     gap: 15
@@ -149,11 +140,13 @@ const Security = () => {
 
             <View
                 style={{
-                    paddingBottom: keyboardHeight > 0 ? keyboardHeight + 12 : 40,
-                    paddingTop: 12
+                    paddingBottom: isKeyboardVisible ? 12 : 0
                 }}
             >
-                <Button title={t("update_password")} onPress={handleSubmit(onSubmit)} />
+                <Button
+                    title={t("update_password")}
+                    onPress={handleSubmit(onSubmit)}
+                />
             </View>
 
             {isPending && <Loading />}
@@ -164,7 +157,7 @@ const Security = () => {
                 message={savingError || ""}
                 onClose={() => setSavingError(null)}
             />
-        </View>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -174,6 +167,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 20,
         paddingTop: 40,
+        paddingBottom: 50,
         gap: 15
     },
     success: {

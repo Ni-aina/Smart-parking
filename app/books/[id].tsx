@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 20,
         paddingTop: 40,
-        paddingBottom: 60,
+        paddingBottom: 50,
         gap: 20
     }
 })

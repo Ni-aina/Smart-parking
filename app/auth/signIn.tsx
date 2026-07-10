@@ -34,7 +34,8 @@ const SignInScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 60,
+        paddingTop: 40,
+        paddingBottom: 50,
         paddingHorizontal: 20,
         gap: 20
     },
