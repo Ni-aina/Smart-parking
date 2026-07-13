@@ -56,7 +56,12 @@ export async function getConversationsByUserId(userId: string): Promise<Conversa
                     const normalized = normalizeConversation(item);
                     return {
                         ...normalized,
-                        lastMessage: lastMessagesByConversation[normalized.id]
+                        lastMessage: lastMessagesByConversation[normalized.id],
+                        isNotReadCount: messages?.filter(m => 
+                            m.conversation_id === normalized.id && 
+                            m.is_read === false &&
+                            m.sender_id !== userId
+                        ).length
                     }
                 })
                 .sort((a, b) => {

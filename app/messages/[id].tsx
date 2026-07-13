@@ -26,13 +26,6 @@ import {
     View
 } from "react-native";
 
-const getInitials = (name?: string) =>
-    name
-        ?.split(" ")
-        .slice(0, 2)
-        .map(part => part.at(0)?.toUpperCase())
-        .join("") || "?";
-
 const Avatar = ({
     profile
 }: {
@@ -53,7 +46,33 @@ const Avatar = ({
     return (
         <View style={[styles.avatarFallback, { backgroundColor: colors.tint }]}>
             <Text style={[styles.avatarText, { color: colors.background }]}>
-                {getInitials(profile?.fullName)}
+                {profile?.fullName?.at(0)?.toUpperCase() || "?"}
+            </Text>
+        </View>
+    )
+}
+
+const AvatarSeen = ({
+    profile
+}: {
+    profile?: ProfileInterface;
+}) => {
+    const colorscheme = useColorScheme() || "light";
+    const colors = Colors[colorscheme];
+
+    if (profile?.urlImage) {
+        return (
+            <Image
+                source={{ uri: profile.urlImage }}
+                style={styles.avatarSeen}
+            />
+        )
+    }
+
+    return (
+        <View style={[styles.avatarSeenFallback, { backgroundColor: colors.tint }]}>
+            <Text style={[styles.avatarSeenText, { color: colors.background }]}>
+                {profile?.fullName?.at(0)?.toUpperCase() || "?"}
             </Text>
         </View>
     )
@@ -63,11 +82,15 @@ const MessageBubble = ({
     message,
     previousMessage,
     isMine,
+    isLastMessage,
+    isNotCurrentProfile,
     locale
 }: {
     message: MessageInterface;
     previousMessage?: MessageInterface;
     isMine: boolean;
+    isLastMessage: boolean;
+    isNotCurrentProfile: ProfileInterface | undefined;
     locale: string;
 }) => {
     const colorscheme = useColorScheme() || "light";
@@ -76,6 +99,8 @@ const MessageBubble = ({
         message.createdAt,
         previousMessage?.createdAt
     )
+
+    const isLastMessageSeen = isMine && message.isRead && isLastMessage;
 
     return (
         <View>
@@ -86,22 +111,34 @@ const MessageBubble = ({
             )}
             <View style={[styles.messageRow, isMine && styles.messageRowMine]}>
                 {!isMine && <Avatar profile={message.sender} />}
-                <View
-                    style={[
-                        styles.messageBubble,
-                        {
-                            backgroundColor: isMine ? colors.tint : colors.gray200
-                        }
-                    ]}
-                >
-                    <Text
+                <View>
+                    <View
                         style={[
-                            styles.messageContent,
-                            { color: isMine ? colors.background : colors.text }
+                            styles.messageBubble,
+                            {
+                                backgroundColor: isMine ? colors.tint : colors.gray200
+                            }
                         ]}
                     >
-                        {message.content}
-                    </Text>
+                        <Text
+                            style={[
+                                styles.messageContent,
+                                { color: isMine ? colors.background : colors.text }
+                            ]}
+                        >
+                            {message.content}
+                        </Text>
+                    </View>
+                    {
+                        isLastMessageSeen &&
+                        <View
+                            style={{
+                                alignItems: "flex-end"
+                            }}
+                        >
+                            <AvatarSeen profile={isNotCurrentProfile} />
+                        </View>
+                    }
                 </View>
             </View>
         </View>
@@ -127,6 +164,8 @@ const ConversationThreadScreen = () => {
         isSending,
         currentProfile
     } = useMessages(id);
+
+    const isNotCurrentProfile: ProfileInterface | undefined = conversation?.senderId !== currentProfile?.id ? conversation?.sender : conversation?.receiver;
 
     const otherUser = useMemo(() => {
         if (!conversation || !currentProfile?.id) return undefined;
@@ -158,12 +197,17 @@ const ConversationThreadScreen = () => {
         }
     }
 
+    const isLastMessageChange = messages?.at(-1)?.isRead;
+
     useEffect(() => {
         if (!messages.length) return;
         setTimeout(() => {
             listRef.current?.scrollToEnd({ animated: true });
         }, 80);
-    }, [messages.length])
+    }, [
+        isLastMessageChange,
+        messages.length
+    ])
 
     return (
         <View
@@ -209,6 +253,8 @@ const ConversationThreadScreen = () => {
                                         message={item}
                                         previousMessage={messages[index - 1]}
                                         isMine={item.senderId === currentProfile?.id}
+                                        isLastMessage={index === messages.length - 1}
+                                        isNotCurrentProfile={isNotCurrentProfile}
                                         locale={i18n.language}
                                     />
                                 )}
@@ -320,6 +366,21 @@ const styles = StyleSheet.create({
     avatarText: {
         fontSize: 12,
         fontWeight: "800"
+    },
+    avatarSeen: {
+        width: 12,
+        height: 12,
+        borderRadius: 6
+    },
+    avatarSeenFallback: {
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    avatarSeenText: {
+        fontSize: 5
     },
     composer: {
         minHeight: 54,

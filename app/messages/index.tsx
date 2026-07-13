@@ -20,13 +20,6 @@ import {
     View
 } from "react-native";
 
-const getInitials = (name?: string) =>
-    name
-        ?.split(" ")
-        .slice(0, 2)
-        .map(part => part.at(0)?.toUpperCase())
-        .join("") || "?";
-
 const ProfileAvatar = ({
     profile,
     size = 52
@@ -66,7 +59,7 @@ const ProfileAvatar = ({
             ]}
         >
             <Text style={[styles.avatarText, { color: colors.background }]}>
-                {getInitials(profile?.fullName)}
+                {profile?.fullName?.at(0)?.toUpperCase() || "?"}
             </Text>
         </View>
     )
@@ -104,7 +97,7 @@ const ConversationItem = ({
         >
             <ProfileAvatar profile={otherUser} />
             <View style={styles.conversationBody}>
-                <View style={styles.conversationTitleRow}>
+                <View style={styles.conversationRow}>
                     <Text
                         numberOfLines={1}
                         style={[styles.conversationName, { color: colors.text }]}
@@ -118,15 +111,23 @@ const ConversationItem = ({
                         }
                     </Text>
                 </View>
-                <Text
-                    numberOfLines={1}
-                    style={[styles.lastMessage, { color: colors.icon }]}
-                >
-                    {lastMessage?.content
-                        ? `${isMine ? t("message_you_prefix") : ""}${isMine ? ": " : ""}${lastMessage.content}`
-                        : t("message_no_messages_yet")
+                <View style={styles.conversationRow}>
+                    <Text
+                        numberOfLines={1}
+                        style={[styles.lastMessage, { color: colors.icon }]}
+                    >
+                        {lastMessage?.content
+                            ? `${isMine ? t("message_you_prefix") : ""}${isMine ? ": " : ""}${lastMessage.content}`
+                            : t("message_no_messages_yet")
+                        }
+                    </Text>
+                    {
+                        conversation.isNotReadCount !== 0 &&
+                        <Text style={styles.conversationIsNotReadCount}>
+                            {conversation.isNotReadCount}
+                        </Text>
                     }
-                </Text>
+                </View>
             </View>
             <Ionicons name="chevron-forward" size={24} color={colors.icon} />
         </Pressable>
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
         gap: 6,
         minWidth: 0
     },
-    conversationTitleRow: {
+    conversationRow: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
@@ -269,7 +270,17 @@ const styles = StyleSheet.create({
         fontWeight: "600"
     },
     lastMessage: {
+        flexShrink: 1,
         fontSize: 14
+    },
+    conversationIsNotReadCount: {
+        backgroundColor: "rgb(215, 72, 72)",
+        color: "white",
+        borderRadius: 12,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        fontSize: 12,
+        fontWeight: "600"
     },
     emptyThreadPane: {
         flex: 1,

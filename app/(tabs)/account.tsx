@@ -4,6 +4,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Pending from "@/components/ui/pending";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
+import useConversations from "@/hooks/messages/useConversations";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -47,6 +48,9 @@ const AccountScreen = () => {
         isPending,
         error
     } = useCurrentProfile();
+
+    const { conversations } = useConversations();
+    const isNotReadCount = conversations.reduce((acc, conversation) => acc + (conversation.isNotReadCount || 0), 0);
 
     const [loadingImage, setLoadingImage] = useState(!!currentProfile?.urlImage);
 
@@ -134,7 +138,6 @@ const AccountScreen = () => {
                             lineBreakMode="tail"
                         >
                             {currentProfile?.emailAddress!}
-                            Long text email address for testing line break mode.
                         </Text>
                     </View>
                     <ThemeSwitcher />
@@ -322,11 +325,19 @@ const AccountScreen = () => {
                                 {t("messages")}
                             </Text>
                         </View>
-                        <Ionicons
-                            name="chevron-forward"
-                            size={28}
-                            color={Colors[colorscheme].icon}
-                        />
+                        <View style={styles.notificationsContainer}>
+                            {
+                                isNotReadCount !== 0 &&
+                                <Text style={styles.conversationIsNotReadCount}>
+                                    {isNotReadCount}
+                                </Text>
+                            }
+                            <Ionicons
+                                name="chevron-forward"
+                                size={28}
+                                color={Colors[colorscheme].icon}
+                            />
+                        </View>
                     </Pressable>
                     <Pressable
                         style={({ pressed }) => [
@@ -557,6 +568,20 @@ const styles = StyleSheet.create({
     textContent: {
         fontSize: 18,
         fontWeight: "semibold"
+    },
+    notificationsContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 10
+    },
+    conversationIsNotReadCount: {
+        backgroundColor: "rgb(215, 72, 72)",
+        color: "white",
+        borderRadius: 12,
+        paddingHorizontal: 8,
+        paddingVertical: 2,
+        fontSize: 12,
+        fontWeight: "600"
     },
     wrapLogout: {
         marginTop: 10,
