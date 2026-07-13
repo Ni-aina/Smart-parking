@@ -1,11 +1,11 @@
 import { Colors } from "@/constants/Colors";
 import { VehicleInterface } from "@/types/vehicle";
+import { Ionicons } from "@expo/vector-icons";
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-    Image,
     Pressable,
     StyleSheet,
     Text,
@@ -82,16 +82,14 @@ const VehicleItem = ({
                     columnGap: 20
                 }}
             >
-                <Image
-                    source={require("@/assets/images/vehicles/default-car.png")}
-                    style={{
-                        width: 60,
-                        height: 60,
-                        transform: "rotate(-90deg)"
-                    }}
+                <Ionicons
+                    name="car-outline"
+                    size={32}
+                    color={Colors[colorscheme].tint}
                 />
                 <View
                     style={{
+                        paddingVertical: 5,
                         gap: 5
                     }}
                 >

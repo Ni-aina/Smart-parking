@@ -112,23 +112,29 @@ const AccountScreen = () => {
                                 </Text>
                             </View>
                     }
-                    <View>
+                    <View style={{ flexShrink: 1 }}>
                         <Text
                             style={[
                                 styles.textProfile, {
                                     color: Colors[colorscheme].text
                                 }]
-                            }>
+                            }
+                            numberOfLines={1}
+                            lineBreakMode="tail"
+                        >
                             {error?.message || currentProfile?.fullName!}
                         </Text>
                         <Text
                             style={[
-
                                 styles.emailProfile, {
                                     color: Colors[colorscheme].icon
                                 }]
-                            }>
+                            }
+                            numberOfLines={1}
+                            lineBreakMode="tail"
+                        >
                             {currentProfile?.emailAddress!}
+                            Long text email address for testing line break mode.
                         </Text>
                     </View>
                     <ThemeSwitcher />

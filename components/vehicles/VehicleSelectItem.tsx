@@ -1,10 +1,10 @@
 import { Colors } from "@/constants/Colors";
 import { useLotStore } from "@/stores/zustand/lot";
 import { VehicleInterface } from "@/types/vehicle";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-    Image,
     Pressable,
     StyleSheet,
     Text,
@@ -105,16 +105,14 @@ const VehicleSelectItem = ({
                         columnGap: 20
                     }}
                 >
-                    <Image
-                        source={require("@/assets/images/vehicles/default-car.png")}
-                        style={{
-                            width: 80,
-                            height: 80,
-                            transform: "rotate(-90deg)"
-                        }}
+                    <Ionicons
+                        name="car-outline"
+                        size={36}
+                        color={Colors[colorscheme].tint}
                     />
                     <View
                         style={{
+                            paddingVertical: 5,
                             gap: 5
                         }}
                     >
