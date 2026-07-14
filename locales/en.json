@@ -183,6 +183,8 @@
     "confirm_btn": "Confirm",
     "error_title": "Error!",
     "something_went_wrong": "Something went wrong.",
+    "success_title": "Success!",
+    "operation_successful": "Operation completed successfully.",
     "hr": "hr",
     "request_took_too_long": "Request took too long",
     "duration_required": "Duration field is required",

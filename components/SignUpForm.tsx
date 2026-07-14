@@ -26,6 +26,7 @@ import Button from "./ui/button";
 import ErrorModal from "./ui/errorModal";
 import Loading from "./ui/loading";
 import PasswordInput from "./ui/passwordInput";
+import SuccessModal from "./ui/successModal";
 
 const SignUpForm = () => {
     const colorScheme = useColorScheme() || "light";
@@ -46,8 +47,6 @@ const SignUpForm = () => {
         watch,
         reset
     } = useForm<RegisterType>();
-
-
 
     const onSubmit = async (data: RegisterType) => {
         try {
@@ -249,19 +248,6 @@ const SignUpForm = () => {
                             }
                         </View>
                     </View>
-                    {
-                        isSaved &&
-                        <Text
-                            style={[
-                                styles.textSaved,
-                                {
-                                    color: "rgb(28, 151, 0)"
-                                }
-                            ]}
-                        >
-                            {t("check_email_verify_account")}
-                        </Text>
-                    }
                 </ScrollView>
             </KeyboardAvoidingView>
 
@@ -333,6 +319,12 @@ const SignUpForm = () => {
             </View>
 
             {isPending && <Loading />}
+
+            <SuccessModal
+                visible={isSaved}
+                message={t("check_email_verify_account")}
+                onClose={() => setIsSaved(false)}
+            />
 
             <ErrorModal
                 visible={!!savingError}
