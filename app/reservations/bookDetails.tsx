@@ -3,7 +3,7 @@ import Button from "@/components/ui/button";
 import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
-import useCheckLotByTime from "@/hooks/reservations/useCheckLotByTime";
+import useCheckLotByTime from "@/hooks/books/useCheckLotByTime";
 import { useLotStore } from "@/stores/zustand/lot";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";

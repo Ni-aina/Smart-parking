@@ -1,4 +1,4 @@
-import useBookHistory from "@/hooks/books/useBookHistory";
+import useBooksHistory from "@/hooks/books/useBooksHistory";
 import { FlatList } from "react-native";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";
@@ -9,8 +9,10 @@ const BookHistory = () => {
         booksHistory,
         isLoading,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching
-    } = useBookHistory();
+    } = useBooksHistory();
 
     if (isLoading) return <LoaderSkeleton />
 
@@ -22,6 +24,12 @@ const BookHistory = () => {
             renderItem={({ item }) => <BookCard reservation={item} />}
             refreshing={isRefetching}
             onRefresh={refetch}
+            onEndReached={() => {
+                if (hasNextPage) {
+                    fetchNextPage();
+                }
+            }}
+            onEndReachedThreshold={0.5}
         />
     )
 }

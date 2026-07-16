@@ -1,4 +1,4 @@
-import useReservations from "@/hooks/reservations/useReservations";
+import useReservations from "@/hooks/books/useReservations";
 import { FlatList } from "react-native";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";
@@ -8,6 +8,8 @@ const MyBooking = () => {
         reservations,
         isLoading,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching
     } = useReservations();
 
@@ -21,6 +23,11 @@ const MyBooking = () => {
             renderItem={({ item }) => <BookCard reservation={item} />}
             refreshing={isRefetching}
             onRefresh={refetch}
+            onEndReached={() => {
+                if (hasNextPage) {
+                    fetchNextPage()
+                }
+            }}
         />
     )
 }

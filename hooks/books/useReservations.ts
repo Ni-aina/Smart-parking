@@ -1,10 +1,6 @@
-import { createReservation, getReservationsByDriverId } from "@/actions/reservation.action";
-import { initialLotState } from "@/data/lot";
+import { getReservationsByDriverId } from "@/actions/reservation.action";
 import { supabase } from "@/lib/supabase";
-import { useLotStore } from "@/stores/zustand/lot";
-import { ReservationPostInterface } from "@/types/reservation";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import useCurrentProfile from "../useCurrentProfile";
 
@@ -12,39 +8,31 @@ const useReservations = () => {
     const { currentProfile } = useCurrentProfile();
     const driverId = currentProfile?.id || "";
 
-    const queryClient = useQueryClient();
-    const router = useRouter();
-
-    const { setLot } = useLotStore();
-
     const {
-        data: reservations,
+        data,
         isLoading,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching
-    } = useQuery({
+    } = useInfiniteQuery({
         queryKey: [`fetch-reservations-${driverId}`],
-        queryFn: () => getReservationsByDriverId(driverId)
+        queryFn: async ({ pageParam = 1 }) => {
+            return await getReservationsByDriverId({
+                driverId,
+                page: pageParam,
+                limit: 10
+            })
+        },
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasMore
+                ? lastPage.nextPage
+                : undefined
+        },
+        initialPageParam: 1
     })
 
-    const {
-        mutate: handleCreate,
-        error: creationError,
-        isPending: isCreating
-    } = useMutation({
-        mutationKey: ["create-reservation"],
-        mutationFn: (reservation: ReservationPostInterface) => createReservation(reservation),
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: [`fetch-reservations-${driverId}`]
-            })
-            queryClient.invalidateQueries({
-                queryKey: [`fetch-book-history-${driverId}`]
-            })
-            setLot(initialLotState);
-            router.push("/(tabs)/book");
-        }
-    })
+    const reservations = data?.pages.flatMap(({ data }) => data);
 
     useEffect(() => {
         if (isLoading) return;
@@ -83,10 +71,9 @@ const useReservations = () => {
         reservations,
         isLoading,
         refetch,
-        isRefetching,
-        handleCreate,
-        creationError,
-        isCreating
+        hasNextPage,
+        fetchNextPage,
+        isRefetching
     }
 }
 

@@ -1,6 +1,6 @@
 import { getBooksHistoryByDriverId } from "@/actions/reservation.action";
 import { supabase } from "@/lib/supabase";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import useCurrentProfile from "../useCurrentProfile";
 
@@ -9,18 +9,34 @@ const useBookHistory = () => {
     const driverId = currentProfile?.id || "";
 
     const {
-        data: booksHistory,
+        data,
         isLoading,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching
-    } = useQuery({
+    } = useInfiniteQuery({
         queryKey: [`fetch-book-history-${driverId}`],
-        queryFn: () => getBooksHistoryByDriverId(driverId)
+        queryFn: async ({ pageParam = 1 }) => {
+            return await getBooksHistoryByDriverId({
+                driverId,
+                page: pageParam,
+                limit: 10
+            })
+        },
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasMore
+                ? lastPage.nextPage
+                : undefined
+        },
+        initialPageParam: 1
     })
+
+    const booksHistory = data?.pages.flatMap(({ data }) => data);
 
     useEffect(() => {
         if (isLoading) return;
-        
+
         const booksChannel = supabase.channel(`books:history:${driverId}`)
             .on(
                 "postgres_changes",
@@ -34,20 +50,22 @@ const useBookHistory = () => {
                 }
             )
             .subscribe();
-    
-            return () => {
-                supabase.removeChannel(booksChannel);
-            }
-        }, [
-            driverId,
-            isLoading,
-            refetch
-        ])
+
+        return () => {
+            supabase.removeChannel(booksChannel);
+        }
+    }, [
+        driverId,
+        isLoading,
+        refetch
+    ])
 
     return {
         booksHistory,
         isLoading,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching
     }
 }

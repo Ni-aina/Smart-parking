@@ -7,7 +7,7 @@ import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
-import useReservation from "@/hooks/reservations/useReservation";
+import useReservation from "@/hooks/books/useReservation";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { calculateDurationHours } from "@/utils/dateTimeAction";
 import { CardField, useStripe } from "@stripe/stripe-react-native";

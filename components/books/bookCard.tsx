@@ -1,5 +1,5 @@
 import { Colors } from "@/constants/Colors";
-import useReservation from "@/hooks/reservations/useReservation";
+import useReservation from "@/hooks/books/useReservation";
 import { defaultParking } from "@/lib/defaultImages";
 import { ReservationInterface } from "@/types/reservation";
 import { getStatusColor } from "@/utils/statusColor";

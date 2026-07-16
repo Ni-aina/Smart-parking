@@ -2,7 +2,7 @@ import ReviewReservation from "@/components/reservations/reviewReservation";
 import Button from "@/components/ui/button";
 import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
-import useReservations from "@/hooks/reservations/useReservations";
+import useReservation from "@/hooks/books/useReservation";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { useLotStore } from "@/stores/zustand/lot";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,7 @@ const ReviewScreen = () => {
         handleCreate,
         creationError,
         isCreating
-    } = useReservations();
+    } = useReservation();
 
     const handleBook = () => {
         handleCreate({

@@ -57,27 +57,51 @@ export async function getReservationById(id: string)
     }
 }
 
-export async function getReservationsByDriverId(driverId: string)
-    : Promise<ReservationInterface[]> {
+export async function getReservationsByDriverId({
+    driverId,
+    page,
+    limit
+}: {
+    driverId: string,
+    page: number,
+    limit: number
+})
+    : Promise<{
+        data: ReservationInterface[],
+        hasMore: boolean;
+        nextPage?: number;
+    }> {
     try {
         if (!isUUID(driverId)) throw new Error("You have to be authenticated");
 
         const d = new Date();
         d.setMonth(d.getMonth() - 6);
 
+        const from = (page - 1) * limit
+        const to = page * limit - 1
+
         const request = (async () => {
-            const { data: reservations, error } = await supabase.from("reservations")
-                .select(`
+            const [
+                { data: reservations, error },
+                { count }
+            ] = await Promise.all([
+                supabase.from("reservations")
+                    .select(`
                     *,
                     driver: driver_id(*),
                     lot: lot_id(*, reviews("rating")),
                     vehicle: vehicle_id(*)
                 `)
-                .eq("driver_id", driverId)
-                .gte("created_at", d.toISOString())
-                .order("created_at", {
-                    ascending: false
-                })
+                    .eq("driver_id", driverId)
+                    .gte("created_at", d.toISOString())
+                    .order("created_at", {
+                        ascending: false
+                    })
+                    .range(from, to),
+                supabase.from("reservations")
+                    .select("*", { count: "exact", head: true })
+                    .eq("driver_id", driverId)
+            ])
 
             if (!reservations || error) throw new Error(`Reservations fetching error, ${error.message}`);
 
@@ -96,7 +120,15 @@ export async function getReservationsByDriverId(driverId: string)
                 }
             })
 
-            return normalizedData as ReservationInterface[];
+            const hasMore = count !== null && count > page * limit;
+
+            return {
+                data: normalizedData as ReservationInterface[],
+                hasMore,
+                nextPage: hasMore ?
+                    page + 1 :
+                    undefined
+            }
         })()
 
         return Promise.race([
@@ -108,23 +140,47 @@ export async function getReservationsByDriverId(driverId: string)
     }
 }
 
-export async function getBooksHistoryByDriverId(driverId: string)
-    : Promise<ReservationInterface[]> {
+export async function getBooksHistoryByDriverId({
+    driverId,
+    page,
+    limit
+}: {
+    driverId: string,
+    page: number,
+    limit: number
+})
+    : Promise<{
+        data: ReservationInterface[],
+        hasMore: boolean;
+        nextPage?: number;
+    }> {
     try {
         if (!isUUID(driverId)) throw new Error("You have to be authenticated");
 
+        const from = (page - 1) * limit;
+        const to = page * limit - 1;
+
         const request = (async () => {
-            const { data: reservations, error } = await supabase.from("reservations")
-                .select(`
+            const [
+                { data: reservations, error },
+                { count }
+            ] = await Promise.all([
+                supabase.from("reservations")
+                    .select(`
                     *,
                     driver: driver_id(*),
                     lot: lot_id(*, reviews("rating")),
                     vehicle: vehicle_id(*)
                 `)
-                .eq("driver_id", driverId)
-                .order("created_at", {
-                    ascending: false
-                })
+                    .eq("driver_id", driverId)
+                    .order("created_at", {
+                        ascending: false
+                    })
+                    .range(from, to),
+                supabase.from("reservations")
+                    .select("*", { count: "exact", head: true })
+                    .eq("driver_id", driverId)
+            ])
 
             if (!reservations) throw new Error(`Reservation fetching error, ${error.message}`);
 
@@ -143,7 +199,15 @@ export async function getBooksHistoryByDriverId(driverId: string)
                 }
             })
 
-            return normalizedData as ReservationInterface[];
+            const hasMore = count !== null && count > page * limit;
+
+            return {
+                data: normalizedData as ReservationInterface[],
+                hasMore,
+                nextPage: hasMore ?
+                    page + 1 :
+                    undefined
+            }
         })()
 
         return Promise.race([
