@@ -15,6 +15,29 @@ const normalizeConversation = (conversation: Record<string, unknown>) =>
 const normalizeMessage = (message: Record<string, unknown>) =>
     normalizeData(message) as MessageInterface;
 
+export async function getNoReadCountByUserId(userId: string): Promise<number> {
+    try {
+        if (!isUUID(userId)) throw new Error("You have to be authenticated");
+
+        const request = (async () => {
+            const { count, error } = await supabase.from("messages")
+                .select("*", { count: "exact", head: true })
+                .neq("sender_id", userId)
+                .eq("is_read", false)
+
+            if (!count || error) throw new Error(`Count fetching error, ${error?.message}`);
+            return count;
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function getConversationsByUserId(userId: string): Promise<ConversationInterface[]> {
     try {
         if (!isUUID(userId)) throw new Error("You have to be authenticated");

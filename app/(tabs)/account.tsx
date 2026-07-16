@@ -4,7 +4,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Pending from "@/components/ui/pending";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
-import useConversations from "@/hooks/messages/useConversations";
+import useNotReadCount from "@/hooks/messages/useNoReadCount";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -49,8 +49,10 @@ const AccountScreen = () => {
         error
     } = useCurrentProfile();
 
-    const { conversations } = useConversations();
-    const isNotReadCount = conversations.reduce((acc, conversation) => acc + (conversation.isNotReadCount || 0), 0);
+    const {
+        isNotReadCount,
+        isLoading
+    } = useNotReadCount();
 
     const [loadingImage, setLoadingImage] = useState(!!currentProfile?.urlImage);
 
@@ -327,7 +329,7 @@ const AccountScreen = () => {
                         </View>
                         <View style={styles.notificationsContainer}>
                             {
-                                isNotReadCount !== 0 &&
+                                !isLoading && isNotReadCount !== 0 &&
                                 <Text style={styles.conversationIsNotReadCount}>
                                     {isNotReadCount}
                                 </Text>
