@@ -57,8 +57,8 @@ export async function getConversationsByUserId(userId: string): Promise<Conversa
                     return {
                         ...normalized,
                         lastMessage: lastMessagesByConversation[normalized.id],
-                        isNotReadCount: messages?.filter(m => 
-                            m.conversation_id === normalized.id && 
+                        isNotReadCount: messages?.filter(m =>
+                            m.conversation_id === normalized.id &&
                             m.is_read === false &&
                             m.sender_id !== userId
                         ).length
@@ -222,6 +222,7 @@ export async function markConversationMessagesAsRead(
             const { error } = await supabase
                 .from("messages")
                 .update({ is_read: true })
+                .eq("is_read", false)
                 .eq("conversation_id", conversationId)
                 .neq("sender_id", userId);
 
