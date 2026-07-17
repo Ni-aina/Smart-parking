@@ -29,7 +29,8 @@ const useLots = ({
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     } = useInfiniteQuery({
         queryKey: [
             "parking-lots",
@@ -116,7 +117,8 @@ const useLots = ({
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     }
 }
 

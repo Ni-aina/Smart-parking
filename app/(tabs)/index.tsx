@@ -41,7 +41,8 @@ const FindParkingScreen = () => {
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     } = useLots({
         searchTerm: debouncedSearchTerm
     })
@@ -83,7 +84,7 @@ const FindParkingScreen = () => {
                         </Pressable>
                     </View>
                 }
-                customBackAction={() => 
+                customBackAction={() =>
                     router.replace("/home")
                 }
             />
@@ -160,6 +161,8 @@ const FindParkingScreen = () => {
                                     />
                                 </View>
                             }
+                            refreshing={isRefetching}
+                            onRefresh={refetch}
                             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                             columnWrapperStyle={layout === "tile" ? { gap: 10 } : undefined}
                             showsVerticalScrollIndicator={false}
@@ -170,14 +173,11 @@ const FindParkingScreen = () => {
                             }}
                             onEndReachedThreshold={0.5}
                             ListFooterComponent={
-                                hasNextPage ?
-                                    <View style={{ paddingVertical: 20 }}>
-                                        <LoaderSkeleton />
-                                    </View> :
+                                isFetchingNextPage ?
+                                    <LoaderSkeleton />
+                                    :
                                     null
                             }
-                            refreshing={isRefetching}
-                            onRefresh={refetch}
                         />
             }
         </View>

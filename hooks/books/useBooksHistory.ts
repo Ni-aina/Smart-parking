@@ -14,7 +14,8 @@ const useBookHistory = () => {
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     } = useInfiniteQuery({
         queryKey: [`fetch-book-history-${driverId}`],
         queryFn: async ({ pageParam = 1 }) => {
@@ -66,7 +67,8 @@ const useBookHistory = () => {
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     }
 }
 

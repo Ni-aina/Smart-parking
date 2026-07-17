@@ -4,13 +4,15 @@ import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";
 
 const MyBooking = () => {
+
     const {
         reservations,
         isLoading,
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     } = useReservations();
 
     if (isLoading) return <LoaderSkeleton />
@@ -28,6 +30,13 @@ const MyBooking = () => {
                     fetchNextPage()
                 }
             }}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={
+                isFetchingNextPage ?
+                    <LoaderSkeleton />
+                    :
+                    null
+            }
         />
     )
 }

@@ -14,7 +14,8 @@ const useReservations = () => {
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     } = useInfiniteQuery({
         queryKey: [`fetch-reservations-${driverId}`],
         queryFn: async ({ pageParam = 1 }) => {
@@ -73,7 +74,8 @@ const useReservations = () => {
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     }
 }
 

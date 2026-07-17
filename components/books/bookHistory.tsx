@@ -11,7 +11,8 @@ const BookHistory = () => {
         refetch,
         hasNextPage,
         fetchNextPage,
-        isRefetching
+        isRefetching,
+        isFetchingNextPage
     } = useBooksHistory();
 
     if (isLoading) return <LoaderSkeleton />
@@ -30,6 +31,12 @@ const BookHistory = () => {
                 }
             }}
             onEndReachedThreshold={0.5}
+            ListFooterComponent={
+                isFetchingNextPage ?
+                    <LoaderSkeleton />
+                    :
+                    null
+            }
         />
     )
 }
