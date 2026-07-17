@@ -25,8 +25,8 @@ export async function getNoReadCountByUserId(userId: string): Promise<number> {
                 .neq("sender_id", userId)
                 .eq("is_read", false)
 
-            if (!count || error) throw new Error(`Count fetching error, ${error?.message}`);
-            return count;
+            if (error) throw new Error(`Count fetching error, ${error?.message}`);
+            return count || 0;
         })()
 
         return Promise.race([

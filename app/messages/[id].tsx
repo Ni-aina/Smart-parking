@@ -12,7 +12,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Image } from "expo-image";
 import { useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     ActivityIndicator,
@@ -82,15 +82,15 @@ const MessageBubble = ({
     message,
     previousMessage,
     isMine,
-    isLastMessage,
-    isNotCurrentProfile,
+    isLastSeenMessage,
+    otherUser,
     locale
 }: {
     message: MessageInterface;
     previousMessage?: MessageInterface;
     isMine: boolean;
-    isLastMessage: boolean;
-    isNotCurrentProfile: ProfileInterface | undefined;
+    isLastSeenMessage: boolean;
+    otherUser: ProfileInterface | undefined;
     locale: string;
 }) => {
     const colorscheme = useColorScheme() || "light";
@@ -99,8 +99,6 @@ const MessageBubble = ({
         message.createdAt,
         previousMessage?.createdAt
     )
-
-    const isLastMessageSeen = isMine && message.isRead && isLastMessage;
 
     return (
         <View>
@@ -130,13 +128,13 @@ const MessageBubble = ({
                         </Text>
                     </View>
                     {
-                        isLastMessageSeen &&
+                        isLastSeenMessage &&
                         <View
                             style={{
                                 alignItems: "flex-end"
                             }}
                         >
-                            <AvatarSeen profile={isNotCurrentProfile} />
+                            <AvatarSeen profile={otherUser} />
                         </View>
                     }
                 </View>
@@ -165,17 +163,11 @@ const ConversationThreadScreen = () => {
         currentProfile
     } = useMessages(id);
 
-    const isNotCurrentProfile: ProfileInterface | undefined = conversation?.senderId !== currentProfile?.id ? conversation?.sender : conversation?.receiver;
+    const otherUser = currentProfile && conversation?.senderId === currentProfile.id
+        ? conversation.receiver
+        : conversation?.sender
 
-    const otherUser = useMemo(() => {
-        if (!conversation || !currentProfile?.id) return undefined;
-        return conversation.senderId === currentProfile.id
-            ? conversation.receiver
-            : conversation.sender;
-    }, [
-        conversation,
-        currentProfile?.id
-    ])
+    const lastSeenMessageId = messages.filter(item => item.senderId === currentProfile?.id && item.isRead).at(-1)?.id;
 
     const submitMessage = async () => {
         const content = message.trim();
@@ -197,15 +189,13 @@ const ConversationThreadScreen = () => {
         }
     }
 
-    const isLastMessageChange = messages?.at(-1)?.isRead;
-
     useEffect(() => {
         if (!messages.length) return;
         setTimeout(() => {
             listRef.current?.scrollToEnd({ animated: true });
         }, 80);
     }, [
-        isLastMessageChange,
+        lastSeenMessageId,
         messages.length
     ])
 
@@ -253,8 +243,8 @@ const ConversationThreadScreen = () => {
                                         message={item}
                                         previousMessage={messages[index - 1]}
                                         isMine={item.senderId === currentProfile?.id}
-                                        isLastMessage={index === messages.length - 1}
-                                        isNotCurrentProfile={isNotCurrentProfile}
+                                        isLastSeenMessage={item.id === lastSeenMessageId}
+                                        otherUser={otherUser}
                                         locale={i18n.language}
                                     />
                                 )}
