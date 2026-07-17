@@ -4,7 +4,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import Pending from "@/components/ui/pending";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
-import useNotReadCount from "@/hooks/messages/useNoReadCount";
+import useNotReadCount from "@/hooks/messages/useNotReadCount";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
