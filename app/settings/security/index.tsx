@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { KeyboardAvoidingView, StyleSheet, Text, useColorScheme, View } from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
 
 interface SecurityInterface {
     currentPassword: string;
@@ -70,84 +70,79 @@ const Security = () => {
     ])
 
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={isKeyboardVisible ? "padding" : undefined}
-        >
-            <View
-                style={{
-                    gap: 15
-                }}
+        <View style={styles.container}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={isKeyboardVisible ? "padding" : undefined}
             >
-                <View
-                    style={{
-                        marginBottom: 20
-                    }}
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ gap: 15 }}
                 >
-                    <Header
-                        title={t("change_password")}
+                    <View
+                        style={{
+                            marginBottom: 20
+                        }}
+                    >
+                        <Header
+                            title={t("change_password")}
+                        />
+                    </View>
+
+                    <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
+                        {t("current_password")} *
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="currentPassword"
+                        rules={{ required: t("this_field_is_required") as string }}
+                        render={({ field: { onChange, value } }) => (
+                            <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_current_password")} />
+                        )}
                     />
-                </View>
+                    {
+                        errors.currentPassword &&
+                        <Text style={styles.inputError}>{errors.currentPassword.message}</Text>
+                    }
 
-                <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                    {t("current_password")} *
-                </Text>
-                <Controller
-                    control={control}
-                    name="currentPassword"
-                    rules={{ required: t("this_field_is_required") as string }}
-                    render={({ field: { onChange, value } }) => (
-                        <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_current_password")} />
-                    )}
-                />
-                {
-                    errors.currentPassword &&
-                    <Text style={styles.inputError}>{errors.currentPassword.message}</Text>
-                }
+                    <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
+                        {t("new_password")} *
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="newPassword"
+                        rules={{ required: t("this_field_is_required") as string, minLength: { value: 6, message: t("password_min_length") } }}
+                        render={({ field: { onChange, value } }) => (
+                            <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_new_password")} />
+                        )}
+                    />
+                    {
+                        errors.newPassword &&
+                        <Text style={styles.inputError}>{errors.newPassword.message}</Text>
+                    }
 
-                <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                    {t("new_password")} *
-                </Text>
-                <Controller
-                    control={control}
-                    name="newPassword"
-                    rules={{ required: t("this_field_is_required") as string, minLength: { value: 6, message: t("password_min_length") } }}
-                    render={({ field: { onChange, value } }) => (
-                        <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_new_password")} />
-                    )}
-                />
-                {
-                    errors.newPassword &&
-                    <Text style={styles.inputError}>{errors.newPassword.message}</Text>
-                }
+                    <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
+                        {t("confirm_password")} *
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="confirmPassword"
+                        rules={{ required: t("this_field_is_required") as string, validate: curr => watch("newPassword") === curr || t("passwords_do_not_match") }}
+                        render={({ field: { onChange, value } }) => (
+                            <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_confirm_password")} />
+                        )}
+                    />
+                    {
+                        errors.confirmPassword &&
+                        <Text style={styles.inputError}>{errors.confirmPassword.message}</Text>
+                    }
+                </ScrollView>
+            </KeyboardAvoidingView>
 
-                <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                    {t("confirm_password")} *
-                </Text>
-                <Controller
-                    control={control}
-                    name="confirmPassword"
-                    rules={{ required: t("this_field_is_required") as string, validate: curr => watch("newPassword") === curr || t("passwords_do_not_match") }}
-                    render={({ field: { onChange, value } }) => (
-                        <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_confirm_password")} />
-                    )}
-                />
-                {
-                    errors.confirmPassword &&
-                    <Text style={styles.inputError}>{errors.confirmPassword.message}</Text>
-                }
-            </View>
-
-            <View
-                style={{
-                    paddingBottom: isKeyboardVisible ? 12 : 0
-                }}
-            >
-                <Button
-                    title={t("update_password")}
-                    onPress={handleSubmit(onSubmit)}
-                />
-            </View>
+            <Button
+                title={t("update_password")}
+                onPress={handleSubmit(onSubmit)}
+            />
 
             {isPending && <Loading />}
 
@@ -157,7 +152,7 @@ const Security = () => {
                 message={savingError || ""}
                 onClose={() => setSavingError(null)}
             />
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 

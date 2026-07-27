@@ -11,6 +11,7 @@ import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
+    ScrollView,
     StyleSheet,
     useColorScheme,
     View
@@ -108,8 +109,9 @@ const ETicket = () => {
             <Header
                 title={t("e_ticket")}
             />
-            <View
-                style={{
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
                     flex: 1,
                     justifyContent: "space-between"
                 }}
@@ -194,7 +196,7 @@ const ETicket = () => {
                     onPress={handlePrint}
                     disabled={isPrinting}
                 />
-            </View>
+            </ScrollView>
         </View>
     )
 }

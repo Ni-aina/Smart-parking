@@ -305,18 +305,12 @@ const Account = () => {
                         </View>
                     </View>
                 </ScrollView>
-
-                <View
-                    style={{
-                        paddingBottom: isKeyboardVisible ? 12 : 0
-                    }}
-                >
-                    <Button
-                        title={t("update_profile")}
-                        onPress={handleSubmit(onSubmit)}
-                    />
-                </View>
             </KeyboardAvoidingView>
+            
+            <Button
+                title={t("update_profile")}
+                onPress={handleSubmit(onSubmit)}
+            />
 
             {(isPending || uploadingImage) && <Loading />}
 

@@ -208,12 +208,11 @@ const LotDetailsScreen = () => {
                                 }
                             </ImageBackground>
                         </ScrollView>
-                        <View style={{ maxHeight: Math.floor(screenHeight / 2) }}>
+                        <View style={{ maxHeight: "50%" }}>
                             <View
                                 style={{
                                     flexDirection: "row",
                                     justifyContent: "space-between",
-                                    paddingTop: 15,
                                     paddingHorizontal: 10
                                 }}
                             >
