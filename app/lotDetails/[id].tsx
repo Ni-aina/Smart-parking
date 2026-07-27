@@ -128,7 +128,7 @@ const LotDetailsScreen = () => {
                                 loadingImage &&
                                 <Skeleton
                                     width={screenWidth}
-                                    height={screenHeight / 2}
+                                    height={screenHeight / 2 - 50}
                                     colorMode={colorScheme}
                                 />
                             }
