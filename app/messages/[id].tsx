@@ -81,6 +81,7 @@ const AvatarSeen = ({
 const MessageBubble = ({
     message,
     previousMessage,
+    nextMessage,
     isMine,
     isLastSeenMessage,
     otherUser,
@@ -88,6 +89,7 @@ const MessageBubble = ({
 }: {
     message: MessageInterface;
     previousMessage?: MessageInterface;
+    nextMessage?: MessageInterface;
     isMine: boolean;
     isLastSeenMessage: boolean;
     otherUser: ProfileInterface | undefined;
@@ -128,7 +130,7 @@ const MessageBubble = ({
                         </Text>
                     </View>
                     {
-                        isLastSeenMessage &&
+                        (nextMessage?.senderId !== otherUser?.id && isLastSeenMessage) &&
                         <View
                             style={{
                                 alignItems: "flex-end"
@@ -242,6 +244,7 @@ const ConversationThreadScreen = () => {
                                     <MessageBubble
                                         message={item}
                                         previousMessage={messages[index - 1]}
+                                        nextMessage={messages[index + 1]}
                                         isMine={item.senderId === currentProfile?.id}
                                         isLastSeenMessage={item.id === lastSeenMessageId}
                                         otherUser={otherUser}
