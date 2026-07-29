@@ -22,7 +22,7 @@ const useBookHistory = () => {
             return await getBooksHistoryByDriverId({
                 driverId,
                 page: pageParam,
-                limit: 10
+                limit: 25
             })
         },
         getNextPageParam: (lastPage) => {

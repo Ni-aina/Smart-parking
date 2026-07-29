@@ -128,7 +128,7 @@ const AccountScreen = () => {
                             numberOfLines={1}
                             lineBreakMode="tail"
                         >
-                            {error?.message || currentProfile?.fullName!}
+                           {error?.message || currentProfile?.fullName!}
                         </Text>
                         <Text
                             style={[
@@ -548,8 +548,7 @@ const styles = StyleSheet.create({
     },
     textProfile: {
         fontSize: 24,
-        fontWeight: "semibold",
-        paddingRight: 70
+        fontWeight: "semibold"
     },
     emailProfile: {
         fontSize: 16

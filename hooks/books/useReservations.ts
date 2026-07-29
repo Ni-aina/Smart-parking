@@ -22,7 +22,7 @@ const useReservations = () => {
             return await getReservationsByDriverId({
                 driverId,
                 page: pageParam,
-                limit: 10
+                limit: 25
             })
         },
         getNextPageParam: (lastPage) => {

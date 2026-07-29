@@ -74,7 +74,8 @@ const HomeScreen = () => {
                         style={[
                             styles.description,
                             {
-                                color: Colors[colorscheme].text
+                                color: Colors[colorscheme].text,
+                                textAlign: "center"
                             }
                         ]}
                     >

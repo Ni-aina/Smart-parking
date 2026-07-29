@@ -56,7 +56,6 @@
     "password_min_length": "Password must be at least 6 characters",
     "tracking_car": "Tracking Car",
     "find_parking": "Find Parking",
-    "book_parking": "Book Parking",
     "profile": "Profile",
     "search": "Search",
     "manage_your_own_parking": "Manage your own parking.",

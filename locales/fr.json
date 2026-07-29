@@ -56,7 +56,6 @@
     "password_min_length": "Le mot de passe doit contenir au moins 6 caractères",
     "tracking_car": "Suivi de véhicule",
     "find_parking": "Trouver un parking",
-    "book_parking": "Réserver un parking",
     "profile": "Paramètres du compte",
     "search": "Rechercher",
     "manage_your_own_parking": "Gérez votre propre parking.",

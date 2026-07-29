@@ -128,8 +128,9 @@ const LotDetailsScreen = () => {
                                 loadingImage &&
                                 <Skeleton
                                     width={screenWidth}
-                                    height={screenHeight / 2 - 50}
+                                    height={screenHeight / 2}
                                     colorMode={colorScheme}
+                                    radius={0}
                                 />
                             }
                             <ImageBackground
@@ -208,7 +209,12 @@ const LotDetailsScreen = () => {
                                 }
                             </ImageBackground>
                         </ScrollView>
-                        <View style={{ maxHeight: "50%" }}>
+                        <View
+                            style={{
+                                maxHeight: screenHeight / 2,
+                                paddingTop: 10
+                            }}
+                        >
                             <View
                                 style={{
                                     flexDirection: "row",

@@ -74,8 +74,8 @@ const TrackingCarSceen = () => {
             <RequestTooLong
               message={errorFetching.message}
               refresh={refetch}
-            /> :
-
+            />
+            :
             <FlatList
               data={vehicles}
               keyExtractor={item => item.id?.toString()}

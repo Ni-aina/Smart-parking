@@ -173,10 +173,12 @@ const VehicleItem = ({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         paddingHorizontal: 15,
+        paddingVertical: 5,
         borderWidth: 0.2,
         borderRadius: 8,
         gap: 5

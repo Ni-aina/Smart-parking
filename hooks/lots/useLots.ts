@@ -48,9 +48,9 @@ const useLots = ({
                 },
                 pagination: {
                     page: pageParam,
-                    limit: 10
+                    limit: 25
                 }
-            });
+            })
         },
         getNextPageParam: (lastPage) => {
             return lastPage.hasMore

@@ -49,7 +49,7 @@ const TabLayout = () => {
           style={styles.tabTrigger}
         >
           <Ionicons name="book" size={30} style={{ color: pathname === "/book" ? activeTab : tabTriggerColor }} />
-          <Text style={[styles.tabText, { color: pathname === "/book" ? activeTab : tabTriggerColor }]}>{t("book_parking")}</Text>
+          <Text style={[styles.tabText, { color: pathname === "/book" ? activeTab : tabTriggerColor }]}>{t("my_bookings")}</Text>
         </TabTrigger>
         <TabTrigger
           name="trackingCar"
