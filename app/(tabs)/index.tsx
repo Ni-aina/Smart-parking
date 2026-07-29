@@ -7,7 +7,7 @@ import useLots from "@/hooks/lots/useLots";
 import useDebounce from "@/hooks/useDebounce";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     FlatList,
@@ -46,6 +46,14 @@ const FindParkingScreen = () => {
     } = useLots({
         searchTerm: debouncedSearchTerm
     })
+
+    const onEndReached = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) fetchNextPage()
+    }, [
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage
+    ])
 
     const handleShowDetails = (id: string) => {
         router.push(`/lotDetails/${id}`)
@@ -166,11 +174,7 @@ const FindParkingScreen = () => {
                             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                             columnWrapperStyle={layout === "tile" ? { gap: 10 } : undefined}
                             showsVerticalScrollIndicator={false}
-                            onEndReached={() => {
-                                if (hasNextPage) {
-                                    fetchNextPage();
-                                }
-                            }}
+                            onEndReached={onEndReached}
                             onEndReachedThreshold={0.5}
                             ListFooterComponent={
                                 isFetchingNextPage ?

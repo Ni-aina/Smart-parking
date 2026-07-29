@@ -21,8 +21,9 @@ export const useLocationStore = create<LocationStore>((set) => ({
       const request = (async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") return;
-        
+
         const locationResult = await Location.getCurrentPositionAsync({});
+  
         set({
           location: {
             latitude: locationResult.coords.latitude,

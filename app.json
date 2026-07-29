@@ -9,7 +9,10 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.nireactdev.SmartParking"
+      "bundleIdentifier": "com.nireactdev.SmartParking",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +22,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.nireactdev.SmartParking"
+      "package": "com.nireactdev.SmartParking",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "output": "static",
@@ -41,7 +48,13 @@
       ],
       "expo-localization",
       "expo-web-browser",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

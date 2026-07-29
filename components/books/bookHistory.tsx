@@ -1,4 +1,5 @@
 import useBooksHistory from "@/hooks/books/useBooksHistory";
+import { useCallback } from "react";
 import { FlatList } from "react-native";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";
@@ -15,6 +16,14 @@ const BookHistory = () => {
         isFetchingNextPage
     } = useBooksHistory();
 
+    const onEndReached = useCallback(() => {
+        if (hasNextPage && !isFetchingNextPage) fetchNextPage()
+    }, [
+        hasNextPage,
+        isFetchingNextPage,
+        fetchNextPage
+    ])
+
     if (isLoading) return <LoaderSkeleton />
 
     return (
@@ -25,11 +34,7 @@ const BookHistory = () => {
             renderItem={({ item }) => <BookCard reservation={item} />}
             refreshing={isRefetching}
             onRefresh={refetch}
-            onEndReached={() => {
-                if (hasNextPage) {
-                    fetchNextPage();
-                }
-            }}
+            onEndReached={onEndReached}
             onEndReachedThreshold={0.5}
             ListFooterComponent={
                 isFetchingNextPage ?
