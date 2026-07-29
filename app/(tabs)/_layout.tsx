@@ -41,7 +41,14 @@ const TabLayout = () => {
           style={styles.tabTrigger}
         >
           <Ionicons name="search" size={30} style={{ color: pathname === "/" ? activeTab : tabTriggerColor }} />
-          <Text style={[styles.tabText, { color: pathname === "/" ? activeTab : tabTriggerColor }]}>{t("find_parking")}</Text>
+          <Text 
+            style={[
+              styles.tabText, 
+              { color: pathname === "/" ? activeTab : tabTriggerColor }
+            ]}
+          >
+            {t("find_parking")}
+          </Text>
         </TabTrigger>
         <TabTrigger
           name="book"
@@ -49,7 +56,14 @@ const TabLayout = () => {
           style={styles.tabTrigger}
         >
           <Ionicons name="book" size={30} style={{ color: pathname === "/book" ? activeTab : tabTriggerColor }} />
-          <Text style={[styles.tabText, { color: pathname === "/book" ? activeTab : tabTriggerColor }]}>{t("my_bookings")}</Text>
+          <Text 
+            style={[
+              styles.tabText, 
+              { color: pathname === "/book" ? activeTab : tabTriggerColor }
+            ]}
+          >
+            {t("my_bookings")}
+          </Text>
         </TabTrigger>
         <TabTrigger
           name="trackingCar"
@@ -57,7 +71,14 @@ const TabLayout = () => {
           style={styles.tabTrigger}
         >
           <Ionicons name="car" size={30} style={{ color: pathname === "/trackingCar" ? activeTab : tabTriggerColor }} />
-          <Text style={[styles.tabText, { color: pathname === "/trackingCar" ? activeTab : tabTriggerColor }]}>{t("tracking_car")}</Text>
+          <Text 
+            style={[
+              styles.tabText, 
+              { color: pathname === "/trackingCar" ? activeTab : tabTriggerColor }
+            ]}
+          >
+            {t("tracking_car")}
+          </Text>
         </TabTrigger>
         <TabTrigger
           name="account"
@@ -65,7 +86,14 @@ const TabLayout = () => {
           style={styles.tabTrigger}
         >
           <Ionicons name="person" size={30} style={{ color: pathname === "/account" ? activeTab : tabTriggerColor }} />
-          <Text style={[styles.tabText, { color: pathname === "/account" ? activeTab : tabTriggerColor }]}>{t("profile")}</Text>
+          <Text 
+            style={[
+              styles.tabText, 
+              { color: pathname === "/account" ? activeTab : tabTriggerColor }
+            ]}
+          >
+            {t("profile")}
+          </Text>
         </TabTrigger>
       </TabList>
       <ChatFAB />
