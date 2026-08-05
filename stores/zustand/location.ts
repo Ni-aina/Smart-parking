@@ -5,7 +5,7 @@ import { create } from "zustand";
 type LocationType = {
   latitude: number;
   longitude: number;
-}
+} | null
 
 type LocationStore = {
   location: LocationType;
@@ -13,14 +13,8 @@ type LocationStore = {
   refreshLocation: () => Promise<void>;
 }
 
-// ispm location
-const defaultLocation = {
-  latitude: -18.916479,
-  longitude: 47.5657178
-}
-
 export const useLocationStore = create<LocationStore>((set) => ({
-  location: defaultLocation,
+  location: null,
   getLocation: async () => {
     try {
       const request = (async () => {
