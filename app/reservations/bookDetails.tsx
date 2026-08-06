@@ -37,11 +37,7 @@ const BookDetailsScreen = () => {
     })
 
     const handleContinue = () => {
-        if (
-            !startTime ||
-            !endTime ||
-            !durationHours
-        ) {
+        if (!startTime || !endTime || !durationHours) {
             setError(t("duration_required"));
             return;
         }

@@ -121,6 +121,7 @@
     "book_details": "Détails de réservation",
     "continue": "Continuer",
     "duration_field_required": "Le champ durée est obligatoire",
+    "bookTimeError": "Veuillez sélectionner une heure future",
     "required_information": "Informations requises",
     "review_summary": "Récapitulatif",
     "add_vehicle": "Ajouter un véhicule",

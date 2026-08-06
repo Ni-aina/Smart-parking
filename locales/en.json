@@ -121,6 +121,7 @@
     "book_details": "Book Details",
     "continue": "Continue",
     "duration_field_required": "Duration field is required",
+    "bookTimeError": "Please select a future time",
     "required_information": "Required information",
     "review_summary": "Review Summary",
     "add_vehicle": "Add Vehicle",

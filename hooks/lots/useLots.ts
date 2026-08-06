@@ -36,11 +36,11 @@ const useLots = ({
             "parking-lots",
             searchTerm
         ],
-        queryFn: async ({
+        queryFn: ({
             pageParam = 1
         }) => {
-            await refreshLocation();
-            return await getParkingLots({
+            refreshLocation()
+            return getParkingLots({
                 searchTerm,
                 location: {
                     latitude,

@@ -14,6 +14,7 @@ import {
     useColorScheme,
     View
 } from "react-native";
+import ErrorModal from "../ui/errorModal";
 
 interface BookFormProps {
     availableSpots: number;
@@ -32,6 +33,8 @@ const BookForm = ({
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
 
+    const [timeError, setTimeError] = useState<string | null>(null);
+
     const {
         startTime,
         endTime,
@@ -45,6 +48,16 @@ const BookForm = ({
         delay: 500
     })
 
+    useEffect(()=> {
+        const timer = setInterval(() => {
+            setLot({
+                ...lot,
+                startTime: new Date()
+            })
+        }, 300000)
+        return () => clearInterval(timer)
+    }, [])
+
     useEffect(() => {
         setLot({
             ...lot,
@@ -54,6 +67,14 @@ const BookForm = ({
         startTime,
         durationDebounce
     ])
+
+    useEffect(()=> {
+        if (!timeError) return
+        const timer = setTimeout(() => {
+            setTimeError(null)
+        }, 3000)
+        return () => clearTimeout(timer)
+    }, [timeError])
 
     return (
         <View style={styles.container}>
@@ -261,9 +282,23 @@ const BookForm = ({
                 <DateTimePicker
                     value={startTime}
                     onChange={(_, selectedDate) => {
-                        selectedDate && setLot({
+                        if (!selectedDate) {
+                            setTimeError(t("bookTimeError"))
+                            return setShowDatePicker(false)
+                        }
+
+                        const now = new Date()
+
+                        const year = selectedDate.getFullYear()
+                        const month = selectedDate.getMonth()
+                        const date = selectedDate.getDate()
+
+                        const hours = now.getHours()
+                        const minutes = now.getMinutes()
+
+                        setLot({
                             ...lot,
-                            startTime: selectedDate
+                            startTime: new Date(year, month, date, hours, minutes)
                         })
                         setShowDatePicker(false)
                     }}
@@ -276,16 +311,29 @@ const BookForm = ({
                 <DateTimePicker
                     value={startTime}
                     onChange={(_, selectedTime) => {
-                        selectedTime && setLot({
+                        const timeMinusFiveMinutes = new Date()
+                        timeMinusFiveMinutes.setMinutes(timeMinusFiveMinutes.getMinutes() - 5)
+                        if (!selectedTime || selectedTime < timeMinusFiveMinutes) {
+                            setTimeError(t("bookTimeError"))
+                            return setShowTimePicker(false)
+                        }
+
+                        setLot({
                             ...lot,
                             startTime: selectedTime
                         })
+
                         setShowTimePicker(false)
                     }}
                     mode="time"
                     display="spinner"
                 />
             }
+            <ErrorModal
+                visible={!!timeError}
+                onClose={() => setTimeError(null)}
+                message={timeError!}
+            />
         </View>
     )
 }

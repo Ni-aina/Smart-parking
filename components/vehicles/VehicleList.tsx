@@ -24,9 +24,9 @@ const VehicleList = () => {
     } = useVehicles();
 
     const {
-        lot: {
-            vehicleId
-        }
+        lot,
+        setLot,
+        lot: { vehicleId }
     } = useLotStore()
 
     const handleContinue = () => {
@@ -34,6 +34,13 @@ const VehicleList = () => {
             setError(t("please_select_vehicle"));
             return;
         }
+        
+        setLot({
+            ...lot,
+            startTime: new Date(),
+            endTime: new Date()
+        })
+
         router.push("/reservations/bookDetails");
     }
 

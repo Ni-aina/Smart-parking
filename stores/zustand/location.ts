@@ -40,7 +40,3 @@ export const useLocationStore = create<LocationStore>((set) => ({
     await useLocationStore.getState().getLocation();
   }
 }))
-
-export const initializeLocation = () => {
-  useLocationStore.getState().getLocation();
-}
