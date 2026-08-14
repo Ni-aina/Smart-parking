@@ -38,17 +38,32 @@ const BookDetailsScreen = () => {
 
     const handleContinue = () => {
         if (!startTime || !endTime || !durationHours) {
-            setError(t("duration_required"));
-            return;
+            setError(t("duration_required"))
+            return
+        }
+
+        const timeMinusFiveMinutes = new Date()
+        timeMinusFiveMinutes.setMinutes(timeMinusFiveMinutes.getMinutes() - 5)
+
+        if (startTime < timeMinusFiveMinutes) {
+            setError(t("book_time_error"))
+            return
         }
 
         if (!availableSpots) {
-            setError(t("no_available_spots"));
-            return;
+            setError(t("no_available_spots"))
+            return
         }
 
-        router.push("/reservations/review");
+        router.push("/reservations/review")
     }
+
+    useEffect(() => {
+        setLot({
+            ...lot,
+            startTime: new Date()
+        })
+    }, [])
 
     useEffect(() => {
         const timedOut = setTimeout(() => {
@@ -75,15 +90,16 @@ const BookDetailsScreen = () => {
                     onPress={handleContinue}
                 />
             </View>
+
             <ErrorModal
                 visible={!!error}
                 title={t("required_information")}
                 message={error}
                 onClose={() => setError("")}
             />
+
             {
-                isLoading &&
-                <Loading />
+                (durationHours && isLoading) && <Loading />
             }
         </>
     )

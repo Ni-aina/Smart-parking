@@ -48,16 +48,6 @@ const BookForm = ({
         delay: 500
     })
 
-    useEffect(()=> {
-        const timer = setInterval(() => {
-            setLot({
-                ...lot,
-                startTime: new Date()
-            })
-        }, 300000)
-        return () => clearInterval(timer)
-    }, [])
-
     useEffect(() => {
         setLot({
             ...lot,
@@ -283,7 +273,7 @@ const BookForm = ({
                     value={startTime}
                     onChange={(_, selectedDate) => {
                         if (!selectedDate) {
-                            setTimeError(t("bookTimeError"))
+                            setTimeError(t("book_time_error"))
                             return setShowDatePicker(false)
                         }
 
@@ -314,7 +304,7 @@ const BookForm = ({
                         const timeMinusFiveMinutes = new Date()
                         timeMinusFiveMinutes.setMinutes(timeMinusFiveMinutes.getMinutes() - 5)
                         if (!selectedTime || selectedTime < timeMinusFiveMinutes) {
-                            setTimeError(t("bookTimeError"))
+                            setTimeError(t("book_time_error"))
                             return setShowTimePicker(false)
                         }
 

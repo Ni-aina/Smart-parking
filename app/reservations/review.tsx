@@ -1,10 +1,12 @@
 import ReviewReservation from "@/components/reservations/reviewReservation";
 import Button from "@/components/ui/button";
+import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
 import useReservation from "@/hooks/books/useReservation";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { useLotStore } from "@/stores/zustand/lot";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -12,6 +14,8 @@ const ReviewScreen = () => {
     const { t } = useTranslation();
     const { currentProfile } = useCurrentProfile();
     const driverId = currentProfile?.id || "";
+
+    const [error, setError] = useState("");
 
     const {
         lot: {
@@ -34,6 +38,19 @@ const ReviewScreen = () => {
     } = useReservation();
 
     const handleBook = () => {
+        if (!startTime || !endTime || !durationHours) {
+            setError(t("duration_required"))
+            return
+        }
+
+        const timeMinusFiveMinutes = new Date()
+        timeMinusFiveMinutes.setMinutes(timeMinusFiveMinutes.getMinutes() - 5)
+
+        if (startTime < timeMinusFiveMinutes) {
+            setError(t("book_time_error"))
+            return
+        }
+
         handleCreate({
             driverId,
             lotId: id,
@@ -43,6 +60,13 @@ const ReviewScreen = () => {
             status: "pending"
         })
     }
+
+    useEffect(() => {
+        const timedOut = setTimeout(() => {
+            setError("");
+        }, 1000 * 3)
+        return () => clearTimeout(timedOut);
+    }, [error])
 
     return (
         <>
@@ -83,6 +107,14 @@ const ReviewScreen = () => {
                     onPress={handleBook}
                 />
             </View >
+
+            <ErrorModal
+                visible={!!error}
+                title={t("required_information")}
+                message={error}
+                onClose={() => setError("")}
+            />
+
             {
                 isCreating &&
                 <Loading />

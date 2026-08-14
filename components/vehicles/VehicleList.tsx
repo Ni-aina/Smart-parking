@@ -35,12 +35,6 @@ const VehicleList = () => {
             return;
         }
         
-        setLot({
-            ...lot,
-            startTime: new Date(),
-            endTime: new Date()
-        })
-
         router.push("/reservations/bookDetails");
     }
 

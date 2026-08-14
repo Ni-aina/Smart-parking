@@ -229,6 +229,8 @@ export async function checkLotByTime(
         if (!startTime || !endTime) throw new Error("Start time and end time are required");
         if (startTime > endTime) throw new Error("Start time must be before end time");
 
+        if (startTime.getTime() === endTime.getTime()) return 0;
+
         const request = (async () => {
             const [lotResult, reservationsResult] = await Promise.all([
                 supabase
