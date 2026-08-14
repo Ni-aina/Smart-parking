@@ -1,15 +1,25 @@
-import { updatePassword } from "@/actions/user.action";
+import { setPassword, updatePassword } from "@/actions/user.action";
 import { useMutation } from "@tanstack/react-query";
 
-const usePassword = () => {
+export const useSetPassword = () => {
+    const mutation = useMutation({
+        mutationKey: ["set-password"],
+        mutationFn: ({ newPassword }: { newPassword: string }) => setPassword(newPassword)
+    })
+
+    return mutation;
+}
+
+const useUpdatePassword = () => {
 
     const mutation = useMutation({
         mutationKey: ["update-password"],
-        mutationFn: ({ email, currentPassword, newPassword }: { email: string; currentPassword: string; newPassword: string }) =>
+        mutationFn: ({ email, currentPassword, newPassword }:
+            { email: string; currentPassword: string; newPassword: string }) =>
             updatePassword(email, currentPassword, newPassword)
     })
 
     return mutation;
 }
 
-export default usePassword;
+export default useUpdatePassword;

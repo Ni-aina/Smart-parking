@@ -58,6 +58,30 @@ export async function logout() {
     }
 }
 
+export async function setPassword(newPassword: string): Promise<boolean> {
+    try {
+        const request = (async () => {
+
+            const { error: updateError } = await supabase.auth.updateUser({
+                password: newPassword
+            })
+
+            if (updateError) throw new Error(updateError.message);
+
+            await supabase.auth.signOut();
+            
+            return true;
+        })()
+
+        return await Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function updatePassword(email: string, password: string, newPassword: string): Promise<boolean> {
     try {
         const request = (async () => {

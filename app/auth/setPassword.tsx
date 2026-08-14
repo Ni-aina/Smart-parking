@@ -4,25 +4,20 @@ import Header from "@/components/ui/header";
 import Loading from "@/components/ui/loading";
 import PasswordInput from "@/components/ui/passwordInput";
 import { Colors } from "@/constants/Colors";
-import useCurrentProfile from "@/hooks/useCurrentProfile";
 import useKeyboardVisible from "@/hooks/useKeyboardVisible";
-import useUpdatePassword from "@/hooks/usePassword";
+import { useSetPassword } from "@/hooks/usePassword";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
 
-interface SecurityInterface {
-    currentPassword: string;
+interface SetPasswordInterface {
     newPassword: string;
     confirmPassword: string;
 }
 
-const Security = () => {
-    const { currentProfile } = useCurrentProfile();
-    const email = currentProfile?.emailAddress || "";
-
+const SetPassword = () => {
     const colorScheme = useColorScheme() || "light";
     const { t } = useTranslation();
 
@@ -33,14 +28,14 @@ const Security = () => {
         handleSubmit,
         formState: { errors },
         watch
-    } = useForm<SecurityInterface>();
+    } = useForm<SetPasswordInterface>();
     const [savingError, setSavingError] = useState<string | null>(null);
 
-    const { mutate, isPending, error, isSuccess } = useUpdatePassword();
+    const { mutate, isPending, error, isSuccess } = useSetPassword();
 
-    const onSubmit = (data: SecurityInterface) => {
-        const { currentPassword, newPassword } = data;
-        mutate({ email, currentPassword, newPassword });
+    const onSubmit = (data: SetPasswordInterface) => {
+        const { newPassword } = data
+        mutate({ newPassword })
     }
 
     const isKeyboardVisible = useKeyboardVisible();
@@ -58,12 +53,8 @@ const Security = () => {
     }, [savingError])
 
     useEffect(() => {
-        if (error?.message) {
-            setSavingError(error.message);
-        }
-        if (isSuccess) {
-            router.push("/(tabs)/account");
-        }
+        if (error?.message) setSavingError(error.message)
+        if (isSuccess) router.push("/auth/signIn")
     }, [
         isSuccess,
         error?.message
@@ -85,25 +76,9 @@ const Security = () => {
                         }}
                     >
                         <Header
-                            title={t("change_password")}
+                            title={t("set_password")}
                         />
                     </View>
-
-                    <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                        {t("current_password")} *
-                    </Text>
-                    <Controller
-                        control={control}
-                        name="currentPassword"
-                        rules={{ required: t("this_field_is_required") as string }}
-                        render={({ field: { onChange, value } }) => (
-                            <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_current_password")} />
-                        )}
-                    />
-                    {
-                        errors.currentPassword &&
-                        <Text style={styles.inputError}>{errors.currentPassword.message}</Text>
-                    }
 
                     <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
                         {t("new_password")} *
@@ -140,7 +115,7 @@ const Security = () => {
             </KeyboardAvoidingView>
 
             <Button
-                title={t("update_password")}
+                title={t("set_password")}
                 onPress={handleSubmit(onSubmit)}
             />
 
@@ -148,7 +123,7 @@ const Security = () => {
 
             <ErrorModal
                 visible={!!savingError}
-                title={t("password_update_failed")}
+                title={t("password_set_failed")}
                 message={savingError || ""}
                 onClose={() => setSavingError(null)}
             />
@@ -174,4 +149,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Security;
+export default SetPassword;
