@@ -1,4 +1,5 @@
 import { createConversation } from "@/actions/message.action";
+import HeaderDetails from "@/components/lots/headerDetails";
 import ReviewList from "@/components/reviews/review-list";
 import ErrorModal from "@/components/ui/errorModal";
 import Icons from "@/components/ui/icons";
@@ -8,8 +9,8 @@ import { Colors } from "@/constants/Colors";
 import useLot from "@/hooks/lots/useLot";
 import useReviews from "@/hooks/reviews/useReviews";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
-import { defaultParking } from "@/lib/defaultImages";
 import { useLotStore } from "@/stores/zustand/lot";
+import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BlurView } from 'expo-blur';
 import * as NavigationBar from 'expo-navigation-bar';
@@ -93,17 +94,22 @@ const LotDetailsScreen = () => {
         router.push("/reservations/selectVehicle");
     }
 
+    const lotImage = lot?.urlImages?.at(indexImage) || null;
+
     useEffect(() => {
         NavigationBar.setVisibilityAsync("hidden");
     }, [])
+
+    useEffect(() => {
+        if (lotImage) return;
+        setLoadingImage(false);
+    }, [lotImage])
 
     if (isLoading) return (
         <View style={styles.loading}>
             <LoaderSkeleton />
         </View>
     )
-
-    const lotImage = lot?.urlImages?.at(indexImage) || null;
 
     return (
         <View style={[styles.container, { backgroundColor: Colors[colorScheme].background }]}>
@@ -133,81 +139,87 @@ const LotDetailsScreen = () => {
                                     radius={0}
                                 />
                             }
-                            <ImageBackground
-                                source={lotImage ? { uri: lotImage } : defaultParking()}
-                                style={
-                                    loadingImage ?
-                                        styles.loadingImage
-                                        :
-                                        styles.imageBackground
-                                }
-                                onLoadStart={
-                                    () => setLoadingImage(true)
-                                }
-                                onLoadEnd={
-                                    () => setLoadingImage(false)
-                                }
-                            >
-                                <View style={styles.headerBackground}>
-                                    <Icons
-                                        onPress={() => router.back()}
-                                        name="chevron-back"
-                                        color={
-                                            lotImage ?
-                                                "white" :
-                                                "#555"
+                            {
+                                lotImage ?
+                                    <ImageBackground
+                                        source={{ uri: lotImage }}
+                                        style={
+                                            loadingImage ?
+                                                styles.loadingImage
+                                                :
+                                                styles.imageBackground
                                         }
-                                        size={30}
-                                    />
-                                    <Icons
-                                        name="share-social-sharp"
-                                        color={
-                                            lotImage ?
-                                                "white" :
-                                                "#555"
+                                        onLoadStart={
+                                            () => setLoadingImage(true)
                                         }
-                                        size={30}
-                                    />
-                                </View>
-                                {
-                                    lotImage &&
-                                    <View style={styles.bodyBackgroundWrapper}>
-                                        <BlurView
-                                            intensity={20}
-                                            tint={colorScheme === "dark" ? "dark" : "light"}
-                                            style={{
-                                                padding: 5
-                                            }}
-                                        >
-                                            <ScrollView
-                                                horizontal
-                                                showsHorizontalScrollIndicator={false}
-                                                contentContainerStyle={{
-                                                    flexDirection: "row",
-                                                    gap: 5
-                                                }}
-                                                nestedScrollEnabled={true}
-                                            >
+                                        onLoadEnd={
+                                            () => setLoadingImage(false)
+                                        }
+                                    >
+                                        <HeaderDetails
+                                            router={router}
+                                            lotImage={lotImage}
+                                        />
+                                        {
+                                            lotImage &&
+                                            <View style={styles.bodyBackgroundWrapper}>
+                                                <BlurView
+                                                    intensity={20}
+                                                    tint={colorScheme === "dark" ? "dark" : "light"}
+                                                    style={{
+                                                        padding: 5
+                                                    }}
+                                                >
+                                                    <ScrollView
+                                                        horizontal
+                                                        showsHorizontalScrollIndicator={false}
+                                                        contentContainerStyle={{
+                                                            flexDirection: "row",
+                                                            gap: 5
+                                                        }}
+                                                        nestedScrollEnabled={true}
+                                                    >
 
-                                                {
-                                                    lot.urlImages?.map((item, index) =>
-                                                        <Pressable
-                                                            key={index}
-                                                            onPress={() => setIndexImage(index)}
-                                                        >
-                                                            <Image
-                                                                source={{ uri: item }}
-                                                                alt={item}
-                                                                style={styles.image}
-                                                            />
-                                                        </Pressable>
-                                                    )
-                                                }
-                                            </ScrollView>
-                                        </BlurView>
+                                                        {
+                                                            lot.urlImages?.map((item, index) =>
+                                                                <Pressable
+                                                                    key={index}
+                                                                    onPress={() => setIndexImage(index)}
+                                                                >
+                                                                    <Image
+                                                                        source={{ uri: item }}
+                                                                        alt={item}
+                                                                        style={styles.image}
+                                                                    />
+                                                                </Pressable>
+                                                            )
+                                                        }
+                                                    </ScrollView>
+                                                </BlurView>
+                                            </View>
+                                        }
+                                    </ImageBackground>
+                                    :
+                                    <View
+                                        style={{
+                                            backgroundColor: Colors[colorScheme].gray200,
+                                            height: Math.floor(screenHeight / 2) - 50,
+                                            paddingHorizontal: 10,
+                                            paddingTop: 35
+                                        }}
+                                    >
+                                        <HeaderDetails router={router} />
+                                        <View
+                                            style={styles.noBackgroundImage}
+                                        >
+                                            <MaterialIcons
+                                                name="local-parking"
+                                                size={200}
+                                                color={Colors[colorScheme].icon}
+                                            />
+                                        </View>
                                     </View>
-                                }
-                            </ImageBackground>
+                            }
                         </ScrollView>
                         <View
                             style={{
@@ -596,13 +608,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         justifyContent: "space-between"
     },
+    noBackgroundImage: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
     loadingImage: {
         width: 0,
         height: 0
-    },
-    headerBackground: {
-        flexDirection: "row",
-        justifyContent: "space-between"
     },
     bodyBackgroundWrapper: {
         borderRadius: 10,

@@ -1,9 +1,8 @@
 import { Colors } from "@/constants/Colors";
 import useReservation from "@/hooks/books/useReservation";
-import { defaultParking } from "@/lib/defaultImages";
 import { ReservationInterface } from "@/types/reservation";
 import { getStatusColor } from "@/utils/statusColor";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Skeleton } from "moti/skeleton";
 import { useEffect, useState } from "react";
@@ -68,6 +67,11 @@ const BookCard = ({ reservation }: BookCardProps) => {
         return () => clearTimeout(timeout);
     }, [cancellationError])
 
+    useEffect(() => {
+        if (lotImage) return;
+        setLoadingImage(false);
+    }, [lotImage])
+
     return (
         <>
             <View
@@ -95,20 +99,39 @@ const BookCard = ({ reservation }: BookCardProps) => {
                             />
                         </View>
                     }
-                    <Image
-                        source={lotImage ? { uri: lotImage } : defaultParking()}
-                        style={
-                            loadingImage ?
-                                styles.loadingImage :
-                                styles.image
-                        }
-                        onLoadStart={
-                            () => setLoadingImage(true)
-                        }
-                        onLoadEnd={
-                            () => setLoadingImage(false)
-                        }
-                    />
+                    {
+                        lotImage ?
+                            <Image
+                                source={{ uri: lotImage }}
+                                style={
+                                    loadingImage ?
+                                        styles.loadingImage :
+                                        styles.image
+                                }
+                                onLoadStart={
+                                    () => setLoadingImage(true)
+                                }
+                                onLoadEnd={
+                                    () => setLoadingImage(false)
+                                }
+                            />
+                            :
+                            <View
+                                style={[
+                                    styles.image, {
+                                        backgroundColor: Colors[colorscheme].gray200,
+                                        justifyContent: "center",
+                                        alignItems: "center"
+                                    }]
+                                }
+                            >
+                                <MaterialIcons
+                                    name="local-parking"
+                                    size={70}
+                                    color={Colors[colorscheme].icon}
+                                />
+                            </View>
+                    }
                     <View
                         style={{
                             flex: 1,

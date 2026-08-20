@@ -1,9 +1,8 @@
 import { Colors } from "@/constants/Colors";
-import { defaultParking } from "@/lib/defaultImages";
 import { LotInterface } from "@/types/lot";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Skeleton } from "moti/skeleton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     Image,
@@ -40,6 +39,11 @@ const LotItem = ({
         distance
     } = lot;
 
+    useEffect(() => {
+        if (lotImage) return;
+        setLoadingImage(false);
+    }, [lotImage])
+
     return (
         <Pressable
             style={({ pressed }) => [
@@ -69,16 +73,36 @@ const LotItem = ({
                     />
                 </View>
             }
-            <Image
-                source={lotImage ? { uri: lotImage } : defaultParking()}
-                style={{
-                    width: loadingImage ? 0 : (layout === "tile" ? "100%" : 70),
-                    height: loadingImage ? 0 : (layout === "tile" ? 120 : 70),
-                    borderRadius: 8
-                }}
-                onLoadStart={() => setLoadingImage(true)}
-                onLoadEnd={() => setLoadingImage(false)}
-            />
+            {
+                lotImage ?
+                    <Image
+                        source={{ uri: lotImage }}
+                        style={{
+                            width: loadingImage ? 0 : (layout === "tile" ? "100%" : 70),
+                            height: loadingImage ? 0 : (layout === "tile" ? 120 : 70),
+                            borderRadius: 8
+                        }}
+                        onLoadStart={() => setLoadingImage(true)}
+                        onLoadEnd={() => setLoadingImage(false)}
+                    />
+                    :
+                    <View
+                        style={{
+                            backgroundColor: Colors[colorscheme].gray200,
+                            width: layout === "tile" ? "100%" : 70,
+                            height: layout === "tile" ? 120 : 70,
+                            borderRadius: 8,
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}
+                    >
+                        <MaterialIcons
+                            name="local-parking"
+                            size={70}
+                            color={Colors[colorscheme].icon}
+                        />
+                    </View>
+            }
             <View
                 style={styles.itemContent}
             >
