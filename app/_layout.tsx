@@ -3,6 +3,7 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 
 import Loading from "@/components/ui/loading";
+import { useSetPasswordDeepLink } from "@/hooks/useSetPassword";
 import { initI18n } from "@/i18n";
 import { stripePublicKey } from "@/lib/config";
 import { AuthContextProvider } from "@/stores/context/AuthContext";
@@ -17,6 +18,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 const queryClient = new QueryClient();
 
 const RootLayout = () => {
+  useSetPasswordDeepLink();
+  
   const [ready, setReady] = useState(false);
   const pathname = usePathname();
 
