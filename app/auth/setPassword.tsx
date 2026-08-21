@@ -1,3 +1,4 @@
+import ProtectedRoute from "@/components/ProtectedRoute";
 import Button from "@/components/ui/button";
 import ErrorModal from "@/components/ui/errorModal";
 import Header from "@/components/ui/header";
@@ -61,73 +62,75 @@ const SetPassword = () => {
     ])
 
     return (
-        <View style={styles.container}>
-            <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior={isKeyboardVisible ? "padding" : undefined}
-            >
-                <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ gap: 15 }}
+        <ProtectedRoute>
+            <View style={styles.container}>
+                <KeyboardAvoidingView
+                    style={{ flex: 1 }}
+                    behavior={isKeyboardVisible ? "padding" : undefined}
                 >
-                    <View
-                        style={{
-                            marginBottom: 20
-                        }}
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={{ gap: 15 }}
                     >
-                        <Header
-                            title={t("set_password")}
+                        <View
+                            style={{
+                                marginBottom: 20
+                            }}
+                        >
+                            <Header
+                                title={t("set_password")}
+                            />
+                        </View>
+
+                        <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
+                            {t("new_password")} *
+                        </Text>
+                        <Controller
+                            control={control}
+                            name="newPassword"
+                            rules={{ required: t("this_field_is_required") as string, minLength: { value: 6, message: t("password_min_length") } }}
+                            render={({ field: { onChange, value } }) => (
+                                <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_new_password")} />
+                            )}
                         />
-                    </View>
+                        {
+                            errors.newPassword &&
+                            <Text style={styles.inputError}>{errors.newPassword.message}</Text>
+                        }
 
-                    <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                        {t("new_password")} *
-                    </Text>
-                    <Controller
-                        control={control}
-                        name="newPassword"
-                        rules={{ required: t("this_field_is_required") as string, minLength: { value: 6, message: t("password_min_length") } }}
-                        render={({ field: { onChange, value } }) => (
-                            <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_new_password")} />
-                        )}
-                    />
-                    {
-                        errors.newPassword &&
-                        <Text style={styles.inputError}>{errors.newPassword.message}</Text>
-                    }
+                        <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
+                            {t("confirm_password")} *
+                        </Text>
+                        <Controller
+                            control={control}
+                            name="confirmPassword"
+                            rules={{ required: t("this_field_is_required") as string, validate: curr => watch("newPassword") === curr || t("passwords_do_not_match") }}
+                            render={({ field: { onChange, value } }) => (
+                                <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_confirm_password")} />
+                            )}
+                        />
+                        {
+                            errors.confirmPassword &&
+                            <Text style={styles.inputError}>{errors.confirmPassword.message}</Text>
+                        }
+                    </ScrollView>
+                </KeyboardAvoidingView>
 
-                    <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                        {t("confirm_password")} *
-                    </Text>
-                    <Controller
-                        control={control}
-                        name="confirmPassword"
-                        rules={{ required: t("this_field_is_required") as string, validate: curr => watch("newPassword") === curr || t("passwords_do_not_match") }}
-                        render={({ field: { onChange, value } }) => (
-                            <PasswordInput value={value} onChangeText={onChange} placeholder={t("placeholder_confirm_password")} />
-                        )}
-                    />
-                    {
-                        errors.confirmPassword &&
-                        <Text style={styles.inputError}>{errors.confirmPassword.message}</Text>
-                    }
-                </ScrollView>
-            </KeyboardAvoidingView>
+                <Button
+                    title={t("set_password")}
+                    onPress={handleSubmit(onSubmit)}
+                />
 
-            <Button
-                title={t("set_password")}
-                onPress={handleSubmit(onSubmit)}
-            />
+                {isPending && <Loading />}
 
-            {isPending && <Loading />}
-
-            <ErrorModal
-                visible={!!savingError}
-                title={t("password_set_failed")}
-                message={savingError || ""}
-                onClose={() => setSavingError(null)}
-            />
-        </View>
+                <ErrorModal
+                    visible={!!savingError}
+                    title={t("password_set_failed")}
+                    message={savingError || ""}
+                    onClose={() => setSavingError(null)}
+                />
+            </View>
+         </ProtectedRoute>
     )
 }
 
