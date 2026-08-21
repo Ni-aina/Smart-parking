@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Animated } from "react-native";
 
 const useChatFABAnimation = () => {
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
     const scaleAnim = useRef(new Animated.Value(0)).current;
 
     const open = () => {
