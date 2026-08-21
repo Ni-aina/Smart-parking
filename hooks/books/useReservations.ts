@@ -10,6 +10,7 @@ const useReservations = () => {
 
     const {
         data,
+        error,
         isLoading,
         refetch,
         hasNextPage,
@@ -70,6 +71,7 @@ const useReservations = () => {
 
     return {
         reservations,
+        error,
         isLoading,
         refetch,
         hasNextPage,

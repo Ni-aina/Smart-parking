@@ -1,6 +1,7 @@
 import useReservations from "@/hooks/books/useReservations";
 import { useCallback } from "react";
 import { FlatList } from "react-native";
+import RequestTooLong from "../ui/requestTooLong";
 import LoaderSkeleton from "../ui/Skeleton";
 import BookCard from "./bookCard";
 
@@ -8,6 +9,7 @@ const MyBooking = () => {
 
     const {
         reservations,
+        error,
         isLoading,
         refetch,
         hasNextPage,
@@ -25,6 +27,8 @@ const MyBooking = () => {
     ])
 
     if (isLoading) return <LoaderSkeleton />
+
+    if (error) return <RequestTooLong refresh={refetch} message={error.message} />
 
     return (
         <FlatList

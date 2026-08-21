@@ -10,6 +10,7 @@ const useBookHistory = () => {
 
     const {
         data,
+        error,
         isLoading,
         refetch,
         hasNextPage,
@@ -63,6 +64,7 @@ const useBookHistory = () => {
 
     return {
         booksHistory,
+        error,
         isLoading,
         refetch,
         hasNextPage,
