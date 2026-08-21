@@ -18,8 +18,8 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 const queryClient = new QueryClient();
 
 const RootLayout = () => {
-  useSetPasswordDeepLink();
-  
+  const { isDeepLinkHandling } = useSetPasswordDeepLink();
+
   const [ready, setReady] = useState(false);
   const pathname = usePathname();
 
@@ -36,7 +36,7 @@ const RootLayout = () => {
     initLang();
   }, [])
 
-  if (!ready) return <Loading />;
+  if (!ready || isDeepLinkHandling) return <Loading />
 
   return (
     <ThemeProvider>

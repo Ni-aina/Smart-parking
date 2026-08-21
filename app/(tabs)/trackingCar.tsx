@@ -1,6 +1,6 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Icons from "@/components/ui/icons";
-import Pending from "@/components/ui/pending";
+import Loading from "@/components/ui/loading";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import VehicleItem from "@/components/vehicles/VehicleItem";
@@ -92,10 +92,7 @@ const TrackingCarSceen = () => {
             />
         }
       </View>
-      {
-        isDeleting &&
-        <Pending />
-      }
+      {isDeleting && <Loading />}
 
     </ProtectedRoute>
   )

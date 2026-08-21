@@ -11,7 +11,14 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { KeyboardAvoidingView, ScrollView, StyleSheet, Text, useColorScheme, View } from "react-native";
+import {
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
+} from "react-native";
 
 interface SetPasswordInterface {
     newPassword: string;

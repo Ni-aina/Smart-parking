@@ -1,7 +1,7 @@
 import { logout } from "@/actions/user.action";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import Pending from "@/components/ui/pending";
+import Loading from "@/components/ui/loading";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useNotReadCount from "@/hooks/messages/useNotReadCount";
@@ -128,7 +128,7 @@ const AccountScreen = () => {
                             numberOfLines={1}
                             lineBreakMode="tail"
                         >
-                           {error?.message || currentProfile?.fullName!}
+                            {error?.message || currentProfile?.fullName!}
                         </Text>
                         <Text
                             style={[
@@ -511,9 +511,7 @@ const AccountScreen = () => {
                     />
                 </Pressable>
             </View>
-            {
-                isSignOut && <Pending />
-            }
+            {isSignOut && <Loading />}
         </ProtectedRoute>
     )
 }

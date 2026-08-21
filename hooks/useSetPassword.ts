@@ -1,9 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const useSetPasswordDeepLink = () => {
+    const [isDeepLinkHandling, setIsDeepLinkHandling] = useState(true)
     const router = useRouter()
 
     useEffect(() => {
@@ -25,13 +26,16 @@ export const useSetPasswordDeepLink = () => {
         const subscription = Linking.addEventListener("url", handleUrl)
 
         Linking.getInitialURL().then((url) => {
-            if (url) {
-                handleUrl({ url })
-            }
-        })
+            if (!url) return;
+            handleUrl({ url })
+        }).finally(() => setIsDeepLinkHandling(false))
 
         return () => {
             subscription.remove()
         }
     }, [])
+
+    return {
+        isDeepLinkHandling
+    }
 }
