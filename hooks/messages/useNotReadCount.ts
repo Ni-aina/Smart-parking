@@ -13,7 +13,7 @@ const useNotReadCount = () => {
         isLoading,
         refetch
     } = useQuery({
-        queryKey: ["not-read-count"],
+        queryKey: ["not-read-count", userId],
         queryFn: () => getNoReadCountByUserId(userId)
     })
 

@@ -1,21 +1,29 @@
+import {
+    createConversation,
+    getConversationById,
+    getConversationsByUserId,
+    normalizeConversation,
+    normalizeMessage
+} from "@/actions/conversation.action";
+import { sendMessagePushNotification } from "@/actions/notification.action";
 import { supabase } from "@/lib/supabase";
 import {
-    ConversationCreateInterface,
-    ConversationInterface,
     MessageCreateInterface,
     MessageInterface
 } from "@/types/message";
 import { isUUID } from "@/utils/isUUID";
-import { denormalizeData, normalizeData } from "@/utils/normalizeData";
+import { denormalizeData } from "@/utils/normalizeData";
 import { rejectTimeout } from "@/utils/rejectTimeout";
 
-const normalizeConversation = (conversation: Record<string, unknown>) =>
-    normalizeData(conversation) as ConversationInterface;
+export {
+    createConversation,
+    getConversationById,
+    getConversationsByUserId,
+    normalizeConversation,
+    normalizeMessage
+};
 
-const normalizeMessage = (message: Record<string, unknown>) =>
-    normalizeData(message) as MessageInterface;
-
-export async function getNoReadCountByUserId(userId: string): Promise<number> {
+export const getNoReadCountByUserId = async (userId: string): Promise<number> => {
     try {
         if (!isUUID(userId)) throw new Error("You have to be authenticated");
 
@@ -38,146 +46,9 @@ export async function getNoReadCountByUserId(userId: string): Promise<number> {
     }
 }
 
-export async function getConversationsByUserId(userId: string): Promise<ConversationInterface[]> {
-    try {
-        if (!isUUID(userId)) throw new Error("You have to be authenticated");
-
-        const request = (async () => {
-            const { data: conversations, error } = await supabase
-                .from("conversations")
-                .select(`
-                    *,
-                    sender: sender_id(*),
-                    receiver: receiver_id(*)
-                `)
-                .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-                .order("created_at", { ascending: false });
-
-            if (!conversations || error) throw new Error(`Conversations fetching error, ${error?.message}`);
-
-            const conversationIds = conversations.map(item => item.id);
-            const { data: messages, error: messageError } = conversationIds.length
-                ? await supabase
-                    .from("messages")
-                    .select("*")
-                    .in("conversation_id", conversationIds)
-                    .order("created_at", { ascending: false })
-                : { data: [], error: null }
-
-            if (messageError) throw new Error(`Messages fetching error, ${messageError.message}`);
-
-            const lastMessagesByConversation = (messages ?? []).reduce<Record<number, MessageInterface>>((acc, item) => {
-                const normalized = normalizeMessage(item);
-                if (!acc[normalized.conversationId]) {
-                    acc[normalized.conversationId] = normalized;
-                }
-                return acc;
-            }, {})
-
-            return conversations
-                .map(item => {
-                    const normalized = normalizeConversation(item);
-                    return {
-                        ...normalized,
-                        lastMessage: lastMessagesByConversation[normalized.id],
-                        isNotReadCount: messages?.filter(m =>
-                            m.conversation_id === normalized.id &&
-                            m.is_read === false &&
-                            m.sender_id !== userId
-                        ).length
-                    }
-                })
-                .sort((a, b) => {
-                    const aTime = a.lastMessage?.createdAt ?? a.createdAt;
-                    const bTime = b.lastMessage?.createdAt ?? b.createdAt;
-                    return new Date(bTime).getTime() - new Date(aTime).getTime();
-                })
-        })()
-
-        return Promise.race([
-            request,
-            rejectTimeout()
-        ])
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function getConversationById(conversationId: string): Promise<ConversationInterface> {
-    try {
-        if (!conversationId) throw new Error("Conversation id is required");
-
-        const request = (async () => {
-            const { data: conversation, error } = await supabase
-                .from("conversations")
-                .select(`
-                    *,
-                    sender: sender_id(*),
-                    receiver: receiver_id(*)
-                `)
-                .eq("id", conversationId)
-                .single();
-
-            if (!conversation || error) throw new Error(`Conversation fetching error, ${error?.message}`);
-            return normalizeConversation(conversation);
-        })()
-
-        return Promise.race([
-            request,
-            rejectTimeout()
-        ])
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function createConversation(
-    conversation: ConversationCreateInterface
-): Promise<ConversationInterface> {
-    try {
-        const { senderId, receiverId } = conversation;
-
-        if (!isUUID(senderId) || !isUUID(receiverId)) throw new Error("Invalid user");
-        if (senderId === receiverId) throw new Error("You cannot create a conversation with yourself");
-
-        const request = (async () => {
-            const { data: existingConversation, error: existingError } = await supabase
-                .from("conversations")
-                .select(`
-                    *,
-                    sender: sender_id(*),
-                    receiver: receiver_id(*)
-                `)
-                .or(`and(sender_id.eq.${senderId},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${senderId})`)
-                .maybeSingle();
-
-            if (existingError) throw new Error(`Conversation lookup error, ${existingError.message}`);
-            if (existingConversation) return normalizeConversation(existingConversation);
-
-            const { data: newConversation, error } = await supabase
-                .from("conversations")
-                .insert([denormalizeData(conversation)])
-                .select(`
-                    *,
-                    sender: sender_id(*),
-                    receiver: receiver_id(*)
-                `)
-                .single();
-
-            if (!newConversation || error) throw new Error(`Conversation creation error, ${error?.message}`);
-            return normalizeConversation(newConversation);
-        })()
-
-        return Promise.race([
-            request,
-            rejectTimeout()
-        ])
-    } catch (error) {
-        throw error;
-    }
-}
-
-export async function getMessagesByConversationId(conversationId: string): Promise<MessageInterface[]> {
+export const getMessagesByConversationId = async (
+    conversationId: string
+): Promise<MessageInterface[]> => {
     try {
         if (!conversationId) throw new Error("Conversation id is required");
 
@@ -204,7 +75,9 @@ export async function getMessagesByConversationId(conversationId: string): Promi
     }
 }
 
-export async function sendMessage(message: MessageCreateInterface): Promise<MessageInterface> {
+export const sendMessage = async (
+    message: MessageCreateInterface
+): Promise<MessageInterface> => {
     try {
         const payload = denormalizeData({
             ...message,
@@ -222,7 +95,28 @@ export async function sendMessage(message: MessageCreateInterface): Promise<Mess
                 .single();
 
             if (!newMessage || error) throw new Error(`Message sending error, ${error?.message}`);
-            return normalizeMessage(newMessage);
+            const normalized = normalizeMessage(newMessage);
+
+            const { data: conversationData } = await supabase
+                .from("conversations")
+                .select("sender_id, receiver_id")
+                .eq("id", message.conversationId)
+                .single();
+
+            if (conversationData) {
+                const recipientId = conversationData.sender_id === message.senderId
+                    ? conversationData.receiver_id
+                    : conversationData.sender_id;
+
+                sendMessagePushNotification({
+                    recipientId,
+                    senderName: normalized.sender?.fullName || "New Message",
+                    messageContent: normalized.content,
+                    conversationId: normalized.conversationId
+                }).catch(() => null)
+            }
+
+            return normalized;
         })()
 
         return Promise.race([
@@ -234,10 +128,10 @@ export async function sendMessage(message: MessageCreateInterface): Promise<Mess
     }
 }
 
-export async function markConversationMessagesAsRead(
+export const markConversationMessagesAsRead = async (
     conversationId: string,
     userId: string
-): Promise<boolean> {
+): Promise<boolean> => {
     try {
         if (!conversationId || !isUUID(userId)) return false;
 
