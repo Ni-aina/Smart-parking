@@ -1,104 +1,116 @@
 import { savePushToken } from "@/actions/notification.action";
+import { Colors } from "@/constants/Colors";
 import { useAuthContext } from "@/stores/context/AuthContext";
-import Constants, { ExecutionEnvironment } from "expo-constants";
-import type { EventSubscription, Notification } from "expo-notifications";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
 import { useRouter } from "expo-router";
-import { useEffect, useRef, useState } from "react";
-import { Platform } from "react-native";
+import type { TFunction } from "i18next";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Platform, useColorScheme } from "react-native";
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+        shouldShowBanner: true,
+        shouldShowList: true
+    })
+})
+
+const handleRegistrationError = (errorMessage: string) => {
+    alert(errorMessage)
+    throw new Error(errorMessage);
+}
+
+async function registerForPushNotificationsAsync(
+    colorscheme: "light" | "dark",
+    t: TFunction<"translation", undefined>
+) {
+    if (Platform.OS === 'android') {
+        await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: Colors[colorscheme].tint,
+        })
+    }
+
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+
+    if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+    }
+
+    if (finalStatus !== 'granted') {
+        handleRegistrationError(t("push_notification_permission_not_granted"));
+        return;
+    }
+
+    const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+    if (!projectId) {
+        handleRegistrationError(t("push_notification_project_id_not_found"));
+    }
+
+    try {
+        const pushTokenString = (
+            await Notifications.getExpoPushTokenAsync({
+                projectId,
+            })
+        ).data;
+        return pushTokenString;
+    } catch (e: unknown) {
+        handleRegistrationError(`${e}`);
+    }
+}
 
 export const usePushNotifications = () => {
     const { session } = useAuthContext();
+
+    const { t } = useTranslation();
+    const colorscheme = useColorScheme() || "light";
+
     const router = useRouter();
     const [expoPushToken, setExpoPushToken] = useState<string>("");
-    const [notification, setNotification] = useState<Notification | null>(null);
-    const notificationListener = useRef<EventSubscription | null>(null);
-    const responseListener = useRef<EventSubscription | null>(null);
+    const [notification, setNotification] = useState<Notifications.Notification | undefined>();
 
     useEffect(() => {
-        if (Platform.OS === "web") return;
+        if (Platform.OS === "web") return
 
-        const isExpoGo = Constants.appOwnership === "expo" ||
-            Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
+        registerForPushNotificationsAsync(colorscheme, t)
+            .then(token => setExpoPushToken(token ?? ''))
+            .catch((error: unknown) => setExpoPushToken(`${error}`));
 
-        if (isExpoGo && Platform.OS === "android") return;
+        const notificationListener = Notifications.addNotificationReceivedListener(notification => {
+            setNotification(notification);
+        })
 
-        let isMounted = true;
-
-        const setupNotifications = async () => {
-            try {
-                const Notifications = await import("expo-notifications");
-
-                Notifications.setNotificationHandler({
-                    handleNotification: async () => ({
-                        shouldShowAlert: true,
-                        shouldPlaySound: true,
-                        shouldSetBadge: true,
-                        shouldShowBanner: true,
-                        shouldShowList: true
-                    })
-                })
-
-                if (Platform.OS === "android") {
-                    await Notifications.setNotificationChannelAsync("messages", {
-                        name: "Messages",
-                        importance: Notifications.AndroidImportance.MAX,
-                        vibrationPattern: [0, 250, 250, 250],
-                        lightColor: "#0D92F4"
-                    })
-                }
-
-                const { status: existingStatus } = await Notifications.getPermissionsAsync();
-                let finalStatus = existingStatus;
-
-                if (existingStatus !== "granted") {
-                    const { status } = await Notifications.requestPermissionsAsync();
-                    finalStatus = status;
-                }
-
-                if (finalStatus === "granted") {
-                    const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
-                    const tokenResponse = await Notifications.getExpoPushTokenAsync({
-                        projectId
-                    })
-
-                    if (tokenResponse?.data && isMounted) {
-                        setExpoPushToken(tokenResponse.data);
+        const responseListener = Notifications.addNotificationResponseReceivedListener(response => {
+            const data = response.notification.request.content.data;
+            if (data?.conversationId) {
+                router.push({
+                    pathname: "/messages/[id]",
+                    params: {
+                        id: String(data.conversationId)
                     }
-                }
-
-                if (isMounted) {
-                    notificationListener.current = Notifications.addNotificationReceivedListener(item => {
-                        setNotification(item);
-                    })
-
-                    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-                        const data = response.notification.request.content.data;
-                        if (data?.conversationId) {
-                            router.push({
-                                pathname: "/messages/[id]",
-                                params: {
-                                    id: String(data.conversationId)
-                                }
-                            })
-                        }
-                    })
-                }
-            } catch {
-                return;
+                })
             }
-        }
-
-        setupNotifications();
+        })
 
         return () => {
-            isMounted = false;
-            notificationListener.current?.remove();
-            responseListener.current?.remove();
+            notificationListener.remove();
+            responseListener.remove();
         }
-    }, [router])
+    }, [
+        t,
+        colorscheme,
+        router
+    ])
 
     useEffect(() => {
-        if (Platform.OS === "web" || !session?.user?.id || !expoPushToken) return;
+        if (Platform.OS === "web" || !session?.user?.id || !expoPushToken) return
 
         savePushToken({
             userId: session.user.id,

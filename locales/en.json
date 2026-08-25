@@ -78,6 +78,8 @@
     "english": "English",
     "french": "French",
     "push_notification": "Push Notification",
+    "push_notification_permission_not_granted": "Permission not granted to get push token for push notification",
+    "push_notification_project_id_not_found": "Project ID not found",
     "messages": "Messages",
     "clear_data": "Clear Data",
     "about": "About",

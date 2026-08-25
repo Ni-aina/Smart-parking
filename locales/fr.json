@@ -78,6 +78,8 @@
     "english": "Anglais",
     "french": "Français",
     "push_notification": "Notifications push",
+    "push_notification_permission_not_granted": "Autorisation non accordée pour obtenir le jeton de notification push",
+    "push_notification_project_id_not_found": "ID de projet introuvable",
     "messages": "Messages",
     "clear_data": "Effacer les données",
     "about": "À propos",
