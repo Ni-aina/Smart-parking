@@ -4,6 +4,7 @@ import * as NavigationBar from "expo-navigation-bar";
 import {
     RelativePathString,
     Stack,
+    usePathname,
     useRouter
 } from "expo-router";
 import { useEffect } from "react";
@@ -15,6 +16,7 @@ const AuthLayout = () => {
     } = useAuthContext();
 
     const { pathname } = useTabsHistoryContext();
+    const currentPath = usePathname();
 
     const router = useRouter();
 
@@ -23,9 +25,7 @@ const AuthLayout = () => {
     }, [])
 
     useEffect(() => {
-        if (loading) return;
-
-        if (!session) return;
+        if (loading || !session || currentPath === "/auth/setPassword") return;
 
         const publicPaths = ["/", "/home"];
         const redirection = publicPaths.includes(pathname) ? "/(tabs)/account" : pathname;
