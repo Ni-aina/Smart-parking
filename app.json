@@ -22,6 +22,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
+      "googleServicesFile": "./google-services.json",
       "package": "com.nireactdev.SmartParking",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
