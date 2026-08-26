@@ -34,22 +34,23 @@ const isSetPasswordLink = (url: string) => {
 }
 
 export const useSetPasswordDeepLink = () => {
-    const [isDeepLinkHandling, setIsDeepLinkHandling] = useState(true)
+    const [isDeepLinkHandling, setIsDeepLinkHandling] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
         const handleUrl = async (url: string) => {
-            try {
-                if (!isSetPasswordLink(url)) {
-                    return
-                }
+            if (!isSetPasswordLink(url)) {
+                return
+            }
 
+            setIsDeepLinkHandling(true)
+            try {
                 const params = extractParams(url)
                 const accessToken = params.get("access_token")
                 const refreshToken = params.get("refresh_token")
                 const code = params.get("code")
                 const tokenHash = params.get("token_hash") || params.get("token")
-                const type = params.get("type")
+                const type = (params.get("type") || "invite") as "invite" | "recovery"
 
                 let sessionSet = false
 
@@ -66,10 +67,10 @@ export const useSetPasswordDeepLink = () => {
                     if (!error) {
                         sessionSet = true
                     }
-                } else if (tokenHash && type) {
+                } else if (tokenHash) {
                     const { error } = await supabase.auth.verifyOtp({
                         token_hash: tokenHash,
-                        type: type as "invite" | "recovery" | "signup" | "email"
+                        type: type
                     })
                     if (!error) {
                         sessionSet = true
@@ -84,17 +85,11 @@ export const useSetPasswordDeepLink = () => {
             }
         }
 
-        Linking.getInitialURL()
-            .then((url) => {
-                if (url) {
-                    handleUrl(url)
-                } else {
-                    setIsDeepLinkHandling(false)
-                }
-            })
-            .catch(() => {
-                setIsDeepLinkHandling(false)
-            })
+        Linking.getInitialURL().then((url) => {
+            if (url) {
+                handleUrl(url)
+            }
+        })
 
         const subscription = Linking.addEventListener("url", (event) => {
             handleUrl(event.url)
@@ -103,7 +98,7 @@ export const useSetPasswordDeepLink = () => {
         return () => {
             subscription.remove()
         }
-    }, [])
+    }, [router])
 
     return {
         isDeepLinkHandling
