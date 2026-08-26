@@ -195,10 +195,9 @@ const ConversationThreadScreen = () => {
 
     useEffect(() => {
         if (!messagesLength) return;
-        const waitingTime = messagesLength * 10;
         setTimeout(() => {
             listRef.current?.scrollToEnd({ animated: true });
-        }, waitingTime);
+        }, 80);
     }, [
         lastSeenMessageId,
         messagesLength
