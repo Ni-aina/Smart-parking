@@ -1,5 +1,4 @@
 import { savePushToken } from "@/actions/notification.action";
-import { Colors } from "@/constants/Colors";
 import { useAuthContext } from "@/stores/context/AuthContext";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
@@ -7,7 +6,7 @@ import { useRouter } from "expo-router";
 import type { TFunction } from "i18next";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Platform, useColorScheme } from "react-native";
+import { Platform } from "react-native";
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -24,7 +23,6 @@ const handleRegistrationError = (errorMessage: string) => {
 }
 
 async function registerForPushNotificationsAsync(
-    colorscheme: "light" | "dark",
     t: TFunction<"translation", undefined>
 ) {
     if (Platform.OS === 'android') {
@@ -32,7 +30,7 @@ async function registerForPushNotificationsAsync(
             name: 'default',
             importance: Notifications.AndroidImportance.MAX,
             vibrationPattern: [0, 250, 250, 250],
-            lightColor: Colors[colorscheme].tint,
+            lightColor: '#FF231F7C',
         })
     }
 
@@ -70,7 +68,6 @@ export const usePushNotifications = () => {
     const { session } = useAuthContext();
 
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
 
     const router = useRouter();
     const [expoPushToken, setExpoPushToken] = useState<string>("");
@@ -79,7 +76,7 @@ export const usePushNotifications = () => {
     useEffect(() => {
         if (Platform.OS === "web") return
 
-        registerForPushNotificationsAsync(colorscheme, t)
+        registerForPushNotificationsAsync(t)
             .then(token => setExpoPushToken(token ?? ''))
             .catch((error: unknown) => setExpoPushToken(`${error}`));
 
@@ -105,7 +102,6 @@ export const usePushNotifications = () => {
         }
     }, [
         t,
-        colorscheme,
         router
     ])
 
