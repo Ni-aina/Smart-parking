@@ -258,6 +258,7 @@
     "message_start_chat": "Commencez la conversation",
     "message_type_placeholder": "Écrivez un message...",
     "message_you_prefix": "Vous",
+    "show_older_messages": "Afficher les messages précédents",
     "time_now": "Maintenant",
     "time_minute_ago": "Il y a 1 minute",
     "time_minutes_ago": "Il y a {{count}} minutes",

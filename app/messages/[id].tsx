@@ -160,20 +160,24 @@ const ConversationThreadScreen = () => {
         conversation,
         messages,
         isLoading,
+        hasNextPage,
+        fetchNextPage,
+        isFetchingNextPage,
         handleSendAsync,
         isSending,
         currentProfile
-    } = useMessages(id);
+    } = useMessages(id)
 
     const otherUser = currentProfile && conversation?.senderId === currentProfile.id
         ? conversation.receiver
         : conversation?.sender
 
-    const lastSeenMessageId = messages.filter(item => item.senderId === currentProfile?.id && item.isRead).at(-1)?.id;
+    const lastSeenMessageId = messages.filter(item => item.senderId === currentProfile?.id && item.isRead).at(-1)?.id
+    const latestMessageId = messages.at(-1)?.id
 
     const submitMessage = async () => {
-        const content = message.trim();
-        if (!content || !currentProfile?.id || !id) return;
+        const content = message.trim()
+        if (!content || !currentProfile?.id || !id) return
 
         try {
             await handleSendAsync({
@@ -181,9 +185,9 @@ const ConversationThreadScreen = () => {
                 senderId: currentProfile.id,
                 content
             })
-            setMessage("");
+            setMessage("")
         } catch {
-            setErrorMessage(t("chat_error"));
+            setErrorMessage(t("chat_error"))
         } finally {
             setTimeout(() => {
                 setErrorMessage("")
@@ -191,16 +195,14 @@ const ConversationThreadScreen = () => {
         }
     }
 
-    const messagesLength = messages.length;
-
     useEffect(() => {
-        if (!messagesLength) return;
+        if (!latestMessageId) return
         setTimeout(() => {
-            listRef.current?.scrollToEnd({ animated: true });
-        }, 80);
+            listRef.current?.scrollToEnd({ animated: true })
+        }, 80)
     }, [
         lastSeenMessageId,
-        messagesLength
+        latestMessageId
     ])
 
     return (
@@ -242,7 +244,34 @@ const ConversationThreadScreen = () => {
                                 keyExtractor={item => item.id.toString()}
                                 contentContainerStyle={styles.messagesList}
                                 showsVerticalScrollIndicator={false}
-                                renderItem={({ item, index }) => (
+                                ListHeaderComponent={
+                                    hasNextPage ?
+                                        <View style={styles.loadMoreContainer}>
+                                            <Pressable
+                                                disabled={isFetchingNextPage}
+                                                onPress={() => fetchNextPage()}
+                                                style={({ pressed }) => [
+                                                    styles.loadMoreButton,
+                                                    { backgroundColor: colors.gray200 },
+                                                    (pressed || isFetchingNextPage) && styles.pressed
+                                                ]}
+                                            >
+                                                {
+                                                    isFetchingNextPage ?
+                                                        <ActivityIndicator
+                                                            size="small"
+                                                            color={colors.tint}
+                                                        />
+                                                        :
+                                                        <Text style={[styles.loadMoreText, { color: colors.text }]}>
+                                                            {t("show_older_messages")}
+                                                        </Text>
+                                                }
+                                            </Pressable>
+                                        </View>
+                                        : null
+                                }
+                                renderItem={({ item, index }) =>
                                     <MessageBubble
                                         message={item}
                                         previousMessage={messages[index - 1]}
@@ -252,7 +281,7 @@ const ConversationThreadScreen = () => {
                                         otherUser={otherUser}
                                         locale={i18n.language}
                                     />
-                                )}
+                                }
                                 ListEmptyComponent={
                                     <View style={styles.emptyMessages}>
                                         <Ionicons name="chatbubble-outline" size={54} color={colors.icon} />
@@ -414,9 +443,25 @@ const styles = StyleSheet.create({
         fontWeight: "700",
         textAlign: "center"
     },
+    loadMoreContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical: 8
+    },
+    loadMoreButton: {
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        borderRadius: 16,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    loadMoreText: {
+        fontSize: 13,
+        fontWeight: "600"
+    },
     pressed: {
         opacity: 0.65
     }
 })
 
-export default ConversationThreadScreen;
+export default ConversationThreadScreen

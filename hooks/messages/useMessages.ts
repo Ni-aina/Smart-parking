@@ -6,17 +6,17 @@ import {
 } from "@/actions/message.action";
 import { supabase } from "@/lib/supabase";
 import { MessageCreateInterface } from "@/types/message";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import useCurrentProfile from "../useCurrentProfile";
 
 const useMessages = (conversationId: string) => {
-    const { currentProfile } = useCurrentProfile();
-    const userId = currentProfile?.id || "";
-    const queryClient = useQueryClient();
+    const { currentProfile } = useCurrentProfile()
+    const userId = currentProfile?.id || ""
+    const queryClient = useQueryClient()
 
-    const messagesKey = ["messages", conversationId];
-    const conversationKey = ["conversation", conversationId];
+    const messagesKey = ["messages", conversationId]
+    const conversationKey = ["conversation", conversationId]
 
     const {
         data: conversation,
@@ -30,16 +30,35 @@ const useMessages = (conversationId: string) => {
     })
 
     const {
-        data: messages = [],
+        data,
         isLoading,
         error,
         refetch,
-        isRefetching
-    } = useQuery({
+        hasNextPage,
+        fetchNextPage,
+        isRefetching,
+        isFetchingNextPage
+    } = useInfiniteQuery({
         queryKey: messagesKey,
-        queryFn: () => getMessagesByConversationId(conversationId),
+        queryFn: async ({ pageParam = 1 }) => {
+            return await getMessagesByConversationId({
+                conversationId,
+                page: pageParam,
+                limit: 20
+            })
+        },
+        getNextPageParam: (lastPage) => {
+            return lastPage.hasMore ?
+                lastPage.nextPage :
+                undefined
+        },
+        initialPageParam: 1,
         enabled: !!conversationId
     })
+
+    const messages = (data?.pages.flatMap(page => page.data) || [])
+        .slice()
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
 
     const {
         mutate: handleSend,
@@ -50,14 +69,14 @@ const useMessages = (conversationId: string) => {
         mutationKey: ["send-message", conversationId],
         mutationFn: (message: MessageCreateInterface) => sendMessage(message),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: messagesKey });
-            queryClient.invalidateQueries({ queryKey: ["conversations"] });
+            queryClient.invalidateQueries({ queryKey: messagesKey })
+            queryClient.invalidateQueries({ queryKey: ["conversations"] })
         }
     })
 
     useEffect(() => {
-        if (!conversationId || !userId) return;
-        markConversationMessagesAsRead(conversationId, userId).catch(() => null);
+        if (!conversationId || !userId) return
+        markConversationMessagesAsRead(conversationId, userId).catch(() => null)
     }, [
         conversationId,
         messages.length,
@@ -65,12 +84,12 @@ const useMessages = (conversationId: string) => {
     ])
 
     useEffect(() => {
-        if (!conversationId) return;
+        if (!conversationId) return
 
-        const channelName = `messages:${conversationId}`;
-        const existingChannel = supabase.getChannels().find(c => c.topic === `realtime:${channelName}`);
+        const channelName = `messages:${conversationId}`
+        const existingChannel = supabase.getChannels().find(c => c.topic === `realtime:${channelName}`)
         if (existingChannel) {
-            supabase.removeChannel(existingChannel);
+            supabase.removeChannel(existingChannel)
         }
 
         const messagesChannel = supabase.channel(channelName)
@@ -94,10 +113,10 @@ const useMessages = (conversationId: string) => {
                 },
                 () => refetchConversation()
             )
-            .subscribe();
+            .subscribe()
 
         return () => {
-            supabase.removeChannel(messagesChannel);
+            supabase.removeChannel(messagesChannel)
         }
     }, [
         conversationId,
@@ -111,7 +130,10 @@ const useMessages = (conversationId: string) => {
         isLoading: isLoading || isConversationLoading,
         error: error || conversationError,
         refetch,
+        hasNextPage,
+        fetchNextPage,
         isRefetching,
+        isFetchingNextPage,
         handleSend,
         handleSendAsync,
         isSending,
@@ -120,4 +142,4 @@ const useMessages = (conversationId: string) => {
     }
 }
 
-export default useMessages;
+export default useMessages

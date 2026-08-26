@@ -46,24 +46,59 @@ export const getNoReadCountByUserId = async (userId: string): Promise<number> =>
     }
 }
 
-export const getMessagesByConversationId = async (
+export const getMessagesByConversationId = async ({
+    conversationId,
+    page = 1,
+    limit = 20
+}: {
     conversationId: string
-): Promise<MessageInterface[]> => {
+    page?: number
+    limit?: number
+}): Promise<{
+    data: MessageInterface[]
+    hasMore: boolean
+    nextPage?: number
+}> => {
     try {
-        if (!conversationId) throw new Error("Conversation id is required");
+        if (!conversationId) throw new Error("Conversation id is required")
+
+        const from = (page - 1) * limit
+        const to = page * limit - 1
 
         const request = (async () => {
-            const { data: messages, error } = await supabase
-                .from("messages")
-                .select(`
+            const [
+                { data: messages, error },
+                { count }
+            ] = await Promise.all([
+                supabase
+                    .from("messages")
+                    .select(`
                     *,
                     sender: sender_id(*)
                 `)
-                .eq("conversation_id", conversationId)
-                .order("created_at", { ascending: true });
+                    .eq("conversation_id", conversationId)
+                    .order("created_at", {
+                        ascending: false
+                    })
+                    .range(from, to),
+                supabase
+                    .from("messages")
+                    .select("*", { count: "exact", head: true })
+                    .eq("conversation_id", conversationId)
+            ])
 
-            if (!messages || error) throw new Error(`Messages fetching error, ${error?.message}`);
-            return messages.map(item => normalizeMessage(item));
+            if (!messages || error) throw new Error(`Messages fetching error, ${error?.message}`)
+
+            const normalizedData = messages.map(item => normalizeMessage(item))
+            const hasMore = count !== null && count > page * limit
+
+            return {
+                data: normalizedData,
+                hasMore,
+                nextPage: hasMore ?
+                    page + 1 :
+                    undefined
+            }
         })()
 
         return Promise.race([
@@ -71,7 +106,7 @@ export const getMessagesByConversationId = async (
             rejectTimeout()
         ])
     } catch (error) {
-        throw error;
+        throw error
     }
 }
 
