@@ -79,7 +79,7 @@ const useMessages = (conversationId: string) => {
         markConversationMessagesAsRead(conversationId, userId).catch(() => null)
     }, [
         conversationId,
-        messages.length,
+        messages.at(-1)?.id,
         userId
     ])
 
