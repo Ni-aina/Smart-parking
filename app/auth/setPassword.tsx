@@ -86,6 +86,9 @@ const SetPassword = () => {
                         >
                             <Header
                                 title={t("set_password")}
+                                customBackAction={
+                                    ()=> router.push("/(tabs)/account")
+                                }
                             />
                         </View>
 
