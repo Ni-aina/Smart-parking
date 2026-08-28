@@ -45,7 +45,10 @@ export const useSetPasswordDeepLink = () => {
         }
 
         const handleUrl = async (url: string) => {
-            if (!isSetPasswordLink(url)) return
+            if (!isSetPasswordLink(url)) {
+                setIsDeepLinkHandling(false)
+                return
+            }
 
             try {
                 const params = extractParams(url)
