@@ -6,6 +6,7 @@ import LoaderSkeleton from "@/components/ui/Skeleton";
 import { Colors } from "@/constants/Colors";
 import useNotReadCount from "@/hooks/messages/useNotReadCount";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
+import { useExpoTokenContext } from "@/stores/context/ExpoTokenContext";
 import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQueryClient } from "@tanstack/react-query";
@@ -24,6 +25,8 @@ import {
 } from "react-native";
 
 const AccountScreen = () => {
+    const { expoPushToken } = useExpoTokenContext();
+
     const { t } = useTranslation();
     const colorscheme = useColorScheme() || "light";
     const router = useRouter();
@@ -61,7 +64,7 @@ const AccountScreen = () => {
     const handleSingout = async () => {
         try {
             setIsSignOut(true);
-            await logout();
+            await logout(expoPushToken);
         } catch (err) {
             alert(t("log_out_failed"));
         } finally {

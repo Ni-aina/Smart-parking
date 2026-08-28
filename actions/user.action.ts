@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase";
 import { AuthenticatedUser, UnauthenticatedUser } from "@/types/authUser";
 import { rejectTimeout } from "@/utils/rejectTimeout";
 import { User } from "@supabase/supabase-js";
+import { deletePushToken } from "./notification.action";
 
 export async function createUser(email: string, password: string): Promise<User | null> {
     try {
@@ -45,8 +46,10 @@ export async function login(email: string, password: string): Promise<Authentica
     }
 }
 
-export async function logout() {
+export async function logout(expoPushToken: string) {
     try {
+        await deletePushToken(expoPushToken);
+
         const request = supabase.auth.signOut();
 
         return await Promise.race([
@@ -69,7 +72,7 @@ export async function setPassword(newPassword: string): Promise<boolean> {
             if (updateError) throw new Error(updateError.message);
 
             await supabase.auth.signOut();
-            
+
             return true;
         })()
 

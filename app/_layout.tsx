@@ -4,6 +4,7 @@ import { useSetPasswordDeepLink } from "@/hooks/useSetPassword";
 import { initI18n } from "@/i18n";
 import { stripePublicKey } from "@/lib/config";
 import { AuthContextProvider } from "@/stores/context/AuthContext";
+import { ExpoTokenContextProvider } from "@/stores/context/ExpoTokenContext";
 import { TabsHistoryContextProvider } from "@/stores/context/tabsHistoryContext";
 import { ThemeProvider } from "@/stores/context/ThemeContext";
 import { StripeProvider } from "@stripe/stripe-react-native";
@@ -18,17 +19,21 @@ import "react-native-reanimated";
 const queryClient = new QueryClient();
 
 const RootNavigation = () => {
-  usePushNotifications();
+  const { expoPushToken } = usePushNotifications();
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false
-      }}
+    <ExpoTokenContextProvider
+      expoPushToken={expoPushToken}
     >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="+not-found" />
-    </Stack>
+      <Stack
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </ExpoTokenContextProvider>
   )
 }
 
