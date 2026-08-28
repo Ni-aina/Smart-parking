@@ -137,7 +137,7 @@ export const sendMessagePushNotification = async ({
 
         const notificationPayload: PushNotificationPayload = {
             to: validTokens,
-            sound: "default",
+            sound: "notification.wav",
             title: senderName || "New Message",
             body: messageContent,
             channelId: "messages",
