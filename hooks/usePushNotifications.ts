@@ -9,6 +9,7 @@ import { Alert, Platform } from "react-native";
 
 type NotificationsType = typeof import("expo-notifications")
 type NotificationType = import("expo-notifications").Notification
+type NotificationResponseType = import("expo-notifications").NotificationResponse
 
 const handleRegistrationError = (errorMessage: string) => Alert.alert(errorMessage)
 
@@ -68,6 +69,7 @@ export const usePushNotifications = () => {
 
     const notificationListenerRef = useRef<ReturnType<NotificationsType["addNotificationReceivedListener"]> | undefined>(undefined)
     const responseListenerRef = useRef<ReturnType<NotificationsType["addNotificationResponseReceivedListener"]> | undefined>(undefined)
+    const handledResponseIdsRef = useRef<Set<string>>(new Set())
 
     useEffect(() => {
         const isExpoGo = Constants.appOwnership === "expo"
@@ -86,15 +88,11 @@ export const usePushNotifications = () => {
                 })
             })
 
-            registerForPushNotificationsAsync(Notifications, t)
-                .then(token => setExpoPushToken(token ?? ""))
-                .catch((error: unknown) => setExpoPushToken(`${error}`))
+            const redirectFromResponse = (response: NotificationResponseType) => {
+                const responseId = response.notification.request.identifier
+                if (handledResponseIdsRef.current.has(responseId)) return
+                handledResponseIdsRef.current.add(responseId)
 
-            notificationListenerRef.current = Notifications.addNotificationReceivedListener(received => {
-                setNotification(received)
-            })
-
-            responseListenerRef.current = Notifications.addNotificationResponseReceivedListener(response => {
                 const data = response.notification.request.content.data
                 if (data?.conversationId) {
                     router.push({
@@ -104,6 +102,21 @@ export const usePushNotifications = () => {
                         }
                     })
                 }
+            }
+
+            registerForPushNotificationsAsync(Notifications, t)
+                .then(token => setExpoPushToken(token ?? ""))
+                .catch((error: unknown) => setExpoPushToken(`${error}`))
+
+            const lastResponse = await Notifications.getLastNotificationResponseAsync()
+            if (lastResponse) redirectFromResponse(lastResponse)
+
+            notificationListenerRef.current = Notifications.addNotificationReceivedListener(received => {
+                setNotification(received)
+            })
+
+            responseListenerRef.current = Notifications.addNotificationResponseReceivedListener(response => {
+                redirectFromResponse(response)
             })
         }
 
