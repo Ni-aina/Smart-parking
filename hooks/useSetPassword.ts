@@ -34,16 +34,19 @@ const isSetPasswordLink = (url: string) => {
 }
 
 export const useSetPasswordDeepLink = () => {
-    const [isDeepLinkHandling, setIsDeepLinkHandling] = useState(false)
+    const [isDeepLinkHandling, setIsDeepLinkHandling] = useState(true)
+    const [isSessionSet, setIsSessionSet] = useState(false);
     const router = useRouter()
 
     useEffect(() => {
-        const handleUrl = async (url: string) => {
-            if (!isSetPasswordLink(url)) {
-                return
-            }
+        if (isSessionSet) {
+            setIsDeepLinkHandling(false)
+            return
+        }
 
-            setIsDeepLinkHandling(true)
+        const handleUrl = async (url: string) => {
+            if (!isSetPasswordLink(url)) return
+
             try {
                 const params = extractParams(url)
                 const accessToken = params.get("access_token")
@@ -52,43 +55,32 @@ export const useSetPasswordDeepLink = () => {
                 const tokenHash = params.get("token_hash") || params.get("token")
                 const type = (params.get("type") || "invite") as "invite" | "recovery"
 
-                let sessionSet = false
-
                 if (accessToken && refreshToken) {
                     const { error } = await supabase.auth.setSession({
                         access_token: accessToken,
                         refresh_token: refreshToken
                     })
-                    if (!error) {
-                        sessionSet = true
-                    }
+                    if (!error) setIsSessionSet(true)
                 } else if (code) {
                     const { error } = await supabase.auth.exchangeCodeForSession(code)
-                    if (!error) {
-                        sessionSet = true
-                    }
+                    if (!error) setIsSessionSet(true)
                 } else if (tokenHash) {
                     const { error } = await supabase.auth.verifyOtp({
                         token_hash: tokenHash,
                         type: type
                     })
-                    if (!error) {
-                        sessionSet = true
-                    }
+                    if (!error) setIsSessionSet(true)
                 }
 
-                if (sessionSet) {
-                    router.replace("/auth/setPassword")
-                }
+                if (isSessionSet) router.replace("/auth/setPassword")
             } finally {
                 setIsDeepLinkHandling(false)
             }
         }
 
         Linking.getInitialURL().then((url) => {
-            if (url) {
-                handleUrl(url)
-            }
+            if (url) handleUrl(url)
+            else setIsDeepLinkHandling(false)
         })
 
         const subscription = Linking.addEventListener("url", (event) => {
