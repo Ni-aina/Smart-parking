@@ -18,7 +18,7 @@ const registerForPushNotificationsAsync = async (
     t: TFunction<"translation", undefined>
 ) => {
     if (Platform.OS === "android") {
-        await Notifications.setNotificationChannelAsync("messages", {
+        await Notifications.setNotificationChannelAsync("messages-v2", {
             name: "Messages",
             importance: Notifications.AndroidImportance.MAX,
             vibrationPattern: [0, 250, 250, 250],
