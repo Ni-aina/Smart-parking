@@ -164,7 +164,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                         onPress={() => router.push("/settings/account")}
                     >
                         <View style={styles.dataContent}>
@@ -192,7 +194,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                         onPress={() => router.push("/settings/payment")}
                     >
                         <View style={styles.dataContent}>
@@ -220,7 +224,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                         onPress={() => router.push("/settings/security")}
                     >
                         <View style={styles.dataContent}>
@@ -257,7 +263,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                         onPress={() => router.push("/settings/language")}
                     >
                         <View style={styles.dataContent}>
@@ -285,7 +293,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -312,7 +322,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                         onPress={() => router.push("/messages")}
                     >
                         <View style={styles.dataContent}>
@@ -348,7 +360,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                         onPress={clearCache}
                     >
                         <View style={styles.dataContent}>
@@ -388,7 +402,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -415,7 +431,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -442,7 +460,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -469,7 +489,9 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
-                        android_ripple={{ color: "#777" }}
+                        android_ripple={{
+                            color: "#00000010"
+                        }}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
