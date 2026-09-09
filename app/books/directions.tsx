@@ -1,7 +1,8 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Header from "@/components/ui/header";
 import { Colors } from "@/constants/Colors";
-import * as Location from "expo-location";
+import { useLocationStore } from "@/stores/zustand/location";
+import { getDistanceTime } from "@/utils/getDistanceTime";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -26,6 +27,7 @@ const DirectionsScreen = () => {
 
     const router = useRouter()
     const mapRef = useRef<MapView | null>(null)
+    const { location: origin, refreshLocation } = useLocationStore()
 
     const { lat, lng, title } = useLocalSearchParams<{ lat?: string; lng?: string; title?: string }>()
     const destLat = parseFloat(lat || "0"), destLng = parseFloat(lng || "0"), destTitle = title || t("destination")
@@ -34,28 +36,26 @@ const DirectionsScreen = () => {
         longitude: destLng
     }
 
-    const [origin, setOrigin] = useState<Coordinate | null>(null)
     const [route, setRoute] = useState<RouteInfo | null>(null)
     const [loading, setLoading] = useState(true)
     const [errorMsg, setErrorMsg] = useState("")
 
     useEffect(() => {
+        const refreshInterval = setInterval(() => {
+            refreshLocation()
+        }, 30_000)
+
+        return () => clearInterval(refreshInterval)
+    }, [refreshLocation])
+
+    useEffect(() => {
         const initNavigation = async () => {
+            if (!origin) return
+
             try {
-                const { status } = await Location.requestForegroundPermissionsAsync()
-                if (status !== "granted") {
-                    setErrorMsg(t("location_permission_denied"))
-                    setLoading(false)
-                    return
-                }
-                const loc = await Location.getCurrentPositionAsync({
-                    accuracy: Location.Accuracy.Balanced
-                })
-                setOrigin({
-                    latitude: loc.coords.latitude,
-                    longitude: loc.coords.longitude
-                })
-                const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${loc.coords.longitude},${loc.coords.latitude};${destLng},${destLat}?overview=full&geometries=geojson`)
+                setLoading(true)
+                setErrorMsg("")
+                const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${origin.longitude},${origin.latitude};${destLng},${destLat}?overview=full&geometries=geojson`)
                 const data = await res.json()
                 if (data.code === "Ok" && data.routes?.length > 0) {
                     const r = data.routes[0]
@@ -65,9 +65,15 @@ const DirectionsScreen = () => {
                             longitude: oLng
                         }
                     })
+                    const duration = getDistanceTime(
+                        origin.latitude,
+                        origin.longitude,
+                        destLat,
+                        destLng
+                    )
                     setRoute({
                         distance: `${(r.distance / 1000).toFixed(1)} km`,
-                        duration: `${Math.ceil(r.duration / 60)} min`,
+                        duration: duration?.formatted || "",
                         coordinates: coords
                     })
                     setTimeout(() => {
@@ -90,8 +96,8 @@ const DirectionsScreen = () => {
                 setLoading(false)
             }
         }
-        if (destLat && destLng) initNavigation()
-    }, [destLat, destLng])
+        if (destLat && destLng && origin) initNavigation()
+    }, [destLat, destLng, origin, t])
 
     const initialRegion = {
         latitude: origin?.latitude || destLat,
@@ -170,6 +176,7 @@ const DirectionsScreen = () => {
         </ProtectedRoute>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
