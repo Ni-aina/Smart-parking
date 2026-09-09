@@ -228,7 +228,7 @@
     "status_failed": "Échoué",
     "status_succeeded": "Réussi",
     "status_active": "Actif",
-    "cancel_rs_status_error": "Seules les réservations en attente ou actives peuvent être annulées",
+    "cancel_rs_status_error": "Seules les réservations en attente peuvent être annulées",
     "ended_reservation_error": "La réservation est déjà terminée",
     "view_details": "Voir les détails",
     "payment_secure_payments": "🔒 Paiements sécurisés",

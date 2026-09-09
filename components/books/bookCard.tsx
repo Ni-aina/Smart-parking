@@ -256,7 +256,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                             } : null
                         ]}
                         onPress={
-                            status.toLowerCase() === "active" ?
+                            status.toLowerCase() === "active" || status.toLowerCase() === "completed" ?
                                 () => router.push(`/books/directions?lat=${reservation.lot.locationLat}&lng=${reservation.lot.locationLng}&title=${encodeURIComponent(reservation.lot.name)}`)
                                 :
                                 () => setConfirmingCancellation(true)
@@ -267,7 +267,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                 color: Colors[colorScheme].text
                             }}
                         >
-                            {status.toLowerCase() === "active" ?
+                            {status.toLowerCase() === "active" || status.toLowerCase() === "completed" ?
                                 t("get_direction")
                                 :
                                 t("cancel")

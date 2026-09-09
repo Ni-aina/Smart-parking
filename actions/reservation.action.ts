@@ -274,10 +274,7 @@ export async function cancelReservation(reservationId: string): Promise<Reservat
 
             if (!currentReservation) throw new Error("Reservation not found");
 
-            if (
-                currentReservation.status !== "pending" &&
-                currentReservation.status !== "active"
-            ) throw new Error("cancel_rs_status_error");
+            if (currentReservation.status !== "pending") throw new Error("cancel_rs_status_error");
 
             const { data, error } = await supabase.from("reservations")
                 .update({ status: "cancelled" })
