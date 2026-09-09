@@ -155,7 +155,16 @@ const DirectionsScreen = () => {
                                 </MapView>
                                 {route &&
                                     <View style={[styles.card, cardStyle]}>
-                                        <Text style={txt} numberOfLines={1}>{destTitle}</Text>
+                                        <Text
+                                            style={{
+                                                textAlign: "center",
+                                                marginBottom: 5,
+                                                ...txt
+                                            }}
+                                            numberOfLines={1}
+                                        >
+                                            {destTitle}
+                                        </Text>
                                         <View style={styles.row}>
                                             <View style={styles.col}>
                                                 <Text style={iconColor}>{t("distance")}</Text>
