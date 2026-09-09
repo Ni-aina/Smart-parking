@@ -1,7 +1,9 @@
 import { Colors } from "@/constants/Colors";
-import { Router } from "expo-router";
+import { useRouter } from "expo-router";
 import { StyleSheet, useColorScheme, View } from "react-native";
 import Icons from "../ui/icons";
+
+type Router = ReturnType<typeof useRouter>;
 
 interface HeaderDetailsInterface {
     router: Router;
@@ -9,7 +11,7 @@ interface HeaderDetailsInterface {
 }
 
 const HeaderDetails = ({ router, lotImage }: HeaderDetailsInterface) => {
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
         <View style={styles.headerBackground}>

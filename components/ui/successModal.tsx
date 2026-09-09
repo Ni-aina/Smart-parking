@@ -26,7 +26,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
     onClose
 }) => {
     const { t } = useTranslation()
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const modalTitle = title ?? t("success_title");
     const modalMessage = message ?? t("operation_successful");
 

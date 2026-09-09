@@ -11,7 +11,7 @@ const RequestTooLong = ({
     refresh,
     message
 }: RequestTooLongInterface) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
         <View style={styles.container}>

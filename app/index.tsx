@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get("window");
 
 const AppScreen = () => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const carouselRef = useRef<ICarouselInstance | null>(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const router = useRouter();

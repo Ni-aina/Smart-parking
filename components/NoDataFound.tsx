@@ -16,7 +16,7 @@ const NoDataFound = ({
     message, 
     iconName = "archive-outline"
 }: NoDataFoundProps) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     return (

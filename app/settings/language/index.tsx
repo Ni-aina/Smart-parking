@@ -23,7 +23,7 @@ const languages: LanguageOption[] = [
 
 const Language = () => {
     const { t, i18n } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const [selectedLanguage, setSelectedLanguage] = useState(i18n.language || "en");
 
     useEffect(() => {

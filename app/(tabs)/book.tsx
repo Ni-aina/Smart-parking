@@ -26,7 +26,7 @@ const BookScreen = () => {
     const accessToScan = currentRoles?.includes("owner") || currentRoles?.includes("agent");
     const router = useRouter();
 
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [active, setActive] = useState<0 | 1>(0);
 
     const {

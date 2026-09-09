@@ -265,5 +265,13 @@
     "time_hour_ago": "Il y a 1 heure",
     "time_hours_ago": "Il y a {{count}} heures",
     "time_day_ago": "Il y a 1 jour",
-    "time_days_ago": "Il y a {{count}} jours"
+    "time_days_ago": "Il y a {{count}} jours",
+    "get_direction": "Itinéraire",
+    "directions": "Itinéraire",
+    "distance": "Distance",
+    "current_location": "Position actuelle",
+    "destination": "Destination",
+    "loading_route": "Chargement de l'itinéraire...",
+    "route_error": "Impossible de trouver l'itinéraire",
+    "location_permission_denied": "La permission de localisation est requise"
 }

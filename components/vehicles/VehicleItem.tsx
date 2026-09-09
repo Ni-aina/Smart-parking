@@ -24,7 +24,7 @@ const VehicleItem = ({
     handleDelete
 }: VehicleItemInterface) => {
     const { t } = useTranslation()
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const router = useRouter();
 
     const [showConfirm, setShowConfirm] = useState(false);

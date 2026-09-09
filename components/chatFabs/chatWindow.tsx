@@ -3,7 +3,7 @@ import useCurrentProfile from "@/hooks/useCurrentProfile";
 import { webBaseUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
-import React, { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Animated, StyleSheet, useColorScheme, View } from "react-native";
 import { Bubble, GiftedChat, IMessage } from "react-native-gifted-chat";
@@ -34,7 +34,7 @@ const ChatWindow = ({ scaleAnim, onClose }: Props) => {
 
     const { location } = useLocationStore();
 
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     const [messages, setMessages] = useState<IMessage[]>(() => [

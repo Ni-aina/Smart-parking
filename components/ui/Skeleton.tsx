@@ -3,7 +3,7 @@ import { Skeleton } from "moti/skeleton";
 import { useColorScheme } from "react-native";
 
 const LoaderSkeleton = () => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
 

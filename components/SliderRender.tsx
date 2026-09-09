@@ -11,7 +11,7 @@ const SliderRender = ({ item: {
     title, description, image
 } }: SliderRenderProps) => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     
     return (
         <View style={styles.container}>

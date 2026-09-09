@@ -1,11 +1,10 @@
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
 import { StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 import { IMessage, SendProps } from "react-native-gifted-chat";
 
 const ChatSendButton = (props: SendProps<IMessage>) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     return (

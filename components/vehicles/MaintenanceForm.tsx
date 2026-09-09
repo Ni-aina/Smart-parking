@@ -36,7 +36,7 @@ const MaintenanceForm = ({
     setShowForm
 }: MaintenanceFormInterface) => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const [showPerformedDatePicker, setShowPerformedDatePicker] = useState(false);
     const [showDueDatePicker, setShowDueDatePicker] = useState(false);
 

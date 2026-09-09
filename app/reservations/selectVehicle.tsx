@@ -13,7 +13,7 @@ import {
 
 const SelectVehicleScreen = () => {
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const router = useRouter();
 
     return (

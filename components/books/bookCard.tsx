@@ -24,7 +24,7 @@ interface BookCardProps {
 
 const BookCard = ({ reservation }: BookCardProps) => {
     const { t } = useTranslation()
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const router = useRouter();
 
     const [loadingImage, setLoadingImage] = useState(true);
@@ -32,7 +32,7 @@ const BookCard = ({ reservation }: BookCardProps) => {
     const [confirmingCancellation, setConfirmingCancellation] = useState(false);
     const [errorCancelling, setErrorCancelling] = useState("");
 
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const lotImage = reservation.lot.urlImages.length > 0 ?
         reservation.lot.urlImages[0] :
         null;
@@ -194,14 +194,16 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                 fontSize: 16,
                                 fontWeight: "bold"
                             }}
+                            numberOfLines={1}
+                            ellipsizeMode="tail"
                         >
                             {reservation.lot.name}
                         </Text>
                         <View
                             style={{
                                 flexDirection: "row",
-                                gap: 4,
-                                alignItems: "center"
+                                alignItems: "center",
+                                gap: 4
                             }}
                         >
                             <Ionicons
@@ -211,8 +213,11 @@ const BookCard = ({ reservation }: BookCardProps) => {
                             />
                             <Text
                                 style={{
-                                    color: Colors[colorScheme].text
+                                    color: Colors[colorScheme].text,
+                                    maxWidth: "90%"
                                 }}
+                                numberOfLines={1}
+                                ellipsizeMode="tail"
                             >
                                 {reservation.lot.location}
                             </Text>
@@ -250,14 +255,23 @@ const BookCard = ({ reservation }: BookCardProps) => {
                                 opacity: 0.6
                             } : null
                         ]}
-                        onPress={() => setConfirmingCancellation(true)}
+                        onPress={
+                            status.toLowerCase() === "active" ?
+                                () => router.push(`/books/directions?lat=${reservation.lot.locationLat}&lng=${reservation.lot.locationLng}&title=${encodeURIComponent(reservation.lot.name)}`)
+                                :
+                                () => setConfirmingCancellation(true)
+                        }
                     >
                         <Text
                             style={{
                                 color: Colors[colorScheme].text
                             }}
                         >
-                            {t("cancel")}
+                            {status.toLowerCase() === "active" ?
+                                t("get_direction")
+                                :
+                                t("cancel")
+                            }
                         </Text>
                     </Pressable>
                     <Pressable

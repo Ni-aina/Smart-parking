@@ -23,7 +23,7 @@ const Security = () => {
     const { currentProfile } = useCurrentProfile();
     const email = currentProfile?.emailAddress || "";
 
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { t } = useTranslation();
 
     const router = useRouter();

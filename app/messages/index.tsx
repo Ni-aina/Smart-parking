@@ -27,7 +27,7 @@ const ProfileAvatar = ({
     profile?: ProfileInterface;
     size?: number;
 }) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     if (profile?.urlImage) {
@@ -75,7 +75,7 @@ const ConversationItem = ({
     onPress: () => void;
 }) => {
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
     const otherUser = conversation.senderId === currentUserId
         ? conversation.receiver
@@ -136,7 +136,7 @@ const ConversationItem = ({
 
 const MessageScreen = () => {
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
     const router = useRouter();
     const { width } = useWindowDimensions();

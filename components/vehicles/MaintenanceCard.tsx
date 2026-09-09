@@ -4,12 +4,12 @@ import Feather from "@expo/vector-icons/Feather";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  useColorScheme
+    Dimensions,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+    useColorScheme
 } from "react-native";
 
 const { width } = Dimensions.get("window")
@@ -26,7 +26,7 @@ const MaintenanceCard = ({
   onDelete
 }: MaintenanceCardInterface) => {
   const { t } = useTranslation();
-  const colorScheme = useColorScheme() || "light";
+  const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
   const [showActions, setShowActions] = useState(false);
 
   const colors = Colors[colorScheme];

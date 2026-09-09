@@ -21,7 +21,7 @@ const Header = ({
     rightIcon,
     customBackAction
 }: HeaderInterface) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const router = useRouter();
 
     return (

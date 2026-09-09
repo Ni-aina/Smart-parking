@@ -21,7 +21,7 @@ const VehicleSelectItem = ({
     vehicle
 }: VehicleSelectItemInterface) => {
     const { t } = useTranslation()
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [error, setError] = useState("");
 
     const {

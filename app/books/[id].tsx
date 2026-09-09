@@ -21,7 +21,7 @@ import QRCode from "react-native-qrcode-svg";
 const ETicket = () => {
     const { t } = useTranslation();
     const { id } = useLocalSearchParams<{ id: string }>();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [isPrinting, setIsPrinting] = useState(false);
 
     const {

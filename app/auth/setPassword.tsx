@@ -26,7 +26,7 @@ interface SetPasswordInterface {
 }
 
 const SetPassword = () => {
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { t } = useTranslation();
 
     const router = useRouter();

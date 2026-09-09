@@ -1,6 +1,5 @@
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 
@@ -10,7 +9,7 @@ type Props = {
 
 const ChatHeader = ({ onClose }: Props) => {
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     return (

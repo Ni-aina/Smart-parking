@@ -26,7 +26,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
     onClose
 }) => {
     const { t } = useTranslation()
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const modalTitle = title ?? t("error_title");
     const modalMessage = message ?? t("something_went_wrong");
 

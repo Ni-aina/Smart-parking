@@ -33,7 +33,7 @@ const Account = () => {
     const { currentProfile } = useCurrentProfile();
     const queryClient = useQueryClient();
 
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
 
     const [isPending, setIsPending] = useState(false);
     const [savingError, setSavingError] = useState("");

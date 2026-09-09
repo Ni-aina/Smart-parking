@@ -6,7 +6,7 @@ import { Text, useColorScheme, View } from "react-native";
 const TextWeight = ({
     text,
 }: { text: string }) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
         <Text
@@ -43,7 +43,7 @@ const PaymentReview = ({
     amount
 }: PaymentReviewProps) => {
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
         <View

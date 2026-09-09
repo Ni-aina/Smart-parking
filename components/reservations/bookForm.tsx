@@ -29,7 +29,7 @@ const BookForm = ({
 }: BookFormProps) => {
 
     const { t } = useTranslation()
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showTimePicker, setShowTimePicker] = useState(false);
 

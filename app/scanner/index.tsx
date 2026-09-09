@@ -24,7 +24,7 @@ const QRCodeScanner = () => {
     const roles = currentProfile?.roles || [];
 
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
 
     const [permission, requestPermission] = useCameraPermissions();
     const [scanStatus, setScanStatus] = useState<ScanStatus>();

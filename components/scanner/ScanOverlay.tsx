@@ -52,11 +52,11 @@ const ACCENT = "#4ade80";
 
 const overlayStyles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFill,
     margin: 10
   },
   corners: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFill
   },
   corner: {
     position: "absolute",

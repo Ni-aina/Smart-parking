@@ -35,7 +35,7 @@ import {
 
 const LotDetailsScreen = () => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { id } = useLocalSearchParams<{ id: string }>();
     const [indexImage, setIndexImage] = useState(0);
     const router = useRouter();
@@ -316,7 +316,7 @@ const LotDetailsScreen = () => {
                                             </Text>
                                             <Text
                                                 style={{
-                                                    fontSize: 20,
+                                                    fontSize: 16,
                                                     color: Colors[colorScheme].icon,
                                                     opacity: 0.7
                                                 }}

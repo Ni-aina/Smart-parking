@@ -2,19 +2,19 @@ import Header from "@/components/ui/header";
 import { Colors } from "@/constants/Colors";
 import { useTranslation } from "react-i18next";
 import {
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
 } from "react-native";
 import Animated, {
-  FadeInDown,
-  FadeInUp
+    FadeInDown,
+    FadeInUp
 } from "react-native-reanimated";
 
 const Payment = () => {
   const { t } = useTranslation();
-  const colorScheme = useColorScheme() || "light";
+  const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
 
   return (
     <View style={styles.container}>

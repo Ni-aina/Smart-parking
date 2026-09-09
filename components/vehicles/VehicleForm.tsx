@@ -25,7 +25,7 @@ const VehicleForm = ({
     vehicle
 }: VehicleFormInterface) => {
     const { t } = useTranslation()
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { currentProfile } = useCurrentProfile();
 
     const isKeyboardVisible = useKeyboardVisible();

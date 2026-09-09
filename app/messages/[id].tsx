@@ -31,7 +31,7 @@ const Avatar = ({
 }: {
     profile?: ProfileInterface;
 }) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     if (profile?.urlImage) {
@@ -57,7 +57,7 @@ const AvatarSeen = ({
 }: {
     profile?: ProfileInterface;
 }) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     if (profile?.urlImage) {
@@ -95,7 +95,7 @@ const MessageBubble = ({
     otherUser: ProfileInterface | undefined;
     locale: string;
 }) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
     const showTime = shouldShowMessageTime(
         message.createdAt,
@@ -147,7 +147,7 @@ const MessageBubble = ({
 
 const ConversationThreadScreen = () => {
     const { t, i18n } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
     const { id } = useLocalSearchParams<{ id: string }>();
     const listRef = useRef<FlatList<MessageInterface>>(null);

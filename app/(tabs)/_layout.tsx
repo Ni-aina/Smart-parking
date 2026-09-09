@@ -1,6 +1,6 @@
 import { usePathname } from 'expo-router';
 import { TabList, Tabs, TabSlot, TabTrigger } from 'expo-router/ui';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 
 import ChatFAB from '@/components/chatFabs/chatFab';
@@ -15,7 +15,7 @@ const TabLayout = () => {
 
   const { t } = useTranslation();
   const pathname = usePathname();
-  const colorscheme = useColorScheme() || "light";
+  const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
   const tabTriggerColor = Colors[colorscheme].tint;
 
   const {

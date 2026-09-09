@@ -265,5 +265,13 @@
     "time_hour_ago": "1 hour ago",
     "time_hours_ago": "{{count}} hours ago",
     "time_day_ago": "1 day ago",
-    "time_days_ago": "{{count}} days ago"
+    "time_days_ago": "{{count}} days ago",
+    "get_direction": "Get Direction",
+    "directions": "Directions",
+    "distance": "Distance",
+    "current_location": "Current Location",
+    "destination": "Destination",
+    "loading_route": "Loading route...",
+    "route_error": "Unable to find route",
+    "location_permission_denied": "Location permission is required"
 }

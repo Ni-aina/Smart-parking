@@ -29,7 +29,7 @@ import PasswordInput from "./ui/passwordInput";
 import SuccessModal from "./ui/successModal";
 
 const SignUpForm = () => {
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { t } = useTranslation();
 
     const router = useRouter();

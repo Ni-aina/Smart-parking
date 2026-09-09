@@ -9,17 +9,17 @@ import useVehicles from "@/hooks/vehicles/useVehicles";
 import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View
+    FlatList,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
 } from "react-native";
 
 const TrackingCarSceen = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const colorscheme = useColorScheme() || "light";
+  const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
   const {
     vehicles,
     errorFetching,

@@ -13,7 +13,7 @@ const Button = ({
     onPress,
     disabled
 }: ButtonProps) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [colorScheme, setColorScheme] = useState<"light" | "dark">("light");
 
     useEffect(() => {

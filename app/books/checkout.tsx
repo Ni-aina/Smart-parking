@@ -19,7 +19,7 @@ import { StyleSheet, useColorScheme, View } from "react-native";
 
 const Checkout = () => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const router = useRouter();
 
     const queryClient = useQueryClient();

@@ -22,7 +22,7 @@ import {
 
 const MaintenanceList = () => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const router = useRouter();
     const params = useLocalSearchParams();
     

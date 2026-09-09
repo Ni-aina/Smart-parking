@@ -24,7 +24,7 @@ import {
 const ReviewScreen = () => {
 
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { id } = useLocalSearchParams<{ id: string }>();
     const lotId = Number(id);
     const router = useRouter();

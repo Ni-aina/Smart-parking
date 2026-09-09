@@ -29,7 +29,7 @@ const ReviewList = ({
 }: Props) => {
 
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { currentProfile } = useCurrentProfile();
     const queryClient = useQueryClient();
     const [deletingId, setDeletingId] = useState<string | null>(null);

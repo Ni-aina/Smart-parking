@@ -4,13 +4,13 @@ import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Modal,
-  Pressable,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View
+    Modal,
+    Pressable,
+    StatusBar,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
 } from "react-native";
 
 interface ConfirmModalProps {
@@ -29,7 +29,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel
 }) => {
   const { t } = useTranslation()
-  const colorScheme = useColorScheme() || "light";
+  const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
 
   useEffect(() => {
     NavigationBar.setVisibilityAsync("hidden");

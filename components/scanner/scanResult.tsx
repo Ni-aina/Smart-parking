@@ -42,7 +42,7 @@ const ScanResult = ({
     message
 }: ScanResultProps) => {
     const { t } = useTranslation();
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const config = statusConfig[status];
 
     const titleKeys: Record<ScanStatus, string> = {

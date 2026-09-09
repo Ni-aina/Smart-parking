@@ -3,7 +3,7 @@ import {
     DarkTheme,
     DefaultTheme,
     ThemeProvider as NativeThemeProvider
-} from "@react-navigation/native";
+} from "expo-router/react-navigation";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Appearance, useColorScheme } from "react-native";
 
@@ -11,7 +11,7 @@ type Theme = "light" | "dark" | "system";
 
 interface ThemeContextType {
     theme: Theme;
-    colorscheme: "light" | "dark";
+    colorscheme: "light" | "dark" | "unspecified";
     setTheme: (t: Theme) => void;
 }
 
@@ -30,7 +30,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
             if (saved) {
                 setThemeState(saved as Theme);
                 if (saved !== "system") Appearance.setColorScheme(saved as "light" | "dark");
-                else Appearance.setColorScheme(null);
+                else Appearance.setColorScheme("unspecified");
             }
         })
     }, [])
@@ -39,11 +39,10 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         setThemeState(t);
         AsyncStorage.setItem("app_theme", t);
         if (t !== "system") Appearance.setColorScheme(t);
-        else Appearance.setColorScheme(null);
+        else Appearance.setColorScheme("unspecified");
     }
 
-    const colorscheme: "light" | "dark" =
-        theme === "system" ? systemScheme : theme;
+    const colorscheme: "light" | "dark" | "unspecified" = theme === "system" ? systemScheme : theme;
 
     return (
         <ThemeContext.Provider

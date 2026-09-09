@@ -19,7 +19,7 @@ const PasswordInput = ({
     secure = true,
     inputStyle
 }: PasswordProps) => {
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { t } = useTranslation();
     const [show, setShow] = useState(false);
 

@@ -1,6 +1,5 @@
 import { Colors } from "@/constants/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React from "react";
 import { StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 
 type Props = {
@@ -8,7 +7,7 @@ type Props = {
 }
 
 const FabButton = ({ onPress }: Props) => {
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
     return (

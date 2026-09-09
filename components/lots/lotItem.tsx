@@ -25,7 +25,7 @@ const LotItem = ({
     onPress
 }: LotItemInterface) => {
     const { t } = useTranslation()
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     const lotImage = lot.urlImages?.at(0) || null;
     const [loadingImage, setLoadingImage] = useState<boolean>();

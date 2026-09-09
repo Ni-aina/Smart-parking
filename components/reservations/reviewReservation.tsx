@@ -21,7 +21,7 @@ const ReviewReservation = ({
     startTime
 }: ReviewReservationInterface) => {
     const { t } = useTranslation()
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
         <>
@@ -51,8 +51,11 @@ const ReviewReservation = ({
                     <Text
                         style={{
                             fontSize: 16,
-                            color: Colors[colorscheme].text
+                            color: Colors[colorscheme].text,
+                            maxWidth: "60%"
                         }}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
                     >
                         {lotArea}
                     </Text>
@@ -75,8 +78,11 @@ const ReviewReservation = ({
                     <Text
                         style={{
                             fontSize: 16,
-                            color: Colors[colorscheme].text
+                            color: Colors[colorscheme].text,
+                            maxWidth: "60%"
                         }}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
                     >
                         {lotAddress}
                     </Text>

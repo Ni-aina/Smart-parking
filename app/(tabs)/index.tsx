@@ -23,7 +23,7 @@ const FindParkingScreen = () => {
     const { t } = useTranslation();
     const router = useRouter();
 
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [layout, setLayout] = useState<"list" | "tile">("list");
     const [searchTerm, setSearchTerm] = useState<string>("");
 

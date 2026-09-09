@@ -18,7 +18,7 @@ import Icons from "./ui/icons";
 import Loading from "./ui/loading";
 
 const SignInForm = () => {
-    const colorScheme = useColorScheme() || "light";
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { t } = useTranslation();
 
     const router = useRouter();

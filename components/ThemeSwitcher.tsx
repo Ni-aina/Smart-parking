@@ -1,13 +1,13 @@
 import { Colors } from "@/constants/Colors";
 import { useTheme } from "@/stores/context/ThemeContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Animated, Pressable, StyleSheet, useColorScheme, View } from "react-native";
 
 const ThemeSwitcher = () => {
     const { theme, setTheme } = useTheme();
 
-    const colorscheme = useColorScheme() ?? "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     const anim = useRef(
         new Animated.Value(

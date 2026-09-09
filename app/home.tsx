@@ -8,7 +8,7 @@ import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 
 const HomeScreen = () => {
     const { t } = useTranslation();
-    const colorscheme = useColorScheme() || "light";
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
         <View
