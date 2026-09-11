@@ -79,13 +79,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        padding: 60
     },
     content: {
         flex: 1,
         justifyContent: "space-between",
-        alignItems: "center",
-        padding: 30
+        alignItems: "center"
     },
     skipContent: {
         alignSelf: "stretch",
