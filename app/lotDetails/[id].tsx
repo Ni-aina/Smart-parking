@@ -304,7 +304,7 @@ const LotDetailsScreen = () => {
                                             gap: 5
                                         }}
                                     >
-                                        <View>
+                                        <View style={{ flex: 1 }}>
                                             <Text
                                                 style={{
                                                     fontSize: 24,
