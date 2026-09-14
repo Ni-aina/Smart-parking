@@ -57,7 +57,7 @@ const AccountScreen = () => {
         isLoading
     } = useNotReadCount();
 
-    const [loadingImage, setLoadingImage] = useState(!!currentProfile?.urlImage);
+    const [loadingImage, setLoadingImage] = useState(false);
 
     const [isSignOut, setIsSignOut] = useState(false);
 
@@ -86,20 +86,16 @@ const AccountScreen = () => {
                         loadingImage &&
                         <Skeleton
                             colorMode={colorscheme}
-                            width={85}
-                            height={85}
-                            radius={100}
+                            width={84}
+                            height={84}
+                            radius={50}
                         />
                     }
                     {
                         currentProfile?.urlImage ?
                             <Image
                                 source={{ uri: currentProfile?.urlImage }}
-                                style={
-                                    loadingImage ?
-                                        styles.loadingPicture :
-                                        styles.profilePicture
-                                }
+                                style={loadingImage ? styles.loadingPicture : styles.profilePicture}
                                 onLoadStart={
                                     () => setLoadingImage(true)
                                 }
@@ -535,8 +531,8 @@ const AccountScreen = () => {
                         color={Colors[colorscheme].icon}
                     />
                 </Pressable>
+                {isSignOut && <Loading />}
             </View>
-            {isSignOut && <Loading />}
         </ProtectedRoute>
     )
 }

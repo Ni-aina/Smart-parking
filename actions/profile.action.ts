@@ -4,6 +4,7 @@ import { isUUID } from "@/utils/isUUID";
 import { denormalizeData, normalizeData } from "@/utils/normalizeData";
 import { rejectTimeout } from "@/utils/rejectTimeout";
 import * as crypto from "expo-crypto";
+import { File } from "expo-file-system";
 
 export async function createProfile(profile: ProfileInterface): Promise<ProfileInterface | null> {
     try {
@@ -104,7 +105,7 @@ export const updateProfilePicture = async ({
 }: UpdateProfilePictureParams) => {
 
     if (oldUrl) {
-        const oldPath = oldUrl.split("/images/")[1];
+        const oldPath = oldUrl.split("/images/")[1]
 
         if (oldPath) {
             await supabase.storage
@@ -113,22 +114,21 @@ export const updateProfilePicture = async ({
         }
     }
 
-    const extension = imageUri.split(".").pop() || "jpg";
+    const extension = imageUri.split(".").pop() || "jpg"
 
-    const path = `avatars/${crypto.randomUUID()}.${extension}`;
+    const path = `avatars/${crypto.randomUUID()}.${extension}`
 
-    const response = await fetch(imageUri)
-    const arrayBuffer = await response.arrayBuffer()
-    const file = new Uint8Array(arrayBuffer)
+    const file = new File(imageUri)
+    const bytes = await file.bytes()
 
     const { error: uploadError } = await supabase.storage
         .from("images")
-        .upload(path, file, {
+        .upload(path, bytes, {
             contentType: "image/jpeg",
             upsert: false
         })
 
-    if (uploadError) throw uploadError;
+    if (uploadError) throw uploadError
 
     const { data } = supabase.storage
         .from("images")
@@ -143,7 +143,7 @@ export const updateProfilePicture = async ({
         .select()
         .single()
 
-    if (error) throw error;
+    if (error) throw error
 
-    return updatedProfile;
+    return updatedProfile
 }
