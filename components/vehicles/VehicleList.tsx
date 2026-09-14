@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList, View } from "react-native";
+import NoDataFound from "../NoDataFound";
 import Button from "../ui/button";
 import ErrorModal from "../ui/errorModal";
 import RequestTooLong from "../ui/requestTooLong";
@@ -71,6 +72,13 @@ const VehicleList = () => {
                                 />
                             }
                             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            ListEmptyComponent={
+                                <NoDataFound
+                                    iconName="car-outline"
+                                    message={t("no_vehicles_yet")}
+                                />
+                            }
                             showsVerticalScrollIndicator={false}
                             refreshing={isRefetching}
                             onRefresh={refetch}

@@ -1,4 +1,5 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
+import NoDataFound from "@/components/NoDataFound";
 import Icons from "@/components/ui/icons";
 import Loading from "@/components/ui/loading";
 import RequestTooLong from "@/components/ui/requestTooLong";
@@ -86,6 +87,13 @@ const TrackingCarSceen = () => {
                 />
               }
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              contentContainerStyle={{ flexGrow: 1 }}
+              ListEmptyComponent={
+                <NoDataFound
+                  iconName="car-outline"
+                  message={t("no_vehicles_yet")}
+                />
+              }
               showsVerticalScrollIndicator={false}
               refreshing={isRefetching}
               onRefresh={refetch}

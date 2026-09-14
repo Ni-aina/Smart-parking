@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 import {
     StyleSheet,
     Text,
@@ -8,7 +9,7 @@ import {
 } from "react-native";
 
 interface NoDataFoundProps {
-    message: string;
+    message?: string;
     iconName?: keyof typeof Ionicons.glyphMap;
 }
 
@@ -16,6 +17,7 @@ const NoDataFound = ({
     message, 
     iconName = "archive-outline"
 }: NoDataFoundProps) => {
+    const { t } = useTranslation();
     const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const colors = Colors[colorscheme];
 
@@ -27,7 +29,7 @@ const NoDataFound = ({
                 size={64}
             />
             <Text style={[styles.message, { color: colors.text }]}>
-                {message}
+                {message ?? t("no_data_yet")}
             </Text>
         </View>
     )
