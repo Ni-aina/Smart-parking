@@ -7,9 +7,13 @@ import { useEffect } from "react";
 import useCurrentProfile from "../useCurrentProfile";
 
 const useLots = ({
-    searchTerm
+    searchTerm,
+    filters = {}
 }: {
     searchTerm: string;
+    filters?: {
+        priceRange?: [number, number];
+    }
 }) => {
     const { currentProfile } = useCurrentProfile();
     const profileId = currentProfile?.id!;
@@ -34,7 +38,9 @@ const useLots = ({
     } = useInfiniteQuery({
         queryKey: [
             "parking-lots",
-            searchTerm
+            searchTerm,
+            filters.priceRange?.[0],
+            filters.priceRange?.[1]
         ],
         queryFn: ({
             pageParam = 1
@@ -42,6 +48,7 @@ const useLots = ({
             refreshLocation()
             return getParkingLots({
                 searchTerm,
+                filters,
                 location: {
                     latitude,
                     longitude

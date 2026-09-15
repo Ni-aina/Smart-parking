@@ -1,37 +1,35 @@
+import LotFiltersModal, { LotFilters } from "@/components/lots/lotFiltersModal";
 import LotItem from "@/components/lots/lotItem";
-import Header from "@/components/ui/header";
+import LotsSearchHeader from "@/components/lots/lotsSearchHeader";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
-import { Colors } from "@/constants/Colors";
 import useLots from "@/hooks/lots/useLots";
 import useDebounce from "@/hooks/useDebounce";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
     FlatList,
-    Pressable,
     StyleSheet,
-    Text,
-    TextInput,
-    useColorScheme,
     View
 } from "react-native";
 
 const FindParkingScreen = () => {
-    const { t } = useTranslation();
     const router = useRouter();
-
-    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
     const [layout, setLayout] = useState<"list" | "tile">("list");
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [filters, setFilters] = useState<LotFilters>({});
+    const [isFilterVisible, setIsFilterVisible] = useState(false);
 
     const {
         debouncedValue: debouncedSearchTerm
     } = useDebounce({
         value: searchTerm,
         delay: 1000
+    })
+
+    const { debouncedValue: debouncedFilters } = useDebounce({
+        value: filters,
+        delay: 500
     })
 
     const {
@@ -44,7 +42,8 @@ const FindParkingScreen = () => {
         isRefetching,
         isFetchingNextPage
     } = useLots({
-        searchTerm: debouncedSearchTerm
+        searchTerm: debouncedSearchTerm,
+        filters: debouncedFilters
     })
 
     const onEndReached = useCallback(() => {
@@ -61,87 +60,13 @@ const FindParkingScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Header
-                title={t("search")}
-                rightIcon={
-                    <View style={styles.layoutToggle}>
-                        <Pressable
-                            onPress={() => setLayout("list")}
-                        >
-                            <Ionicons
-                                name="reorder-four"
-                                size={28}
-                                color={layout === "list" ?
-                                    Colors[colorscheme].tint :
-                                    Colors[colorscheme].icon
-                                }
-                            />
-                        </Pressable>
-
-                        <Pressable
-                            onPress={() => setLayout("tile")}
-                        >
-                            <Ionicons
-                                name="grid-outline"
-                                size={24}
-                                color={layout === "tile" ?
-                                    Colors[colorscheme].tint :
-                                    Colors[colorscheme].icon
-                                }
-                            />
-                        </Pressable>
-                    </View>
-                }
-                customBackAction={() =>
-                    router.replace("/home")
-                }
+            <LotsSearchHeader
+                layout={layout}
+                searchTerm={searchTerm}
+                onLayoutChange={setLayout}
+                onSearchChange={setSearchTerm}
+                onShowFilters={() => setIsFilterVisible(true)}
             />
-            <View
-                style={[
-                    styles.inputSearch,
-                    {
-                        borderColor: Colors[colorscheme].icon,
-                        backgroundColor: Colors[colorscheme].background
-                    }
-                ]}
-            >
-                <Ionicons
-                    name="search"
-                    size={20}
-                    color={Colors[colorscheme].icon}
-                />
-                <TextInput
-                    style={[
-                        styles.inputSearchText,
-                        {
-                            color: Colors[colorscheme].icon,
-                        }
-                    ]}
-                    placeholderTextColor={Colors[colorscheme].icon}
-                    placeholder={t("search")}
-                    value={searchTerm}
-                    onChangeText={setSearchTerm}
-                />
-            </View>
-            <View style={styles.filterContent}>
-                <Text
-                    style={{
-                        fontSize: 20,
-                        fontWeight: "500",
-                        color: Colors[colorscheme].text
-                    }}
-                >
-                    {t("search_result")}
-                </Text>
-                <Text
-                    style={{
-                        fontSize: 20,
-                        color: Colors[colorscheme].tint
-                    }}
-                >
-                    {t("filters")}
-                </Text>
-            </View>
             {
                 error ?
                     <RequestTooLong
@@ -184,6 +109,12 @@ const FindParkingScreen = () => {
                             }
                         />
             }
+            <LotFiltersModal
+                visible={isFilterVisible}
+                filters={filters}
+                setFilters={setFilters}
+                onClose={() => setIsFilterVisible(false)}
+            />
         </View>
     )
 }
@@ -195,34 +126,6 @@ const styles = StyleSheet.create({
         paddingTop: 60,
         gap: 10
     },
-    layoutToggle: {
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        gap: 5
-    },
-    headerText: {
-        fontSize: 20,
-        fontWeight: "semibold"
-    },
-    inputSearch: {
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: 8,
-        gap: 5,
-        borderRadius: 8
-    },
-    inputSearchText: {
-        width: "100%",
-        fontSize: 16,
-        fontWeight: "semibold",
-        outlineWidth: 0
-    },
-    filterContent: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
-    }
 })
 
 export default FindParkingScreen;
