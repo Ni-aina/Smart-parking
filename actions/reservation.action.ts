@@ -75,7 +75,7 @@ export async function getReservationsByDriverId({
         if (!isUUID(driverId)) throw new Error("You have to be authenticated");
 
         const d = new Date();
-        d.setMonth(d.getMonth() - 6);
+        d.setMonth(d.getMonth() - 3);
 
         const from = (page - 1) * limit
         const to = page * limit - 1

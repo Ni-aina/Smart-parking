@@ -1,12 +1,14 @@
 import LotFiltersModal, { LotFilters } from "@/components/lots/lotFiltersModal";
 import LotItem from "@/components/lots/lotItem";
 import LotsSearchHeader from "@/components/lots/lotsSearchHeader";
+import NoDataFound from "@/components/NoDataFound";
 import RequestTooLong from "@/components/ui/requestTooLong";
 import LoaderSkeleton from "@/components/ui/Skeleton";
 import useLots from "@/hooks/lots/useLots";
 import useDebounce from "@/hooks/useDebounce";
 import { useRouter } from "expo-router";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
     FlatList,
     StyleSheet,
@@ -15,6 +17,7 @@ import {
 
 const FindParkingScreen = () => {
     const router = useRouter();
+    const { t } = useTranslation();
     const [layout, setLayout] = useState<"list" | "tile">("list");
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [filters, setFilters] = useState<LotFilters>({});
@@ -98,6 +101,13 @@ const FindParkingScreen = () => {
                             onRefresh={refetch}
                             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                             columnWrapperStyle={layout === "tile" ? { gap: 10 } : undefined}
+                            contentContainerStyle={{ flexGrow: 1 }}
+                            ListEmptyComponent={
+                                <NoDataFound
+                                    iconName="car-outline"
+                                    message={t("no_parking_lots_found")}
+                                />
+                            }
                             showsVerticalScrollIndicator={false}
                             onEndReached={onEndReached}
                             onEndReachedThreshold={0.5}
