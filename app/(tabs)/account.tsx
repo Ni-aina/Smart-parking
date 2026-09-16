@@ -377,6 +377,7 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
+                        onPress={() => router.push("/settings/help")}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
@@ -429,6 +430,7 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
+                        onPress={() => router.push("/settings/about")}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
