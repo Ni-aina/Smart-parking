@@ -13,6 +13,7 @@ import { useLotStore } from "@/stores/zustand/lot";
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BlurView } from 'expo-blur';
+import * as Linking from "expo-linking";
 import * as NavigationBar from 'expo-navigation-bar';
 import { Href, useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -27,6 +28,7 @@ import {
     Pressable,
     RefreshControl,
     ScrollView,
+    Share,
     StyleSheet,
     Text,
     useColorScheme,
@@ -94,6 +96,18 @@ const LotDetailsScreen = () => {
         router.push("/reservations/selectVehicle");
     }
 
+    const handleShare = async () => {
+        if (!lot?.id) return;
+
+        const lotLink = Linking.createURL(`/lotDetails/${lot.id}`);
+
+        await Share.share({
+            title: lot.name,
+            message: `Check out ${lot.name} on SmartParking: ${lotLink}`,
+            url: lotLink,
+        })
+    }
+
     const lotImage = lot?.urlImages?.at(indexImage) || null;
 
     useEffect(() => {
@@ -159,6 +173,7 @@ const LotDetailsScreen = () => {
                                         <HeaderDetails
                                             router={router}
                                             lotImage={lotImage}
+                                            onShare={handleShare}
                                         />
                                         {
                                             lotImage &&
@@ -208,7 +223,7 @@ const LotDetailsScreen = () => {
                                             paddingTop: 35
                                         }}
                                     >
-                                        <HeaderDetails router={router} />
+                                        <HeaderDetails router={router} onShare={handleShare} />
                                         <View
                                             style={styles.noBackgroundImage}
                                         >

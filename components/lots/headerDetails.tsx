@@ -8,9 +8,10 @@ type Router = ReturnType<typeof useRouter>;
 interface HeaderDetailsInterface {
     router: Router;
     lotImage?: string;
+    onShare: () => void;
 }
 
-const HeaderDetails = ({ router, lotImage }: HeaderDetailsInterface) => {
+const HeaderDetails = ({ router, lotImage, onShare }: HeaderDetailsInterface) => {
     const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
 
     return (
@@ -26,6 +27,7 @@ const HeaderDetails = ({ router, lotImage }: HeaderDetailsInterface) => {
                 size={30}
             />
             <Icons
+                onPress={onShare}
                 name="share-social-sharp"
                 color={
                     lotImage ?
