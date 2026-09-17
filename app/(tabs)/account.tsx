@@ -10,7 +10,7 @@ import { useExpoTokenContext } from "@/stores/context/ExpoTokenContext";
 import formatCacheSize from "@/utils/formatCacheSize";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { Href, useRouter } from "expo-router";
 import { Skeleton } from "moti/skeleton";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -277,6 +277,7 @@ const AccountScreen = () => {
                         style={({ pressed }) => [
                             styles.infoContent, pressed && styles.pressed
                         ]}
+                        onPress={() => router.push("/settings/notifications" as Href)}
                     >
                         <View style={styles.dataContent}>
                             <Ionicons
