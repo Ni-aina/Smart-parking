@@ -13,7 +13,6 @@ import { useLotStore } from "@/stores/zustand/lot";
 import { MaterialIcons } from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { BlurView } from 'expo-blur';
-import * as Linking from "expo-linking";
 import * as NavigationBar from 'expo-navigation-bar';
 import { Href, useLocalSearchParams, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -99,12 +98,13 @@ const LotDetailsScreen = () => {
     const handleShare = async () => {
         if (!lot?.id) return;
 
-        const lotLink = Linking.createURL(`/lotDetails/${lot.id}`);
+        const baseUrl = process.env.EXPO_PUBLIC_WEB_BASE_URL
+        const url = `${baseUrl}/api/public/redirect?id=${lot.id}`
 
         await Share.share({
             title: lot.name,
-            message: `Check out ${lot.name} on SmartParking: ${lotLink}`,
-            url: lotLink,
+            message: `Check out ${lot.name} on SmartParking. \n${url}`,
+            url
         })
     }
 
