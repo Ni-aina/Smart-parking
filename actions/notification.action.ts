@@ -46,6 +46,72 @@ export const savePushToken = async (
     }
 }
 
+export const setPushTokenEnabled = async (
+    userId: string,
+    pushToken: string,
+    enabled: {
+        enabledUpdates: boolean,
+        enabledMessages: boolean
+    }
+): Promise<boolean> => {
+    try {
+        if (!userId || !pushToken) return false
+
+        const payload = {
+            enabled_updates: enabled.enabledUpdates,
+            enabled_messages: enabled.enabledMessages
+        }
+
+        const request = (async () => {
+            const { error } = await supabase
+                .from("user_push_tokens")
+                .update(payload)
+                .eq("push_token", pushToken)
+
+            if (error) throw new Error(error.message)
+
+            return true
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    }
+    catch (error) {
+        throw error
+    }
+}
+
+export const getPushTokenEnabled = async (
+    userId: string,
+    pushToken: string
+): Promise<PushTokenInterface | null> => {
+    try {
+        if (!isUUID(userId) || !pushToken) return null
+
+        const request = (async () => {
+            const { data, error } = await supabase
+                .from("user_push_tokens")
+                .select("*")
+                .eq("user_id", userId)
+                .eq("push_token", pushToken)
+                .maybeSingle()
+
+            if (error) throw new Error(error.message)
+            return normalizeData(data) as PushTokenInterface;
+        })()
+
+        return Promise.race([
+            request,
+            rejectTimeout()
+        ])
+    }
+    catch (error) {
+        throw error
+    }
+}
+
 export const deletePushToken = async (pushToken: string): Promise<boolean> => {
     try {
         if (!pushToken) return false;
@@ -70,16 +136,24 @@ export const deletePushToken = async (pushToken: string): Promise<boolean> => {
 }
 
 export const getPushTokensByUserId = async (
-    userId: string
+    userId: string,
+    push_messages: boolean,
+    push_updates: boolean
 ): Promise<PushTokenInterface[]> => {
     try {
         if (!isUUID(userId)) return []
 
         const request = (async () => {
-            const { data, error } = await supabase
+            const query = supabase
                 .from("user_push_tokens")
                 .select("*")
                 .eq("user_id", userId)
+
+            if (push_messages) query.eq("enabled_messages", true)
+
+            if (push_updates) query.eq("enabled_updates", true)
+
+            const { data, error } = await query;
 
             if (error) throw new Error(error.message);
             return (data || []).map(item => normalizeData(item) as PushTokenInterface);
@@ -128,7 +202,7 @@ export const sendMessagePushNotification = async ({
     try {
         if (!recipientId || !messageContent) return false;
 
-        const tokens = await getPushTokensByUserId(recipientId);
+        const tokens = await getPushTokensByUserId(recipientId, true, false);
         const validTokens = tokens
             .map(t => t.pushToken)
             .filter(token => Boolean(token && token.startsWith("ExponentPushToken[")))
