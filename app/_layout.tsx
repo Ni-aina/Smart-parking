@@ -5,6 +5,7 @@ import { initI18n } from "@/i18n";
 import { stripePublicKey } from "@/lib/config";
 import { AuthContextProvider } from "@/stores/context/AuthContext";
 import { ExpoTokenContextProvider } from "@/stores/context/ExpoTokenContext";
+import { NotificationContextProvider } from "@/stores/context/NotificationContext";
 import { TabsHistoryContextProvider } from "@/stores/context/tabsHistoryContext";
 import { ThemeProvider } from "@/stores/context/ThemeContext";
 import { StripeProvider } from "@stripe/stripe-react-native";
@@ -25,14 +26,16 @@ const RootNavigation = () => {
     <ExpoTokenContextProvider
       expoPushToken={expoPushToken}
     >
-      <Stack
-        screenOptions={{
-          headerShown: false
-        }}
-      >
-        <Stack.Screen name="index" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <NotificationContextProvider>
+        <Stack
+          screenOptions={{
+            headerShown: false
+          }}
+        >
+          <Stack.Screen name="index" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </NotificationContextProvider>
     </ExpoTokenContextProvider>
   )
 }

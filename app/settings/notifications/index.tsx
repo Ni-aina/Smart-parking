@@ -1,93 +1,21 @@
-import { getPushTokenEnabled, setPushTokenEnabled } from "@/actions/notification.action";
 import Header from "@/components/ui/header";
 import { Colors } from "@/constants/Colors";
-import useCurrentProfile from "@/hooks/useCurrentProfile";
-import { useExpoTokenContext } from "@/stores/context/ExpoTokenContext";
+import { useNotificationContext } from "@/stores/context/NotificationContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, Switch, Text, useColorScheme, View } from "react-native";
 
 const NotificationSettings = () => {
     const { t } = useTranslation()
     const colorScheme = useColorScheme() === "dark" ? "dark" : "light"
-    const [isAppUpdatesEnabled, setIsAppUpdatesEnabled] = useState(true)
-    const [isMessagesEnabled, setIsMessagesEnabled] = useState(true)
-
     const colors = Colors[colorScheme]
 
-    const { currentProfile } = useCurrentProfile()
-    const { expoPushToken: pushToken } = useExpoTokenContext()
-
-    const handleSwitchUpdateEnabled = async () => {
-        try {
-            if (!currentProfile?.id || !pushToken) throw new Error()
-            const { id: userId } = currentProfile
-            const isEnabled = !isAppUpdatesEnabled
-
-            setIsAppUpdatesEnabled(isEnabled)
-
-            const isSetted = await setPushTokenEnabled(
-                userId,
-                pushToken,
-                {
-                    enabledUpdates: isEnabled,
-                    enabledMessages: isMessagesEnabled
-                }
-            )
-
-            if (!isSetted) throw new Error()
-        } catch (error) {
-            setIsAppUpdatesEnabled(isAppUpdatesEnabled)
-        }
-    }
-
-    const handleSwitchMessageEnabled = async () => {
-        try {
-            if (!currentProfile?.id || !pushToken) throw new Error()
-            const { id: userId } = currentProfile
-            const isEnabled = !isMessagesEnabled
-
-            setIsMessagesEnabled(isEnabled)
-
-            const isSetted = await setPushTokenEnabled(
-                userId,
-                pushToken,
-                {
-                    enabledUpdates: isAppUpdatesEnabled,
-                    enabledMessages: isEnabled
-                }
-            )
-
-            if (!isSetted) throw new Error()
-        } catch {
-            setIsMessagesEnabled(isMessagesEnabled)
-        }
-    }
-
-    useEffect(() => {
-        (async () => {
-            try {
-                if (!currentProfile?.id || !pushToken) return
-                const { id: userId } = currentProfile
-
-                const token = await getPushTokenEnabled(
-                    userId,
-                    pushToken
-                )
-
-                if (!token) throw new Error()
-
-                setIsAppUpdatesEnabled(token.enabledUpdates)
-                setIsMessagesEnabled(token.enabledMessages)
-            }
-            catch {
-                setIsAppUpdatesEnabled(true)
-                setIsMessagesEnabled(true)
-            }
-        })()
-
-    }, [currentProfile?.id, pushToken])
+    const {
+        isAppUpdatesEnabled,
+        isMessagesEnabled,
+        handleSwitchUpdateEnabled,
+        handleSwitchMessageEnabled
+    } = useNotificationContext()
 
     return (
         <View style={styles.container}>
