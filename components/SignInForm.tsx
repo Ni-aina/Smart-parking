@@ -5,62 +5,43 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import {
-    StyleSheet,
-    Text,
-    TextInput,
-    useColorScheme,
-    View
-} from "react-native";
+import { StyleSheet, Text, TextInput, useColorScheme, View } from "react-native";
 import Button from "./ui/button";
 import ErrorModal from "./ui/errorModal";
 import Icons from "./ui/icons";
 import Loading from "./ui/loading";
-
 const SignInForm = () => {
-    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
-    const { t } = useTranslation();
-
-    const router = useRouter();
-
-    const [isPending, setIsPending] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [signInError, setSignInError] = useState("");
-
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light"
+    const { t } = useTranslation()
+    const router = useRouter()
+    const [isPending, setIsPending] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const [signInError, setSignInError] = useState("")
     const {
         control,
         handleSubmit,
         formState: { errors },
         reset
-    } = useForm<LoginType>();
-
-    const handleShowPassword = () => setShowPassword(prev => !prev);
-
+    } = useForm<LoginType>()
+    const handleShowPassword = () => setShowPassword(prev => !prev)
     const onSubmit = async (data: LoginType) => {
-        const { email, password } = data;
         try {
-            setIsPending(true);
-            await login(email, password);
-            reset();
+            setIsPending(true)
+            await login(data.email, data.password)
+            reset()
         } catch {
-            setSignInError(t("failed_authentication"));
+            setSignInError(t("failed_authentication"))
         } finally {
-            setIsPending(false);
+            setIsPending(false)
         }
     }
-
     useEffect(() => {
         if (!signInError) return;
-
         const errorTimedOut = setTimeout(() => {
             setSignInError("")
         }, 2000)
-
-        return () => {
-            clearTimeout(errorTimedOut)
-        }
+        return () => clearTimeout(errorTimedOut)
     }, [signInError])
-
     return (
         <>
             <View style={styles.contentInfo}>
@@ -83,13 +64,10 @@ const SignInForm = () => {
                                 value={value}
                                 onChangeText={onChange}
                                 placeholder={t("email_placeholder")}
-                                style={[
-                                    styles.input,
-                                    {
-                                        color: Colors[colorScheme].text,
-                                        borderColor: Colors[colorScheme].tint,
-                                    }
-                                ]}
+                                style={[styles.input, {
+                                    color: Colors[colorScheme].text,
+                                    borderColor: Colors[colorScheme].tint
+                                }]}
                                 placeholderTextColor={Colors[colorScheme].text}
                             />
                         )}
@@ -99,7 +77,6 @@ const SignInForm = () => {
                         <Text style={styles.inputError}>{errors.email.message}</Text>
                     }
                 </View>
-
                 <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
                     {t("password")} *
                 </Text>
@@ -114,11 +91,10 @@ const SignInForm = () => {
                                     value={value}
                                     onChangeText={onChange}
                                     placeholder={t("input_your_password")}
-                                    style={{
+                                    style={[styles.flexOne, {
                                         color: Colors[colorScheme].text,
-                                        borderColor: Colors[colorScheme].tint,
-                                        flex: 1
-                                    }}
+                                        borderColor: Colors[colorScheme].tint
+                                    }]}
                                     placeholderTextColor={Colors[colorScheme].text}
                                     secureTextEntry={!showPassword}
                                 />
@@ -136,33 +112,30 @@ const SignInForm = () => {
                         <Text style={styles.inputError}>{errors.password.message}</Text>
                     }
                 </View>
-            </View>
-            <View
-                style={{
-                    gap: 10
-                }}
-            >
-                <Button title={t("sign_in")} onPress={handleSubmit(onSubmit)} />
-                <View
-                    style={{
-                        alignItems: "flex-end"
-                    }}
-                >
-                    <View 
-                        style={{ 
-                            flexDirection: "row", 
-                            alignItems: "center", 
-                            gap: 5 
-                        }}
+                <View style={styles.alignEnd}>
+                    <Text
+                        style={[styles.underline, {
+                            color: Colors[colorScheme].text
+                        }]}
+                        onPress={() => router.push("/auth/forgotPassword")}
                     >
-                        <Text style={{ color: Colors[colorScheme].text }}>
+                        {t("forgot_password")}
+                    </Text>
+                </View>
+            </View>
+            <View style={styles.actions}>
+                <Button title={t("sign_in")} onPress={handleSubmit(onSubmit)} />
+                <View style={styles.alignEnd}>
+                    <View style={styles.rowCenter}>
+                        <Text style={{
+                            color: Colors[colorScheme].text
+                        }}>
                             {t("no_account")}
                         </Text>
                         <Text
-                            style={{
-                                color: Colors[colorScheme].text,
-                                textDecorationLine: "underline"
-                            }}
+                            style={[styles.underline, {
+                                color: Colors[colorScheme].text
+                            }]}
                             onPress={() => router.push("/auth/signUp")}
                         >
                             {t("create_an_account")}
@@ -170,21 +143,16 @@ const SignInForm = () => {
                     </View>
                 </View>
             </View>
-
             {isPending && <Loading />}
-
             <ErrorModal
                 visible={!!signInError}
                 title={t("error_sign_in")}
                 message={signInError}
-                onClose={
-                    () => setSignInError("")
-                }
+                onClose={() => setSignInError("")}
             />
         </>
     )
 }
-
 const styles = StyleSheet.create({
     contentInfo: {
         gap: 10,
@@ -209,6 +177,23 @@ const styles = StyleSheet.create({
     inputError: {
         fontSize: 14,
         color: "#ff0000"
+    },
+    alignEnd: {
+        alignItems: "flex-end"
+    },
+    rowCenter: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5
+    },
+    underline: {
+        textDecorationLine: "underline"
+    },
+    actions: {
+        gap: 10
+    },
+    flexOne: {
+        flex: 1
     }
 })
 
