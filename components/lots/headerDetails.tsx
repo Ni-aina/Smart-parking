@@ -17,7 +17,7 @@ const HeaderDetails = ({ router, lotImage, onShare }: HeaderDetailsInterface) =>
     return (
         <View style={styles.headerBackground}>
             <Icons
-                onPress={() => router.back()}
+                onPress={() => router.push("/(tabs)")}
                 name="chevron-back"
                 color={
                     lotImage ?
