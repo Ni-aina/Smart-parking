@@ -7,7 +7,6 @@ import { Colors } from "@/constants/Colors";
 import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import { supabase } from "@/lib/supabase";
 import { rejectTimeout } from "@/utils/rejectTimeout";
-import * as Linking from "expo-linking";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -45,7 +44,7 @@ const ForgotPasswordScreen = () => {
     const onSubmit = async (data: ForgotPasswordValues) => {
         try {
             setIsPending(true)
-            
+
             const { data: existingProfile } = await supabase
                 .from("profiles")
                 .select("*")
@@ -54,10 +53,9 @@ const ForgotPasswordScreen = () => {
 
             if (!existingProfile) throw new Error(`${t("user_not_found")}`)
 
-            const redirectTo = Linking.createURL("/auth/setPassword")
             const request = (async () => {
                 const res = await supabase.auth.resetPasswordForEmail(data.email, {
-                    redirectTo
+                    redirectTo: "SmartParking://auth/setPassword"
                 })
                 if (res.error) {
                     throw new Error(res.error.message)
