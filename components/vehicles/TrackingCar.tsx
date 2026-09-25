@@ -1,0 +1,114 @@
+import NoDataFound from "@/components/NoDataFound";
+import Icons from "@/components/ui/icons";
+import Loading from "@/components/ui/loading";
+import RequestTooLong from "@/components/ui/requestTooLong";
+import LoaderSkeleton from "@/components/ui/Skeleton";
+import VehicleItem from "@/components/vehicles/VehicleItem";
+import { Colors } from "@/constants/Colors";
+import useVehicles from "@/hooks/vehicles/useVehicles";
+import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
+} from "react-native";
+
+const TrackingCar = () => {
+    const { t } = useTranslation();
+    const router = useRouter();
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
+    const {
+        vehicles,
+        errorFetching,
+        isLoading,
+        refetch,
+        isRefetching,
+        isDeleting,
+        handleDelete
+    } = useVehicles();
+
+    const handleAddVehicle = () => {
+        router.push("/vehicleControls/addVehicle");
+    }
+
+    if (isLoading) return (
+        <View
+            style={styles.container}
+        >
+            <LoaderSkeleton />
+        </View>
+    )
+
+    return (
+        <View
+            style={styles.container}
+        >
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    gap: 5
+                }}
+            >
+                <Text
+                    style={{
+                        fontSize: 24,
+                        color: Colors[colorscheme].text
+                    }}
+                >
+                    {t("my_vehicles")}
+                </Text>
+                <Icons
+                    name="add"
+                    size={28}
+                    color={Colors[colorscheme].icon}
+                    onPress={handleAddVehicle}
+                />
+            </View>
+            {
+                errorFetching ?
+                    <RequestTooLong
+                        message={errorFetching.message}
+                        refresh={refetch}
+                    />
+                    :
+                    <FlatList
+                        data={vehicles}
+                        keyExtractor={item => item.id?.toString()}
+                        renderItem={({ item }) =>
+                            <VehicleItem
+                                vehicle={item}
+                                handleDelete={handleDelete}
+                            />
+                        }
+                        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                        contentContainerStyle={{ flexGrow: 1 }}
+                        ListEmptyComponent={
+                            <NoDataFound
+                                iconName="car-outline"
+                                message={t("no_vehicles_yet")}
+                            />
+                        }
+                        showsVerticalScrollIndicator={false}
+                        refreshing={isRefetching}
+                        onRefresh={refetch}
+                    />
+            }
+            {isDeleting && <Loading />}
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 60,
+        gap: 15
+    }
+})
+
+export default TrackingCar;
