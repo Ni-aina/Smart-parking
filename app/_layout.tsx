@@ -1,4 +1,6 @@
+import NoNetwork from "@/components/NoNetwork";
 import Loading from "@/components/ui/loading";
+import useNetworkStatus from "@/hooks/useNetworkStatus";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { useSetPasswordDeepLink } from "@/hooks/useSetPassword";
 import { initI18n } from "@/i18n";
@@ -41,6 +43,7 @@ const RootNavigation = () => {
 }
 
 const RootLayout = () => {
+  const { isConnected } = useNetworkStatus();
   const { isDeepLinkHandling } = useSetPasswordDeepLink();
   const [ready, setReady] = useState(false);
   const pathname = usePathname();
@@ -60,6 +63,8 @@ const RootLayout = () => {
   }, [])
 
   if (!ready || isDeepLinkHandling) return <Loading />
+
+  if (!isConnected) return <NoNetwork />
 
   return (
     <ThemeProvider>

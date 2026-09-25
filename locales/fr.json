@@ -344,5 +344,6 @@
     "destination": "Destination",
     "loading_route": "Chargement de l'itinéraire...",
     "route_error": "Impossible de trouver l'itinéraire",
-    "location_permission_denied": "La permission de localisation est requise"
+    "location_permission_denied": "La permission de localisation est requise",
+    "no_internet_connection": "Pas de connexion internet"
 }

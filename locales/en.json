@@ -344,5 +344,6 @@
     "destination": "Destination",
     "loading_route": "Loading route...",
     "route_error": "Unable to find route",
-    "location_permission_denied": "Location permission is required"
+    "location_permission_denied": "Location permission is required",
+    "no_internet_connection": "No internet connection"
 }

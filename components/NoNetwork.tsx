@@ -1,0 +1,67 @@
+import { Colors } from "@/constants/Colors";
+import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
+import {
+    StyleSheet,
+    Text,
+    useColorScheme,
+    View
+} from "react-native";
+
+interface NoNetworkProps {
+    message?: string;
+    iconName?: keyof typeof Ionicons.glyphMap;
+}
+
+const NoNetwork = ({
+    message,
+    iconName = "cloud-offline-outline"
+}: NoNetworkProps) => {
+    const { t } = useTranslation();
+    const colorscheme = useColorScheme() === "dark" ? "dark" : "light";
+    const colors = Colors[colorscheme];
+
+    return (
+        <View
+            style={[
+                styles.container,
+                {
+                    backgroundColor: Colors[colorscheme].background
+
+                }
+            ]}
+        >
+            <Ionicons
+                name={iconName}
+                color={colors.tint}
+                style={styles.icon}
+                size={64}
+            />
+            <Text style={[styles.message, { color: colors.icon }]}>
+                {message ?? t("no_internet_connection")}
+            </Text>
+        </View>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 20,
+        gap: 8
+    },
+    icon: {
+        opacity: 0.5,
+        marginBottom: 8
+    },
+    message: {
+        fontSize: 16,
+        fontWeight: "600",
+        textAlign: "center",
+        maxWidth: "80%"
+    }
+})
+
+export default NoNetwork;
