@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import useCategory from "@/hooks/categories/useCategory";
 import { Ionicons } from "@expo/vector-icons";
 import { usePathname } from "expo-router";
 import { useEffect, useState } from "react";
@@ -37,6 +38,11 @@ const LotFiltersModal = ({ visible, filters, setFilters, onClose }: LotFiltersMo
     const [maxPrice, setMaxPrice] = useState(filters.priceRange?.[1]?.toString() ?? "")
     const [validationError, setValidationError] = useState("")
     const isCompact = height < 700 || width < 360
+
+    const {
+        categories,
+        isLoading
+    } = useCategory()
 
     const updatePrice = (minimum: string, maximum: string) => {
         const min = Number(minimum)
