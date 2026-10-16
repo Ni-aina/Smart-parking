@@ -35,7 +35,7 @@ import {
 } from "react-native";
 
 const LotDetailsScreen = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
     const { id } = useLocalSearchParams<{ id: string }>();
     const [indexImage, setIndexImage] = useState(0);
@@ -49,6 +49,8 @@ const LotDetailsScreen = () => {
         refetch,
         isRefetching
     } = useLot({ id })
+
+    const category = lot?.category?.translations?.find(item => item.languageCode === i18n.language);
 
     const [loadingImage, setLoadingImage] = useState(true);
 
@@ -85,9 +87,6 @@ const LotDetailsScreen = () => {
             id,
             lotArea: lot.name || "",
             lotAddress: lot.location || "",
-            maxWidth: lot.lotType?.maxWidth || 0,
-            maxHeight: lot.lotType?.maxHeight || 0,
-            maxLength: lot.lotType?.maxLength || 0,
             pricePerHour: lot.pricePerHour || 0,
             vehicleId: "",
             vehicleNumber: ""
@@ -478,24 +477,55 @@ const LotDetailsScreen = () => {
                                                 color: Colors[colorScheme].tabIconDefault
                                             }}
                                         >
-                                            {t("width")} {"< " + lot.lotType?.maxWidth || t("na")} m
+                                            {category?.displayLabel!}
                                         </Text>
-                                        <Text
+                                        <View
                                             style={{
-                                                fontSize: 16,
-                                                color: Colors[colorScheme].tabIconDefault
+                                                flexDirection: "row",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                gap: 5
                                             }}
                                         >
-                                            {t("height")} {"< " + lot.lotType?.maxHeight || t("na")} m
-                                        </Text>
-                                        <Text
+                                            <Ionicons
+                                                name="bus-outline"
+                                                color={Colors[colorScheme].tint}
+                                                size={14}
+                                            />
+                                            <Text
+                                                style={{
+                                                    fontSize: 16,
+                                                    color: Colors[colorScheme].tabIconDefault
+                                                }}
+                                            >
+                                                {lot?.category.maxWeightTonnes!}t
+                                            </Text>
+                                        </View>
+                                        <View
                                             style={{
-                                                fontSize: 16,
-                                                color: Colors[colorScheme].tabIconDefault
+                                                flexDirection: "row",
+                                                justifyContent: "space-between",
+                                                alignItems: "center",
+                                                gap: 2
                                             }}
                                         >
-                                            {t("length")} {"< " + lot.lotType?.maxLength || t("na")} m
-                                        </Text>
+                                            <Ionicons
+                                                name="resize"
+                                                color={Colors[colorScheme].tint}
+                                                size={14}
+                                                style={{
+                                                    transform: [{ rotate: "-45deg" }]
+                                                }}
+                                            />
+                                            <Text
+                                                style={{
+                                                    fontSize: 16,
+                                                    color: Colors[colorScheme].tabIconDefault
+                                                }}
+                                            >
+                                                {lot?.category.maxHeightMeters!} m
+                                            </Text>
+                                        </View>
                                     </View>
                                     <View
                                         style={{
@@ -522,7 +552,7 @@ const LotDetailsScreen = () => {
                                                 lineHeight: 22
                                             }}
                                         >
-                                            {lot.lotType?.description || t("no_description_available")}
+                                            {category?.description || t("no_description_available")}
                                         </Text>
                                     </View>
                                     <View

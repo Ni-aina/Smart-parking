@@ -19,6 +19,7 @@ export async function getParkingById(
             if (!parking || error) throw new Error(`The parking cannot be find, ${error?.message}`);
             
             const normalized = normalizeData(parking);
+            
             return normalized as LotInterface;
         })()
         return Promise.race([
@@ -34,7 +35,7 @@ export async function getParkingLots(
     params: {
         searchTerm?: string;
         filters?: {
-            type?: string;
+            category?: string;
             priceRange?: [number, number];
         }
         location?: {
@@ -68,12 +69,12 @@ export async function getParkingLots(
         const request = (async () => {
 
             const { data: parkings, error } = await supabase.rpc(
-                "get_parking_lots_advanced",
+                "get_parking_lots",
                 {
                     search_term: searchTerm,
-                    type_filter: filters.type ?? null,
+                    category_filter: filters.category ?? null,
                     min_price: filters.priceRange?.[0] ?? 0,
-                    max_price: filters.priceRange?.[1] ?? 10000,
+                    max_price: filters.priceRange?.[1] ?? 1000000,
                     user_lat: location?.latitude ?? null,
                     user_lng: location?.longitude ?? null,
                     page: pagination.page,
@@ -84,7 +85,9 @@ export async function getParkingLots(
             const hasMore = parkings.length * pagination.page < parkings[0]?.total_lots;
 
             if (!parkings || error) throw new Error(`An error occured during fetching parkings, ${error?.message}`);
+            
             const normalized = parkings.map((item: any) => normalizeData(item));
+
             return {
                 data: normalized as LotInterface[],
                 hasMore,

@@ -103,20 +103,42 @@ const LotItem = ({
                         />
                     </View>
             }
-            <View
-                style={styles.itemContent}
-            >
-                <Text
+            <View style={styles.itemContent}>
+                <View
                     style={{
-                        fontSize: 16,
-                        fontWeight: "600",
-                        color: Colors[colorscheme].text
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 5
                     }}
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
                 >
-                    {name}
-                </Text>
+                    <Text
+                        style={{
+                            flex: 1,
+                            fontSize: 16,
+                            fontWeight: "600",
+                            color: Colors[colorscheme].text
+                        }}
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                    >
+                        {name}
+                    </Text>
+                    <Ionicons
+                        name="bus-outline"
+                        color={Colors[colorscheme].tint}
+                        size={14}
+                    />
+                    <Text
+                        style={{
+                            flex: 0,
+                            fontSize: 16,
+                            color: Colors[colorscheme].text
+                        }}
+                    >
+                        {lot.category?.maxWeightTonnes || t("na")}t
+                    </Text>
+                </View>
                 <Text
                     style={{
                         fontSize: 14,

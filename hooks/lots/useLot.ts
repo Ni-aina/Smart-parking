@@ -1,6 +1,7 @@
-import { getParkingById } from "@/actions/lots.action";
+import { getParkingById } from "@/actions/lot.action";
 import { useLocationStore } from "@/stores/zustand/location";
-import { LotInterface, lotTypeInterface } from "@/types/lot";
+import { VehicleCategoryInterface } from "@/types/category";
+import { LotInterface } from "@/types/lot";
 import { ProfileInterface } from "@/types/profile";
 import { getDistanceTime } from "@/utils/getDistanceTime";
 import { useQuery } from "@tanstack/react-query";
@@ -31,7 +32,7 @@ const useLot = ({ id }: { id: string }) => {
     const lotFormated: LotInterface = {
         id: lot?.id || "",
         owner: lot?.owner as ProfileInterface,
-        lotType: lot?.lotType as lotTypeInterface,
+        category: lot?.category as VehicleCategoryInterface,
         name: lot?.name || "",
         location: lot?.location || "",
         locationLat: lot?.locationLat || 0,

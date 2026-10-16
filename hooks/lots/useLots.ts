@@ -1,4 +1,4 @@
-import { getParkingLots } from "@/actions/lots.action";
+import { getParkingLots } from "@/actions/lot.action";
 import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import { getDistanceTimeFromPostGIS } from "@/utils/getDistanceTime";

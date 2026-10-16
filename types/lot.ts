@@ -1,18 +1,10 @@
+import { VehicleCategoryInterface } from "./category";
 import { ProfileInterface } from "./profile";
-
-export interface lotTypeInterface {
-    id: string;
-    vehicleType: string;
-    description: string;
-    maxWidth: number;
-    maxLength: number;
-    maxHeight: number;
-}
 
 export interface LotInterface {
     id: string;
     owner: ProfileInterface;
-    lotType:lotTypeInterface;
+    category:VehicleCategoryInterface;
     name: string;
     location: string;
     locationLat: number;
