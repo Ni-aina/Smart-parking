@@ -13,9 +13,9 @@ export async function createVehicle(vehicle: VehicleInterface): Promise<VehicleI
                 make,
                 model,
                 year,
-                width,
-                length,
-                height
+                category: {
+                    id: category_id
+                }
             } = vehicle;
 
             if (!driver_id) throw new Error("You must be authenticated");
@@ -27,9 +27,7 @@ export async function createVehicle(vehicle: VehicleInterface): Promise<VehicleI
                     make,
                     model,
                     year,
-                    width,
-                    length,
-                    height
+                    category_id
                 }])
                 .select()
                 .single()
@@ -59,9 +57,9 @@ export async function updateVehicle(vehicle: VehicleInterface): Promise<VehicleI
                 make,
                 model,
                 year,
-                width,
-                length,
-                height
+                category: {
+                    id: category_id
+                }
             } = vehicle;
 
             if (!id) return null;
@@ -72,9 +70,7 @@ export async function updateVehicle(vehicle: VehicleInterface): Promise<VehicleI
                     make,
                     model,
                     year,
-                    width,
-                    length,
-                    height
+                    category_id
                 })
                 .eq("id", id)
                 .select()
@@ -121,7 +117,7 @@ export async function getVehiclesByDriverId(driverId: string): Promise<VehicleIn
     try {
         const request = (async () => {
             const { data: vehicles, error } = await supabase.from("vehicles")
-                .select("*")
+                .select("*, category:vehicle_categories(*)")
                 .eq("driver_id", driverId)
                 .order("created_at", {
                     ascending: false

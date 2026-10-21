@@ -19,7 +19,7 @@ const EditVehicleScreen = () => {
 
     const { vehicle } = useLocalSearchParams();
     const parsedVehicle: VehicleInterface = JSON.parse(vehicle as string);
-
+    
     return (
         <ProtectedRoute>
             <View

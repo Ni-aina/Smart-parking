@@ -29,9 +29,7 @@ const VehicleSelectItem = ({
         make,
         model,
         plateNumber,
-        width,
-        height,
-        length
+        category
     } = vehicle;
 
     const {
@@ -41,26 +39,18 @@ const VehicleSelectItem = ({
 
     const {
         vehicleId,
-        maxWidth,
-        maxHeight,
-        maxLength
+        maxWeight,
+        maxHeight
     } = lot;
 
     const handleVehicleSelected = () => {
-        if (!id) {
-            setError(t("vehicle_not_found"));
+        if (!id || !category.maxWeightTonnes || !category.maxHeightMeters) {
+            setError(t("incomplete_info"));
             return;
         }
-        if (Number(width) > maxWidth) {
-            setError(t("vehicle_too_large"));
-            return;
-        }
-        if (Number(height) > maxHeight) {
-            setError(t("vehicle_too_tall"));
-            return;
-        }
-        if (Number(length) > maxLength) {
-            setError(t("vehicle_too_long"));
+
+        if (category.maxWeightTonnes > maxWeight || category.maxHeightMeters > maxHeight) {
+            setError(t("vehicle_dimensions_exceeded"));
             return;
         }
 

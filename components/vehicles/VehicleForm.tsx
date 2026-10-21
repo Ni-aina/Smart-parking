@@ -1,7 +1,9 @@
 import { Colors } from "@/constants/Colors";
+import useCategory from "@/hooks/categories/useCategory";
 import useCurrentProfile from "@/hooks/useCurrentProfile";
 import useKeyboardVisible from "@/hooks/useKeyboardVisible";
 import useVehicles from "@/hooks/vehicles/useVehicles";
+import { VehicleCategoryInterface } from "@/types/category";
 import { VehicleInterface } from "@/types/vehicle";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -16,6 +18,7 @@ import {
 } from "react-native";
 import Button from "../ui/button";
 import Loading from "../ui/loading";
+import SelectInput from "../ui/selectInput";
 
 interface VehicleFormInterface {
     vehicle?: VehicleInterface
@@ -39,11 +42,20 @@ const VehicleForm = ({
         isUpdating,
     } = useVehicles();
 
+    const { categories } = useCategory();
+    const selectCategories = categories?.map(item => {
+        return {
+            id: item.id,
+            content: `${item.translations?.at(0)?.displayLabel || ""}, ${item.maxWeightTonnes}t, ↕${item.maxHeightMeters}m`
+        }
+    })
+
     const {
-        formState: { errors },
+        formState: { errors, isSubmitted },
         handleSubmit,
         watch,
-        control
+        control,
+        setValue
     } = useForm<VehicleInterface>({
         defaultValues: {
             id: vehicle?.id || "",
@@ -52,17 +64,18 @@ const VehicleForm = ({
             make: vehicle?.make || "",
             model: vehicle?.model || "",
             year: vehicle?.year && Number(vehicle.year).toString() || "",
-            width: vehicle?.width && Number(vehicle.width).toString() || "",
-            length: vehicle?.length && Number(vehicle.length).toString() || "",
-            height: vehicle?.height && Number(vehicle.height).toString() || ""
+            category: vehicle?.category
         }
     })
 
     const onSubmit = () => {
+        if (!watch("category")?.id) return;
+
         if (watch("id")) {
             handleUpdate(watch());
             return;
         }
+
         handleCreate({
             ...watch(),
             driverId: currentProfile?.id || ""
@@ -217,116 +230,38 @@ const VehicleForm = ({
                                     />
                                 )}
                             />
-                            {
-                                errors.year &&
-                                <Text style={styles.inputError}>{errors.year.message}</Text>
-                            }
                         </View>
+                        {
+                            errors.year &&
+                            <Text style={styles.inputError}>{errors.year.message}</Text>
+                        }
                         <View
                             style={{
                                 gap: 3
                             }}
                         >
                             <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                {t("width_label")} *
+                                {t("vehicle_category")} *
                             </Text>
-                            <Controller
-                                name="width"
-                                control={control}
-                                rules={{
-                                    required: t("this_field_is_required") as string
+                            <SelectInput
+                                options={selectCategories || []}
+                                value={{
+                                    id: watch("category")?.id || "",
+                                    content: selectCategories?.find(item => item.id === watch("category")?.id)?.content || ""
                                 }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        onChangeText={onChange}
-                                        value={value}
-                                        placeholder={t("vehicle_width_placeholder")}
-                                        keyboardType="number-pad"
-                                        style={[
-                                            styles.inputForm,
-                                            {
-                                                color: Colors[colorScheme].text,
-                                                borderColor: Colors[colorScheme].text
-                                            }
-                                        ]}
-                                    />
-                                )}
-                            />
-                            {
-                                errors.width &&
-                                <Text style={styles.inputError}>{errors.width.message}</Text>
-                            }
-                        </View>
-                        <View
-                            style={{
-                                gap: 3
-                            }}
-                        >
-                            <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                {t("length_label")} *
-                            </Text>
-                            <Controller
-                                name="length"
-                                control={control}
-                                rules={{
-                                    required: t("this_field_is_required") as string
+                                setValue={(value) => {
+                                    setValue("category",
+                                        categories?.find((item) => item.id === value.id) as VehicleCategoryInterface
+                                    )
                                 }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        onChangeText={onChange}
-                                        value={value}
-                                        placeholder={t("vehicle_length_placeholder")}
-                                        keyboardType="number-pad"
-                                        style={[
-                                            styles.inputForm,
-                                            {
-                                                color: Colors[colorScheme].text,
-                                                borderColor: Colors[colorScheme].text
-                                            }
-                                        ]}
-                                    />
-                                )}
+                                placeholder={t("select_category")}
                             />
-                            {
-                                errors.length &&
-                                <Text style={styles.inputError}>{errors.length.message}</Text>
-                            }
                         </View>
-                        <View
-                            style={{
-                                gap: 3
-                            }}
-                        >
-                            <Text style={{ fontSize: 16, color: Colors[colorScheme].text }}>
-                                {t("height_label")} *
-                            </Text>
-                            <Controller
-                                name="height"
-                                control={control}
-                                rules={{
-                                    required: t("this_field_is_required") as string
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        onChangeText={onChange}
-                                        value={value}
-                                        placeholder={t("vehicle_height_placeholder")}
-                                        keyboardType="number-pad"
-                                        style={[
-                                            styles.inputForm,
-                                            {
-                                                color: Colors[colorScheme].text,
-                                                borderColor: Colors[colorScheme].text
-                                            }
-                                        ]}
-                                    />
-                                )}
-                            />
-                            {
-                                errors.height &&
-                                <Text style={styles.inputError}>{errors.height.message}</Text>
-                            }
-                        </View>
+                        {
+                            (!watch("category")?.id && isSubmitted) &&
+                            <Text style={styles.inputError}>{t("this_field_is_required")}</Text>
+                        }
+
                         {
                             creationError &&
                             <Text style={styles.inputError}>{creationError.message}</Text>

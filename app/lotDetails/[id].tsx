@@ -88,8 +88,9 @@ const LotDetailsScreen = () => {
             lotArea: lot.name || "",
             lotAddress: lot.location || "",
             pricePerHour: lot.pricePerHour || 0,
-            vehicleId: "",
-            vehicleNumber: ""
+            maxWeight: lot.category?.maxWeightTonnes || 0,
+            maxHeight: lot.category?.maxHeightMeters || 0,
+            vehicleId: ""
         })
         router.push("/reservations/selectVehicle");
     }

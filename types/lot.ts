@@ -24,9 +24,8 @@ export interface LotStateInterface {
     id: string;
     lotArea: string;
     lotAddress: string;
-    maxWidth: number;
+    maxWeight: number;
     maxHeight: number;
-    maxLength: number;
     vehicleId: string;
     vehicleNumber: string;
     pricePerHour: number;

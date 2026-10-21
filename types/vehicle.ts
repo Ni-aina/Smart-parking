@@ -1,3 +1,5 @@
+import { VehicleCategoryInterface } from "./category";
+
 export interface VehicleInterface {
     id: string;
     driverId: string;
@@ -5,8 +7,6 @@ export interface VehicleInterface {
     make: string;
     model: string;
     year: string;
-    width: string;
-    length: string;
-    height: string;
+    category: VehicleCategoryInterface;
     createdAt: string;
 }
