@@ -2,13 +2,14 @@ import { Colors } from "@/constants/Colors";
 import useCategory from "@/hooks/categories/useCategory";
 import { Ionicons } from "@expo/vector-icons";
 import { usePathname } from "expo-router";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
     KeyboardAvoidingView,
     Modal,
     Platform,
     Pressable,
+    ScrollView,
     StyleSheet,
     Text,
     TextInput,
@@ -16,57 +17,79 @@ import {
     useWindowDimensions,
     View
 } from "react-native";
+import SelectInput from "../ui/selectInput";
 
 export interface LotFilters {
-    priceRange?: [number, number]
+    priceRange: [number, number];
+    category: string;
 }
 
 interface LotFiltersModalProps {
-    visible: boolean
-    filters: LotFilters
-    setFilters: (filters: LotFilters) => void
-    onClose: () => void
+    visible: boolean;
+    filters: LotFilters;
+    setFilters: Dispatch<SetStateAction<LotFilters>>;
+    onClose: () => void;
 }
 
 const LotFiltersModal = ({ visible, filters, setFilters, onClose }: LotFiltersModalProps) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation();
     const pathname = usePathname();
 
-    const colorScheme = useColorScheme() === "dark" ? "dark" : "light"
-    const { height, width } = useWindowDimensions()
-    const [minPrice, setMinPrice] = useState(filters.priceRange?.[0]?.toString() ?? "")
-    const [maxPrice, setMaxPrice] = useState(filters.priceRange?.[1]?.toString() ?? "")
-    const [validationError, setValidationError] = useState("")
-    const isCompact = height < 700 || width < 360
+    const colorScheme = useColorScheme() === "dark" ? "dark" : "light";
+    const { height, width } = useWindowDimensions();
 
-    const {
-        categories,
-        isLoading
-    } = useCategory()
+    const [minPrice, setMinPrice] = useState(filters.priceRange?.[0]?.toString() ?? "");
+    const [maxPrice, setMaxPrice] = useState(filters.priceRange?.[1]?.toString() ?? "");
+    const [selectedCategoryId, setSelectedCategoryId] = useState<string>(filters.category);
+    const [validationError, setValidationError] = useState("");
+    const isCompact = height < 700 || width < 360;
 
-    const updatePrice = (minimum: string, maximum: string) => {
-        const min = Number(minimum)
-        const max = Number(maximum)
+    const { categories } = useCategory();
 
-        if (!Number.isFinite(min) || !Number.isFinite(max) || min < 0 || max < 0 || min > max) {
-            setValidationError(t("invalid_price_range"))
-            return
+    const selectCategories = categories?.map(item => {
+        return {
+            id: item.id,
+            content: `${item.translations?.at(0)?.displayLabel || ""}, ${item.maxWeightTonnes}t, ↕${item.maxHeightMeters}m`
+        }
+    })
+
+    const updatePrice = (min: string, max: string) => {
+        const minNum = Number(min);
+        const maxNum = Number(max);
+
+        if (minNum < 0 || maxNum < 0 || maxNum > 500 || minNum > maxNum) {
+            setValidationError(t("invalid_price_range"));
+            return;
         }
 
-        setValidationError("")
-        setFilters({ priceRange: [min, max] })
+        setValidationError("");
+
+        setFilters(prev => ({
+            ...prev,
+            priceRange: [minNum, maxNum]
+        }))
     }
 
     const resetFilters = () => {
-        setMinPrice("")
-        setMaxPrice("")
-        setValidationError("")
-        setFilters({})
+        setMinPrice("");
+        setMaxPrice("");
+        setSelectedCategoryId("");
+        setValidationError("");
+        setFilters({
+            priceRange: [0, 500],
+            category: ""
+        });
     }
 
     useEffect(() => {
-        resetFilters()
-    }, [pathname])
+        setMinPrice(filters.priceRange?.[0]?.toString() ?? "");
+        setMaxPrice(filters.priceRange?.[1]?.toString() ?? "");
+        setSelectedCategoryId(filters.category);
+    }, [visible, filters.priceRange, filters.category]);
+
+    useEffect(() => {
+        resetFilters();
+    }, [pathname]);
 
     return (
         <Modal
@@ -81,7 +104,7 @@ const LotFiltersModal = ({ visible, filters, setFilters, onClose }: LotFiltersMo
                 style={styles.keyboard}
                 pointerEvents="box-none"
             >
-                <View style={[styles.sheet, { backgroundColor: Colors[colorScheme].background, height: isCompact ? "58%" : "50%" }]}>
+                <View style={[styles.sheet, { backgroundColor: Colors[colorScheme].background, maxHeight: isCompact ? "80%" : "70%" }]}>
                     <View style={[styles.handle, { backgroundColor: Colors[colorScheme].gray200 }]} />
                     <View style={styles.header}>
                         <Text style={[styles.title, { color: Colors[colorScheme].text }]}>{t("filters")}</Text>
@@ -94,55 +117,84 @@ const LotFiltersModal = ({ visible, filters, setFilters, onClose }: LotFiltersMo
                             <Ionicons name="close" size={22} color={Colors[colorScheme].icon} />
                         </Pressable>
                     </View>
-                    <View style={styles.section}>
-                        <Text style={[styles.label, { color: Colors[colorScheme].text }]}>{t("price_range")}</Text>
-                        <View style={[styles.fields, isCompact && styles.fieldsCompact]}>
-                            <View style={styles.field}>
-                                <Text style={{ color: Colors[colorScheme].text }}>{t("minimum_price")}</Text>
-                                <TextInput
-                                    accessibilityLabel={t("minimum_price")}
-                                    keyboardType="decimal-pad"
-                                    placeholder="0"
-                                    placeholderTextColor={Colors[colorScheme].icon}
-                                    value={minPrice}
-                                    onChangeText={value => {
-                                        setMinPrice(value)
-                                        updatePrice(value, maxPrice)
-                                    }}
-                                    style={[styles.input, { borderColor: Colors[colorScheme].gray200, color: Colors[colorScheme].text }]}
-                                />
-                            </View>
-                            <View style={styles.field}>
-                                <Text style={{ color: Colors[colorScheme].text }}>{t("maximum_price")}</Text>
-                                <TextInput
-                                    accessibilityLabel={t("maximum_price")}
-                                    keyboardType="decimal-pad"
-                                    placeholder="10000"
-                                    placeholderTextColor={Colors[colorScheme].icon}
-                                    value={maxPrice}
-                                    onChangeText={value => {
-                                        setMaxPrice(value)
-                                        updatePrice(minPrice, value)
-                                    }}
-                                    style={[styles.input, { borderColor: Colors[colorScheme].gray200, color: Colors[colorScheme].text }]}
-                                />
-                            </View>
-                        </View>
-                    </View>
-                    {!!validationError && <Text style={styles.error}>{validationError}</Text>}
-                    <Pressable
-                        accessibilityRole="button"
-                        onPress={resetFilters}
-                        style={[styles.reset, { borderColor: Colors[colorScheme].gray200 }]}
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        keyboardShouldPersistTaps="handled"
+                        contentContainerStyle={styles.scrollContent}
                     >
-                        <Ionicons name="refresh-outline" size={18} color={Colors[colorScheme].tint} />
-                        <Text style={{ color: Colors[colorScheme].tint }}>{t("reset_filters")}</Text>
-                    </Pressable>
+                        <View style={styles.section}>
+                            <Text style={[styles.label, { color: Colors[colorScheme].text }]}>{t("vehicle_category")}</Text>
+                            <SelectInput
+                                options={selectCategories || []}
+                                value={{
+                                    id: selectedCategoryId || "",
+                                    content: selectCategories?.find(item => item.id === selectedCategoryId)?.content || ""
+                                }}
+                                setValue={(value) => {
+                                    setSelectedCategoryId(() => categories?.find((item) => item.id === value.id)?.id || "")
+                                    setFilters(prev => ({
+                                        ...prev,
+                                        category: categories?.find((item) => item.id === value.id)?.id || ""
+                                    }))
+                                }}
+                                placeholder={t("select_category")}
+                            />
+                        </View>
+
+                        <View style={styles.section}>
+                            <Text style={[styles.label, { color: Colors[colorScheme].text }]}>{t("price_range")}</Text>
+                            <View style={[styles.fields, isCompact && styles.fieldsCompact]}>
+                                <View style={styles.field}>
+                                    <Text style={[styles.fieldLabel, { color: Colors[colorScheme].text }]}>{t("minimum_price")}</Text>
+                                    <TextInput
+                                        accessibilityLabel={t("minimum_price")}
+                                        keyboardType="decimal-pad"
+                                        placeholder="0"
+                                        placeholderTextColor={Colors[colorScheme].icon}
+                                        value={minPrice}
+                                        onChangeText={value => {
+                                            setMinPrice(value);
+                                            if (!Number(value)) return;
+                                            updatePrice(value, maxPrice);
+                                        }}
+                                        style={[styles.input, { borderColor: Colors[colorScheme].gray200, color: Colors[colorScheme].text }]}
+                                    />
+                                </View>
+                                <View style={styles.field}>
+                                    <Text style={[styles.fieldLabel, { color: Colors[colorScheme].text }]}>{t("maximum_price")}</Text>
+                                    <TextInput
+                                        accessibilityLabel={t("maximum_price")}
+                                        keyboardType="decimal-pad"
+                                        placeholder="500"
+                                        placeholderTextColor={Colors[colorScheme].icon}
+                                        value={maxPrice}
+                                        onChangeText={value => {
+                                            setMaxPrice(value);
+                                            if (!Number(value)) return;
+                                            updatePrice(minPrice, value);
+                                        }}
+                                        style={[styles.input, { borderColor: Colors[colorScheme].gray200, color: Colors[colorScheme].text }]}
+                                    />
+                                </View>
+                            </View>
+                            {!!validationError && <Text style={styles.error}>{validationError}</Text>}
+                        </View>
+
+                        <Pressable
+                            accessibilityRole="button"
+                            onPress={resetFilters}
+                            style={[styles.reset, { borderColor: Colors[colorScheme].gray200 }]}
+                        >
+                            <Ionicons name="refresh-outline" size={18} color={Colors[colorScheme].tint} />
+                            <Text style={{ color: Colors[colorScheme].tint, fontWeight: "600" }}>{t("reset_filters")}</Text>
+                        </Pressable>
+                    </ScrollView>
                 </View>
             </KeyboardAvoidingView>
         </Modal>
     )
 }
+
 const styles = StyleSheet.create({
     backdrop: {
         ...StyleSheet.absoluteFill,
@@ -157,23 +209,27 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 28,
         borderTopRightRadius: 28,
         maxWidth: 720,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingTop: 16,
         width: "100%"
     },
     handle: {
         alignSelf: "center",
         borderRadius: 3,
         height: 5,
-        marginBottom: 18,
+        marginBottom: 16,
         width: 48
     },
     header: {
         alignItems: "center",
         flexDirection: "row",
         justifyContent: "space-between",
-        marginBottom: 24
+        marginBottom: 16
     },
-    title: { fontSize: 24, fontWeight: "700" },
+    title: {
+        fontSize: 24,
+        fontWeight: "700"
+    },
     close: {
         alignItems: "center",
         borderRadius: 20,
@@ -181,13 +237,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         width: 40
     },
+    scrollContent: {
+        gap: 20,
+        paddingBottom: 28
+    },
     section: {
-        borderRadius: 18
+        gap: 12
     },
     label: {
         fontSize: 16,
-        fontWeight: "700",
-        marginBottom: 16
+        fontWeight: "700"
     },
     fields: {
         flexDirection: "row",
@@ -200,6 +259,9 @@ const styles = StyleSheet.create({
         flex: 1,
         gap: 6
     },
+    fieldLabel: {
+        fontSize: 14
+    },
     input: {
         borderRadius: 10,
         borderWidth: 1,
@@ -207,9 +269,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 14,
         paddingVertical: 12
     },
+    selectInput: {
+        borderRadius: 10,
+        borderWidth: 1,
+        minHeight: 48,
+        paddingHorizontal: 14
+    },
     error: {
         color: "#dd1919",
-        marginTop: 8
+        marginTop: 4
     },
     reset: {
         alignItems: "center",
@@ -218,10 +286,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         flexDirection: "row",
         gap: 8,
-        marginTop: 20,
+        marginTop: 10,
         paddingHorizontal: 16,
         paddingVertical: 12
     }
-})
+});
 
 export default LotFiltersModal;

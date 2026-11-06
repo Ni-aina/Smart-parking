@@ -1,4 +1,5 @@
 import { getParkingLots } from "@/actions/lot.action";
+import { LotFilters } from "@/components/lots/lotFiltersModal";
 import { supabase } from "@/lib/supabase";
 import { useLocationStore } from "@/stores/zustand/location";
 import { getDistanceTimeFromPostGIS } from "@/utils/getDistanceTime";
@@ -8,12 +9,10 @@ import useCurrentProfile from "../useCurrentProfile";
 
 const useLots = ({
     searchTerm,
-    filters = {}
+    filters
 }: {
     searchTerm: string;
-    filters?: {
-        priceRange?: [number, number];
-    }
+    filters: LotFilters;
 }) => {
     const { currentProfile } = useCurrentProfile();
     const profileId = currentProfile?.id!;
@@ -39,8 +38,9 @@ const useLots = ({
         queryKey: [
             "parking-lots",
             searchTerm,
-            filters.priceRange?.[0],
-            filters.priceRange?.[1]
+            filters.category,
+            filters.priceRange[0],
+            filters.priceRange[1]
         ],
         queryFn: ({
             pageParam = 1

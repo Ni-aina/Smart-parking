@@ -20,7 +20,11 @@ const FindParkingScreen = () => {
     const { t } = useTranslation();
     const [layout, setLayout] = useState<"list" | "tile">("list");
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [filters, setFilters] = useState<LotFilters>({});
+    const [filters, setFilters] = useState<LotFilters>(() => ({
+        priceRange: [0, 500],
+        category: ""
+    }))
+    
     const [isFilterVisible, setIsFilterVisible] = useState(false);
 
     const {

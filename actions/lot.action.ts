@@ -67,14 +67,13 @@ export async function getParkingLots(
         } = params;
 
         const request = (async () => {
-
             const { data: parkings, error } = await supabase.rpc(
                 "get_parking_lots",
                 {
                     search_term: searchTerm,
-                    category_filter: filters.category ?? null,
+                    category_filter: filters.category || null,
                     min_price: filters.priceRange?.[0] ?? 0,
-                    max_price: filters.priceRange?.[1] ?? 1000000,
+                    max_price: filters.priceRange?.[1] ?? 500,
                     user_lat: location?.latitude ?? null,
                     user_lng: location?.longitude ?? null,
                     page: pagination.page,
