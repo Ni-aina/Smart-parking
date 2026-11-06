@@ -17,7 +17,7 @@ import { Stack, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import { KeyboardProvider } from "react-native-keyboard-controller";
-import "react-native-reanimated";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const queryClient = new QueryClient();
 
@@ -25,20 +25,24 @@ const RootNavigation = () => {
   const { expoPushToken } = usePushNotifications();
 
   return (
-    <ExpoTokenContextProvider
-      expoPushToken={expoPushToken}
-    >
-      <NotificationContextProvider>
-        <Stack
-          screenOptions={{
-            headerShown: false
-          }}
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} edges={['left', 'right']}>
+        <ExpoTokenContextProvider
+          expoPushToken={expoPushToken}
         >
-          <Stack.Screen name="index" />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </NotificationContextProvider>
-    </ExpoTokenContextProvider>
+          <NotificationContextProvider>
+            <Stack
+              screenOptions={{
+                headerShown: false
+              }}
+            >
+              <Stack.Screen name="index" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </NotificationContextProvider>
+        </ExpoTokenContextProvider>
+      </SafeAreaView>
+    </SafeAreaProvider>
   )
 }
 

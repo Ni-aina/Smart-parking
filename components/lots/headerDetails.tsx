@@ -17,7 +17,7 @@ const HeaderDetails = ({ router, lotImage, onShare }: HeaderDetailsInterface) =>
     return (
         <View style={styles.headerBackground}>
             <Icons
-                onPress={() => router.push("/(tabs)")}
+                onPress={() => router.push("/parking")}
                 name="chevron-back"
                 color={
                     lotImage ?

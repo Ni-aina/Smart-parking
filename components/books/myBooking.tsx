@@ -1,7 +1,7 @@
 import useReservations from "@/hooks/books/useReservations";
 import { useCallback } from "react";
-import { FlatList } from "react-native";
 import { useTranslation } from "react-i18next";
+import { FlatList } from "react-native";
 import NoDataFound from "../NoDataFound";
 import RequestTooLong from "../ui/requestTooLong";
 import LoaderSkeleton from "../ui/Skeleton";
@@ -47,14 +47,14 @@ const MyBooking = () => {
                 />
             }
             refreshing={isRefetching}
-            onRefresh={refetch}
+            onRefresh={() => { refetch() }}
             onEndReached={onEndReached}
             onEndReachedThreshold={0.5}
             ListFooterComponent={
                 isFetchingNextPage ?
                     <LoaderSkeleton />
                     :
-                    null
+                    undefined
             }
         />
     )

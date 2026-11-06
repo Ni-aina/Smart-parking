@@ -94,7 +94,7 @@ const TrackingCar = () => {
                         }
                         showsVerticalScrollIndicator={false}
                         refreshing={isRefetching}
-                        onRefresh={refetch}
+                        onRefresh={() => { refetch() }}
                     />
             }
             {isDeleting && <Loading />}

@@ -36,15 +36,15 @@ const TabLayout = () => {
       <TabSlot />
       <TabList style={styles.tabList}>
         <TabTrigger
-          name="index"
-          href="/"
+          name="parking"
+          href="/parking"
           style={styles.tabTrigger}
         >
-          <Ionicons name="search" size={30} style={{ color: pathname === "/" ? activeTab : tabTriggerColor }} />
+          <Ionicons name="search" size={30} style={{ color: pathname === "/parking" ? activeTab : tabTriggerColor }} />
           <Text 
             style={[
               styles.tabText, 
-              { color: pathname === "/" ? activeTab : tabTriggerColor }
+              { color: pathname === "/parking" ? activeTab : tabTriggerColor }
             ]}
           >
             {t("find_parking")}

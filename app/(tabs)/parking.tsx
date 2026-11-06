@@ -98,7 +98,7 @@ const FindParkingScreen = () => {
                                 </View>
                             }
                             refreshing={isRefetching}
-                            onRefresh={refetch}
+                            onRefresh={() => { refetch() }}
                             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                             columnWrapperStyle={layout === "tile" ? { gap: 10 } : undefined}
                             contentContainerStyle={{ flexGrow: 1 }}
@@ -115,7 +115,7 @@ const FindParkingScreen = () => {
                                 isFetchingNextPage ?
                                     <LoaderSkeleton />
                                     :
-                                    null
+                                    undefined
                             }
                         />
             }

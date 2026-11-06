@@ -269,7 +269,7 @@ const ConversationThreadScreen = () => {
                                                 }
                                             </Pressable>
                                         </View>
-                                        : null
+                                        : undefined
                                 }
                                 renderItem={({ item, index }) =>
                                     <MessageBubble

@@ -23,7 +23,6 @@ import {
     ActivityIndicator,
     Dimensions,
     Image,
-    ImageBackground,
     Pressable,
     RefreshControl,
     ScrollView,
@@ -140,7 +139,7 @@ const LotDetailsScreen = () => {
                             refreshControl={
                                 <RefreshControl
                                     refreshing={isRefetching}
-                                    onRefresh={refetch}
+                                    onRefresh={() => { refetch() }}
                                 />
                             }
                         >
@@ -155,21 +154,21 @@ const LotDetailsScreen = () => {
                             }
                             {
                                 lotImage ?
-                                    <ImageBackground
-                                        source={{ uri: lotImage }}
+                                    <View
                                         style={
                                             loadingImage ?
                                                 styles.loadingImage
                                                 :
                                                 styles.imageBackground
                                         }
-                                        onLoadStart={
-                                            () => setLoadingImage(true)
-                                        }
-                                        onLoadEnd={
-                                            () => setLoadingImage(false)
-                                        }
                                     >
+                                        <Image
+                                            source={{ uri: lotImage }}
+                                            style={StyleSheet.absoluteFill}
+                                            resizeMode="cover"
+                                            onLoadStart={() => setLoadingImage(true)}
+                                            onLoadEnd={() => setLoadingImage(false)}
+                                        />
                                         <HeaderDetails
                                             router={router}
                                             lotImage={lotImage}
@@ -179,7 +178,7 @@ const LotDetailsScreen = () => {
                                             lotImage &&
                                             <View style={styles.bodyBackgroundWrapper}>
                                                 <BlurView
-                                                    intensity={20}
+                                                    intensity={40}
                                                     tint={colorScheme === "dark" ? "dark" : "light"}
                                                     style={{
                                                         padding: 5
@@ -194,17 +193,18 @@ const LotDetailsScreen = () => {
                                                         }}
                                                         nestedScrollEnabled={true}
                                                     >
-
                                                         {
                                                             lot.urlImages?.map((item, index) =>
                                                                 <Pressable
-                                                                    key={index}
+                                                                    key={`${item}-${index}`}
                                                                     onPress={() => setIndexImage(index)}
                                                                 >
                                                                     <Image
                                                                         source={{ uri: item }}
-                                                                        alt={item}
                                                                         style={styles.image}
+                                                                        resizeMethod="resize"
+                                                                        fadeDuration={200}
+                                                                        progressiveRenderingEnabled
                                                                     />
                                                                 </Pressable>
                                                             )
@@ -213,7 +213,7 @@ const LotDetailsScreen = () => {
                                                 </BlurView>
                                             </View>
                                         }
-                                    </ImageBackground>
+                                    </View>
                                     :
                                     <View
                                         style={{
@@ -499,7 +499,7 @@ const LotDetailsScreen = () => {
                                                     color: Colors[colorScheme].tabIconDefault
                                                 }}
                                             >
-                                                {lot?.category.maxWeightTonnes!}t
+                                                {lot?.category?.maxWeightTonnes!}t
                                             </Text>
                                         </View>
                                         <View
@@ -524,7 +524,7 @@ const LotDetailsScreen = () => {
                                                     color: Colors[colorScheme].tabIconDefault
                                                 }}
                                             >
-                                                {lot?.category.maxHeightMeters!} m
+                                                {lot?.category?.maxHeightMeters!} m
                                             </Text>
                                         </View>
                                     </View>
@@ -652,7 +652,8 @@ const styles = StyleSheet.create({
         paddingTop: 35,
         paddingBottom: 20,
         paddingHorizontal: 10,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        overflow: "hidden"
     },
     noBackgroundImage: {
         flex: 1,

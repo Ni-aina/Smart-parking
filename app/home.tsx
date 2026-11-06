@@ -68,7 +68,7 @@ const HomeScreen = () => {
                 <View style={styles.accountContainer}>
                     <Button
                         title={t("let's_get_started")}
-                        onPress={() => router.navigate("/(tabs)")}
+                        onPress={() => router.navigate("/parking")}
                     />
                     <Text
                         style={[

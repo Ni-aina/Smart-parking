@@ -125,7 +125,7 @@ const AccountScreen = () => {
                                 }]
                             }
                             numberOfLines={1}
-                            lineBreakMode="tail"
+                            ellipsizeMode="tail"
                         >
                             {error?.message || currentProfile?.fullName!}
                         </Text>
@@ -136,7 +136,7 @@ const AccountScreen = () => {
                                 }]
                             }
                             numberOfLines={1}
-                            lineBreakMode="tail"
+                            ellipsizeMode="tail"
                         >
                             {currentProfile?.emailAddress!}
                         </Text>

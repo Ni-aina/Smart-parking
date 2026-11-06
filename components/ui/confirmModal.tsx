@@ -4,13 +4,13 @@ import * as NavigationBar from 'expo-navigation-bar';
 import React, { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
-    Modal,
-    Pressable,
-    StatusBar,
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View
+  Modal,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View
 } from "react-native";
 
 interface ConfirmModalProps {
@@ -41,12 +41,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       animationType="fade"
       transparent
     >
-      <StatusBar
-        barStyle={colorScheme === "dark" ? "light-content" : "dark-content"}
-        backgroundColor={
-          colorScheme === "light" ? "rgba(0,0,0,0.25)" : "rgba(255,255,255,0.25)"
-        }
-      />
+      <StatusBar barStyle={colorScheme === "dark" ? "light-content" : "dark-content"} />
       <BlurView
         intensity={25}
         tint={colorScheme === "dark" ? "light" : "dark"}

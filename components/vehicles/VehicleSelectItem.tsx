@@ -44,12 +44,12 @@ const VehicleSelectItem = ({
     } = lot;
 
     const handleVehicleSelected = () => {
-        if (!id || !category.maxWeightTonnes || !category.maxHeightMeters) {
+        if (!id || !category?.maxWeightTonnes || !category?.maxHeightMeters) {
             setError(t("incomplete_info"));
             return;
         }
 
-        if (category.maxWeightTonnes > maxWeight || category.maxHeightMeters > maxHeight) {
+        if (category?.maxWeightTonnes > maxWeight || category?.maxHeightMeters > maxHeight) {
             setError(t("vehicle_dimensions_exceeded"));
             return;
         }

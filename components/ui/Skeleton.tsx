@@ -7,12 +7,7 @@ const LoaderSkeleton = () => {
 
     return (
 
-        <MotiView
-            transition={{
-                type: "spring"
-            }}
-            animate={{ backgroundColor: "transparent" }}
-        >
+        <MotiView animate={{ backgroundColor: "transparent" }}>
             <View style={
                 {
                     marginVertical: 10,

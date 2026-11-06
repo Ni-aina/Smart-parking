@@ -40,10 +40,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
             animationType="fade"
             transparent
         >
-            <StatusBar 
-                barStyle={colorScheme === "dark" ? "dark-content" : "light-content"}
-                backgroundColor={Colors[colorScheme].background}
-            />
+            <StatusBar barStyle={colorScheme === "dark" ? "light-content" : "dark-content"} />
             <View
                 style={
                     [

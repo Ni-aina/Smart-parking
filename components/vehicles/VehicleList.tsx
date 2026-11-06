@@ -81,7 +81,7 @@ const VehicleList = () => {
                             }
                             showsVerticalScrollIndicator={false}
                             refreshing={isRefetching}
-                            onRefresh={refetch}
+                            onRefresh={() => { refetch() }}
                         />
                 }
                 <Button

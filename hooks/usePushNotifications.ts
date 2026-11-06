@@ -1,5 +1,6 @@
 import { savePushToken } from "@/actions/notification.action";
 import { useAuthContext } from "@/stores/context/AuthContext";
+import { isRunningInExpoGo } from "expo";
 import Constants from "expo-constants";
 import { useRouter } from "expo-router";
 import type { TFunction } from "i18next";
@@ -72,9 +73,7 @@ export const usePushNotifications = () => {
     const handledResponseIdsRef = useRef<Set<string>>(new Set())
 
     useEffect(() => {
-        const isExpoGo = Constants.appOwnership === "expo"
-
-        if (Platform.OS === "web" || isExpoGo) return
+        if (Platform.OS === "web" || isRunningInExpoGo()) return
 
         const setup = async () => {
             const Notifications = await import("expo-notifications")

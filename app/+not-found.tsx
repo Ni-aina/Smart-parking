@@ -5,14 +5,14 @@ import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useTranslation } from "react-i18next";
 import {
-    StyleSheet,
-    Text,
-    useColorScheme,
-    View
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View
 } from "react-native";
 import Animated, {
-    FadeInDown,
-    FadeInUp
+  FadeInDown,
+  FadeInUp
 } from "react-native-reanimated";
 
 const NotFoundScreen = () => {
@@ -115,7 +115,7 @@ const NotFoundScreen = () => {
             >
               <Button
                 title={t("go_to_home")}
-                onPress={() => router.replace("/")}
+                onPress={() => router.replace("/home")}
               />
             </Animated.View>
           </Animated.View>

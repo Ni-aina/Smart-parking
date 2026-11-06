@@ -5,24 +5,9 @@ const VehicleControlsLayout = () => {
     return (
         <ProtectedRoute>
             <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Screen
-                    name="addVehicle"
-                    options={{
-                        presentation: "modal"
-                    }}
-                />
-                <Stack.Screen
-                    name="editVehicle"
-                    options={{
-                        presentation: "modal"
-                    }}
-                />
-                <Stack.Screen
-                    name="maintenanceList"
-                    options={{
-                        presentation: "modal"
-                    }}
-                />
+                <Stack.Screen name="addVehicle" />
+                <Stack.Screen name="editVehicle" />
+                <Stack.Screen name="maintenanceList" />
             </Stack>
         </ProtectedRoute>
     )
